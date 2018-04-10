@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Notes on Multi-versioned Storage · Liqun's Homepage</title><meta name="description" content="Notes on Multi-versioned Storage - Liqun Li"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://scholar.google.com/citations?user=icgetesAAAAJ&amp;hl=en" target="_blank" class="nav-list-link">GOOGLE SCHOLAR</a></li><li class="nav-list-item"><a href="https://www.linkedin.com/in/liqunli/" target="_blank" class="nav-list-link">LINKEDIN</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Notes on Multi-versioned Storage</h1><div class="post-info">Mar 31, 2017</div><div class="post-content"><p>I recently read the <a href="https://research.google.com/archive/spanner.html" target="_blank" rel="noopener">Spanner</a> paper. I realized that I cannot understand the idea of TrueTime and Non-blocking read well. Therefore, I did some research by googling the concept of non-blocking read, and came across this mysql <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-consistent-read.html" target="_blank" rel="noopener">document</a>. After reading it, I realized that my understanding of multi-versioned storage is incorrect. So I decide to put some notes here.</p>
+<p>The key points of multi-versioned storage are:  </p>
+<ol>
+<li>version -&gt; the creation wall clock time of the object (or a vector time)</li>
+<li>timestamp -&gt; the query time of the object</li>
+<li>the association between the metadata and content should never be changed</li>
+</ol>
+<p>Each object is associated with a set of metadata. The metadata contains a timestamp field indicating the version of this object. For a concrete example, let’s define a storage model as follows:</p>
+<p><img src="/blog/assets/objstore1.png" width="500"></p>
+<p>Each metadata contains three fields</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td style="text-align:center">name of the object. objects with the same name are deem to be the same object</td>
+</tr>
+<tr>
+<td>ctime</td>
+<td style="text-align:center">creation time</td>
+</tr>
+<tr>
+<td>deleted</td>
+<td style="text-align:center">1 means a tombstone</td>
+</tr>
+<tr>
+<td>extra</td>
+<td style="text-align:center">some extra metadata for this object</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s use typical operations to clarify the usage of this data model. </p>
+<p><strong>Put</strong><br>Put is adding a new versioned object into the storage. In the figure above, the first “obj1” is inserted at 2017-04-01 11:30:12. Inserting another object with the same name is simply adding a new entry to the table pointing to the new content. When an object is requested from client, only the one with the latest timestamp is returned. Therefore, from 2017-04-01 11:30:12 to 2017-04-02 11:31:25, the first obj1 is visible. After 2017-04-02 11:31:25, the client see only the second obj1. With this data model, there is no need to block writes during reading this object, since each operation is based solely on its timestamp. </p>
+<p><strong>Delete</strong><br>Delete is simply by putting a tombstone for a certain object. Like the third obj1 in the example. No content is presented for this entry. The objects with a tombstone as the latest entry will be filtered out if requested from clients.</p>
+<p><strong>Update</strong><br>In this context, update is different from putting new contents into the object, but altering the object’s metadata (e.g., the extra field in the table). Updating the fields beyond the unique key is less a problem. If we need to update even the name of the object, we need to perform two steps: (1) delete the original object; (2) put a new object with the new metadata. One need to keep these two steps in an atomic transaction.</p>
+<p><strong>Search</strong><br>Search is usually based on metadata to find a set of objects. The difference with multi-versioned storage is that we only return an object with the latest timestamp. This could be achieved with a select clause like </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT t.* FROM (SELECT * FROM table WHERE xxx AND ctime &lt; NOW() ORDER BY ctime DESC) t GROUP BY t.name</span><br></pre></td></tr></table></figure>
+<p>We then filter out tombstones reside in the result set.</p>
+<p><strong>Get</strong><br>Get is first searching for the latest object before the operation time. Then, the pointer of content is handed over to the client. The client should read the content as soon as possible. Otherwise, the content may be deleted due to recycling.  </p>
+<p><strong>Compact</strong><br>Compact refers to merge a set of contents into a big one. This is useful for example for HDFS to relief the name node’s burden of storing a large number of small files. The implementation of compaction is a bit tricky. One first merge the target set of contents into a big file. Then, insert a new entry for each  related object within an atomic transaction. For clarification, let’s suppose we need to compact obj2 and obj3 in our example. We first create a new content with both contents from the original obj2 and obj3. Then, we add new entries for obj2 and obj3, respectively. The tricky part is that the ctime for these two entries are just 1 second larger than the original two. </p>
+<p><img src="/blog/assets/objstore2.png" width="600"></p>
+<p>This may sounds weired at first. But think about the situation that a new entry for obj2 is put after we started but not finished compaction. In this case, the new content could be covered by the compaction if the ctime is larger than the new entry. We add 1 to the ctime. So, the new entry will either be later, or conflict with the compaction, leading to a failure. Upon such failure, the client simply retry to submit the new content. This should not be a real problem since compaction is a rare operation. </p>
+<p>One may wonder why not simply updating the pointers in the original entries for obj2 and obj3. This actually breaks the third key points we mentioned at the beginning. It is important not changing the association. For example, if we want to get an object during compaction, reading may fail since the old contents may be deleted. Also, stale contents may be produced. More importantly, we may need very complicated transaction controls. </p>
+<p><strong>Recycle</strong><br>Recycle is used to delete all deleted objects. The deleted objects could be find by searching for tombstones in the table. If a tombstone is detected, all entries before that can be deleted physically, including the tombstone itself. Delete a single content is straightforward. However, if a content is merged into a big file, we can carry out a similar process like compaction to delete the content physically. Old-versioned entries can also be recycled. Both recycling for deleted and old-versioned entries follows a certain policy. We can delete an entry once it has been out dated for a few days. This duration shouldn’t be too soon. Otherwise, we may recycle content being or to be read. </p>
+<p>One can see that, with this multi-versioned storage model, all operations are much simpler without dependency to a locking system. We even do not rely on transaction, if compaction is not necessary. Let’s return to the three key parts at the beginning of this note. With a timestamp field, we already get the sense of version. As discussed above, the operation timestamp is critical as we need it to determine which object should be put into the result set. If data is stored across multiple machines, we need to synchronize their clock precisely. TrueTime is a API expose the uncertainty of time among different machines, and thus is critical for such large scale storage implementation. Finally, the association should not be broken, otherwise, we need complicated mechanisms to fix the issues it incurs.</p>
+</div></article></div></main><footer><div class="paginator"><a href="/blog/2017/03/31/2017-03-31-implementing-a-lock-system-NSConflict-liqul/" class="prev">PREV</a><a href="/blog/2017/03/26/2017-03-26-an-algorithm-deduplicate-file-locks-NSConflict-liqul/" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

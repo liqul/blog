@@ -1,0 +1,42 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 有用的Git相关汇总 · Liqun's Homepage</title><meta name="description" content="有用的Git相关汇总 - Liqun Li"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://scholar.google.com/citations?user=icgetesAAAAJ&amp;hl=en" target="_blank" class="nav-list-link">GOOGLE SCHOLAR</a></li><li class="nav-list-item"><a href="https://www.linkedin.com/in/liqunli/" target="_blank" class="nav-list-link">LINKEDIN</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">有用的Git相关汇总</h1><div class="post-info">Jan 22, 2016</div><div class="post-content"><h4 id="平时收集的一些有用的git命令（持续更新）："><a href="#平时收集的一些有用的git命令（持续更新）：" class="headerlink" title="平时收集的一些有用的git命令（持续更新）："></a>平时收集的一些有用的git命令（持续更新）：</h4><ul>
+<li>git reset –hard: 去掉所有改动，比如某些文件被改动了，用这招可以将它们都干掉，主要用于处理刚刚接手的杂乱版本，后面跟上commit号就会跳到对应的版本。</li>
+<li>git diff –diff-filter=D –name-only -z &brvbar; xargs -0 git rm 批量删除所有被delete的文件</li>
+<li>git branch –merged master &brvbar; grep -v master &brvbar; xargs git branch -d 删除所有已经与master合并的分支，用于清理中间的一个本地git库<!--break--></li>
+<li>git clean -fd: 干掉所有untracked file and folder，上面这招不会去掉新添加的文件或文件夹，靠这招更加彻底清除。</li>
+<li>git branch -D: 干掉一个分支，主要用于去掉那些已经没有意义的分支，如fix某个bug的分支。</li>
+<li>git checkout – <filename>：去掉被add了的文件，用.表示去掉所有被add的文件。</filename></li>
+<li>git checkout -b <branchname>: 从当前分支分出一个新分支，主要用于创建一个feature或bug分支。</branchname></li>
+<li>git diff &lt;commit id1/reflog id&gt; &lt;commit id2/reflog id&gt; <filename>: 查看某个文件两个不同版本间的差别。</filename></li>
+<li>git log <filename>：查看某个文件的历史记录，如果没<filename>则表示整个branch的历史记录，加–color表示生成一个树状图，-p表示查看修改详情。</filename></filename></li>
+<li>git fetch会同步git库和本地库的版本信息，而不会真正下载代码。</li>
+<li>git checkout version_number /path/to/file 将某个文件切换到指定的版本。</li>
+<li>git stash用于将当前修改缓存下来，方便切到其它分支工作；完成工作后切回来用git stash pop。</li>
+<li>git 回滚远程代码库</li>
+</ul>
+<blockquote>
+<p><strong>步骤一</strong>：本地先回滚到正确的版本。用git reset –hard version_number version_number可以是commit号或reflog编号。</p>
+</blockquote>
+<blockquote>
+<p><strong>步骤二</strong>：将本地版本强制推送到远端，覆盖远程版本。用git push origin master -f</p>
+</blockquote>
+<blockquote>
+<p><strong>步骤三</strong>：将线上服务器同步到git代码库。直接用git pull origin master是不行的，因为这时候往往线上服务器比代码库更新。所以需要执行下面的命令来强制同步：<br></p>
+<ol>
+<li>git fetch –all <br></li>
+<li>git reset –hard origin/master <br><br>这样就同步好了。基本原理可以参考<a href="http://stackoverflow.com/questions/1125968/force-git-to-overwrite-local-files-on-pull。这样做比直接删代码风险要小一些。" target="_blank" rel="noopener">http://stackoverflow.com/questions/1125968/force-git-to-overwrite-local-files-on-pull。这样做比直接删代码风险要小一些。</a> </li>
+</ol>
+</blockquote>
+<ul>
+<li>git log -p –name-only 其中的–name-only是个非常好用的参数，可以用来只显示改动的文件，可以与其它很多命令搭配起来用。</li>
+<li>git init –bare用于在server端新建一个repo，随后在本地代码文件夹下git init再git add remote对应的地址就可以将本地与server关联上了。</li>
+<li>git checkout -b –orphan branchname 从当前分支产生一个无历史的新分支，可以用来分享代码。</li>
+<li>git config –global push.default current 设置全局push默认的分支为当前分支，执行后可以通过git push来推送当前分支，而不需要显式写出分知名。</li>
+<li>git reflog 查看本地的git命令执行历史。</li>
+<li>git fetch 同步本地和远程的分支信息，尤其可以消除“Your branch is ahead of ‘origin/master’ by 1 commit.”这样的提醒。</li>
+<li>git mv old_name new_name 用于重命名一个文件。免去rm+add的重复劳动。</li>
+<li>git branch -a 查看远程分支。</li>
+<li>git push origin –delete branch_name 根据分支名删除远程分支。</li>
+<li>git push origin –delete tag tag_name 根据tag删除远程分支。</li>
+<li>git checkout mybranch; git rebase origin 把自己的分支以patch的形式加到origin分支上，与pull或merge产生的效果类似，但“看起来“历史不同，参考<a href="http://gitbook.liuhui998.com/4_2.html。" target="_blank" rel="noopener">http://gitbook.liuhui998.com/4_2.html。</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/blog/2016/01/26/2016-12-03-useful-links-NSConflict-liqul/" class="prev">PREV</a><a href="/blog/2015/10/15/2016-12-03-mysql-deployment-NSConflict-liqul/" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> MySQL安装部署 · Liqun's Homepage</title><meta name="description" content="MySQL安装部署 - Liqun Li"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://scholar.google.com/citations?user=icgetesAAAAJ&amp;hl=en" target="_blank" class="nav-list-link">GOOGLE SCHOLAR</a></li><li class="nav-list-item"><a href="https://www.linkedin.com/in/liqunli/" target="_blank" class="nav-list-link">LINKEDIN</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">MySQL安装部署</h1><div class="post-info">Oct 15, 2015</div><div class="post-content"><p>参考<a href="http://dev.mysql.com/doc/refman/5.6/en/installing-source-distribution.html。" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.6/en/installing-source-distribution.html。</a></p>
+<ul>
+<li>安装前配置<pre class="lang:default decode:true ">
+groupadd mysql
+useradd -r -g mysql mysql
+yum install cmake
+</pre></li>
+<li>安装<br><pre class="lang:default decode:true "><br>tar zxvf mysql-VERSION.tar.gz<br>cd mysql-VERSION<br>cmake .<br>make<br>make install<br></pre><!--break--></li>
+<li>安装后配置</li>
+</ul>
+<pre class="lang:default decode:true ">cd /usr/local/mysql
+chown -R mysql .
+chgrp -R mysql .
+# df -ha 用于查看各个分区的使用率，在处理之前确保有足够存储空间
+bin/mysql_install_db --datadir=/var/lib/mysql --user=mysql
+chown -R root .
+chown -R mysql data
+bin/mysqld_safe --user=mysql &amp;
+mysqladmin -u root -h host_name password newpassword
+# 启动服务
+/usr/local/mysql/bin/mysqld_safe --user=mysql &;
+# my.cnf在/etc目录下</pre> 
+
+
+<ul>
+<li>设置用户<br><pre class="lang:default decode:true "><br>#创建一个新用户，host可以用%替换，表示从任意ip地址登陆<br>CREATE USER ‘username‘@’host’ IDENTIFIED BY ‘password’;</pre></li>
+</ul>
+<p>#查看用户信息<br>SELECT user, host, password FROM user WHERE user=’username’;</p>
+<p>#分配权限，primitive包括select, insert, update, delete, create, drop, index, alter, grant, reference, reload, shutdown, process, file共14个权限<br>GRANT primitive1, primitive2, …, primitiven ON db.table TO username@host IDENTIFIED BY password</p>
+<p>#删除用户<br>DROP USER username;</p>
+<p>#取消用户授权<br>REVOKE primitive ON db.table FROM username@host;<br></p>
+<ul>
+<li>备份<br>下面的命令里都省略了-u和-p，在实际操作时须补全。<br><strong>关于bin log的部分，文档《binlog基本认识》有非常详尽的介绍。</strong><br><pre class="lang:default decode:true "><h1 id="开启binlog"><a href="#开启binlog" class="headerlink" title="开启binlog"></a>开启binlog</h1>编辑my.cnf文件，在[mysqld]区块中加入log-bin=mysql-bin，重启服务即生效<br>执行show variables like ‘log_%’;来确认已经打开bin log</pre></li>
+</ul>
+<h1 id="常用的bin-log操作"><a href="#常用的bin-log操作" class="headerlink" title="常用的bin log操作"></a>常用的bin log操作</h1><p>show master logs; # 查看所有bin log日志列表<br>show master status; # 查看最新一个bin log日志编号名称，以及最后一个操作事件结束点<br>flush logs; # 刷新日志，产生一个新的bin log日志文件<br>reset master; # 清空所有bin log日志</p>
+<h1 id="查看bin-log"><a href="#查看bin-log" class="headerlink" title="查看bin log"></a>查看bin log</h1><p>mysqlbinlog mysql-bin.000013 #打开一个bin log文件<br>show binlog events [IN log_name] [FROM pos] [LIMIT [offset,] row_count]<br>例如指定查询 mysql-bin.000021 这个文件，从pos点:8224开始查起，偏移2行，查询10条<br>    show binlog events in ‘mysql-bin.000021’ from 8224 limit 2,10\G;</p>
+<h1 id="利用bin-log恢复数据"><a href="#利用bin-log恢复数据" class="headerlink" title="利用bin log恢复数据"></a>利用bin log恢复数据</h1><p>mysqlbinlog mysql-bin.0000xx | mysql </p>
+<h1 id="备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行"><a href="#备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行" class="headerlink" title="备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行"></a>备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行</h1><p>mysqldump –single-transaction –all-databases &gt; backup_yy_mm_dd_hh_mm_ss.sql<br>mysql &lt; backup_yy_mm_dd_hh_mm_ss.sql<br></p>
+<ul>
+<li>主从同步<br>  完整的说明在这里：<a href="http://dev.mysql.com/doc/refman/5.6/en/replication-howto.html。" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.6/en/replication-howto.html。</a><br>  另一篇文章是个不错的简化版，并且更加实用“<a href="http://plusbryan.com/mysql-replication-without-downtime" target="_blank" rel="noopener">Setting up MySQL replication without the downtime</a>”。</li>
+</ul>
+<pre class="lang:default decode:true ">
+    ## 设置主服务器
+    # 确保master已经通过log-bin来开启bin log
+    # 确保每个host对应的server-id是不同的
+        [mysqld]
+        log-bin=mysql-bin
+        server-id=1
+        innodb_flush_log_at_trx_commit=1
+        sync_binlog=1
+    # 为slave创建专门的用户名
+    create user 'repl'@'%.mydomain.com' identified by 'slavepass';
+    grant replication slave on *.* to 'repl'@'%.mydomain.com';
+
+    ## 设置从服务器
+    # 确保slave的server-id与其它服务器不同
+        [mysqld]
+        server-id=2
+
+    ## 获取master的同步位置
+    # 执行flush操作，开启一个client session，执行下面语句后保持不退出
+    flush tables with read lock;
+    # 在另一个client session执行，记录File、Position对应的值
+    show master status;
+    +------------------+----------+--------------+------------------+
+    | File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
+    +------------------+----------+--------------+------------------+
+    | mysql-bin.000003 | 73       | test         | manual,mysql     |
+    +------------------+----------+--------------+------------------+
+    # 回到锁住的session执行
+    unlock tables;
+
+    ## 创建master的镜像
+    mysqldump --all-database --master-data > dbdump.db
+    # 如果需要选择性同步，需要在slave上配置--replicate-ignore-db=db_name来完成，详细使用方法参考官方文档
+
+    ## 在slave导入镜像
+    #带--skip-slave-start选项启动slave上的mysql
+    #导入dump文件
+    mysql < dbdump.db
+    #在slave执行change master to指令
+    CHANGE MASTER TO
+         MASTER_HOST='master_host_name',
+         MASTER_USER='replication_user_name',
+         MASTER_PASSWORD='replication_password',
+         MASTER_LOG_FILE='recorded_log_file_name',
+         MASTER_LOG_POS=recorded_log_position;
+    start slave;
+</pre>
+
+<ul>
+<li>配置实例<br>  <strong>注意：配置MySQL的目的不是有什么秘诀，关键在于根据系统本身的配置高低和处理的业务类型来调整各种资源配置</strong><ul>
+<li>这里有根据不同业务量级给出的实例，<a href="https://github.com/onddo/mysql_tuning-cookbook。" target="_blank" rel="noopener">https://github.com/onddo/mysql_tuning-cookbook。</a></li>
+<li>可以从这里出发，按照步骤来配置<a href="https://tools.percona.com/wizard" target="_blank" rel="noopener">https://tools.percona.com/wizard</a></li>
+<li>执行一下这个工具来获得优化建议<a href="https://github.com/major/MySQLTuner-perl" target="_blank" rel="noopener">https://github.com/major/MySQLTuner-perl</a></li>
+</ul>
+</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/blog/2016/01/22/2016-12-03-git-recipe-NSConflict-liqul/" class="prev">PREV</a><a href="/blog/2015/10/14/2016-12-03-php-deployment-NSConflict-liqul/" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

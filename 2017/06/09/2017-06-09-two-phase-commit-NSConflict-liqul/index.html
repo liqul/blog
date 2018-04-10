@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Notes on Two-phase Commit · Liqun's Homepage</title><meta name="description" content="Notes on Two-phase Commit - Liqun Li"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://scholar.google.com/citations?user=icgetesAAAAJ&amp;hl=en" target="_blank" class="nav-list-link">GOOGLE SCHOLAR</a></li><li class="nav-list-item"><a href="https://www.linkedin.com/in/liqunli/" target="_blank" class="nav-list-link">LINKEDIN</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Notes on Two-phase Commit</h1><div class="post-info">Jun 9, 2017</div><div class="post-content"><p>I recently came across a good description of two-phase commit from actordb’s document. I decide to borrow it as a note. The following is copied from <a href="http://www.actordb.com/docs-howitworks.html#h_323" target="_blank" rel="noopener">actordb’s document</a>:</p>
+<p>3.2.3 Multi-actor transactions<br>Multi-actor transactions need to be ACID compliant. They are executed by a transaction manager. The manager is itself an actor. It has name and a transaction number that is incremented for every transaction.</p>
+<p>Sequence of events from the transaction manager point of view:</p>
+<ol>
+<li>Start transaction by writing the number and state (uncommitted) to transaction table of transaction manager actor.</li>
+<li>Go through all actors in the transaction and execute their belonging SQL to check if it can execute, but do not commit it. If actor successfully executes SQL it will lock itself (queue all reads and writes).</li>
+<li>All actors returned success. Change state in transaction table for transaction to committed.</li>
+<li>Inform all actors that they should commit.</li>
+</ol>
+<p>Sequence of events from an actors point of view:</p>
+<ol>
+<li>Actor receives SQL with a transaction ID, transaction number and which node transaction manager belongs to.</li>
+<li>Store the actual SQL statement with transaction info to a transaction table (not execute it).</li>
+<li>Once it is stored, the SQL will be executed but not committed. If there was no error, return success.</li>
+<li>Actor waits for confirm or abort from transaction manager. It will also periodically check back with the transaction manager in case the node where it was running from went down and confirmation message is lost.</li>
+<li>Once it has a confirmation or abort message it executes it and unlocks itself.</li>
+</ol>
+<p>Problem scenarios:</p>
+<ol>
+<li>Node where transaction manager lives goes down before committing transaction: Actors will be checking back to see what state a transaction is in. If transaction manager actor resumes on another node and sees an uncommitted transaction, it will mark it as aborted. Actors will in turn abort the transaction as well.</li>
+<li>Node where transaction manager lives goes down after committing transaction to local state, but before informing actors that transaction was confirmed. Actors checking back will detect a confirmed transaction and commit it.</li>
+<li>Node where one or more actors live goes down after confirming that they can execute transaction. The actual SQL statements are stored in their databases. The next time actors start up, they will notice that transaction. Check back with the transaction manager and either commit or abort it.</li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a href="/blog/2017/07/07/2017-07-07-notes-learning-spark/" class="prev">PREV</a><a href="/blog/2017/05/04/2017-05-04-notes-on-photography-NSConflict-liqul/" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
