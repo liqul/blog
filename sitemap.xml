@@ -2,282 +2,282 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>liqul.github.io/blog/2018/03/16/consistency_model/</loc>
+    <loc>liqul.github.io/blog/about/</loc>
     
-    <lastmod>2018-04-10T14:19:32.645Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/11/10/things-about-replication-in-elasticsearch/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.246Z</lastmod>
+    <lastmod>2018-04-10T15:16:42.659Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/12/07/ssd/</loc>
+    <loc>liqul.github.io/blog/cycling/</loc>
     
-    <lastmod>2018-04-10T13:59:45.245Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/02/13/running-mapreduce-over-openstack-swift/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.244Z</lastmod>
+    <lastmod>2018-04-10T15:00:12.504Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/10/27/quorum_in_amazon_aurora/</loc>
+    <loc>liqul.github.io/blog/yangming/</loc>
     
-    <lastmod>2018-04-10T13:59:45.244Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/08/29/new_apache_hbase_mob_compaction_policy/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.243Z</lastmod>
+    <lastmod>2018-04-10T14:59:44.591Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/10/28/ming_lessons/</loc>
+    <loc>liqul.github.io/blog/guoshidagang/</loc>
     
-    <lastmod>2018-04-10T13:59:45.242Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2018/02/05/flink/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.242Z</lastmod>
+    <lastmod>2018-04-10T14:59:07.157Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/07/28/2017-07-28-notes-chain-replication/</loc>
+    <loc>liqul.github.io/blog/install-octave-on-osx-ei-capitan-10113/</loc>
     
-    <lastmod>2018-04-10T13:59:45.241Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/07/07/2017-07-07-notes-learning-spark/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.240Z</lastmod>
+    <lastmod>2018-04-10T14:58:23.004Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2018/02/05/2017-07-03-experience_with_mr_memory_parameters-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/consistency_model/</loc>
     
-    <lastmod>2018-04-10T13:59:45.239Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/06/09/2017-06-09-two-phase-commit-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.238Z</lastmod>
+    <lastmod>2018-03-26T02:37:33.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/05/04/2017-05-04-notes-on-photography-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/the-raft-consensus-algorithm/</loc>
     
-    <lastmod>2018-04-10T13:59:45.238Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/04/10/2017-04-10-setup-sbt-development-environment-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.237Z</lastmod>
+    <lastmod>2018-03-15T02:34:55.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/03/31/2017-04-07-using-select-for-update-for-uniqueness-in-mysql-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/things-about-replication-in-elasticsearch/</loc>
     
-    <lastmod>2018-04-10T13:59:45.236Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/03/31/2017-04-01-the-raft-consensus-algorithm-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.236Z</lastmod>
+    <lastmod>2018-03-06T10:55:29.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/03/31/2017-04-01-non-blocking-read-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/ssd/</loc>
     
-    <lastmod>2018-04-10T13:59:45.235Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/03/26/2017-03-26-an-algorithm-deduplicate-file-locks-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.234Z</lastmod>
+    <lastmod>2018-03-06T10:55:21.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/03/31/2017-03-31-implementing-a-lock-system-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/running-mapreduce-over-openstack-swift/</loc>
     
-    <lastmod>2018-04-10T13:59:45.234Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/03/07/2017-03-07-a-role-based-admission-control-system-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.233Z</lastmod>
+    <lastmod>2018-03-06T10:55:14.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/02/25/2017-02-25-the-crowd-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/quorum_in_amazon_aurora/</loc>
     
-    <lastmod>2018-04-10T13:59:45.232Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2017/02/13/2017-02-13-implementing-your-own-inputformat-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.232Z</lastmod>
+    <lastmod>2018-03-06T10:55:03.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2017/02/11/2017-02-11-questions-applying-ai-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/new_apache_hbase_mob_compaction_policy/</loc>
     
-    <lastmod>2018-04-10T13:59:45.231Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2016/12/18/2016-12-18-toolbox-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.230Z</lastmod>
+    <lastmod>2018-03-06T10:54:54.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2018/04/10/2016-12-03-yangming-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/ming_lessons/</loc>
     
-    <lastmod>2018-04-10T13:59:45.230Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2016/01/26/2016-12-03-useful-links-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.229Z</lastmod>
+    <lastmod>2018-03-06T10:54:37.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2015/08/15/2016-12-03-rabbitmq-memory-management-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/flink/</loc>
     
-    <lastmod>2018-04-10T13:59:45.228Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2015/08/15/2016-12-03-rabbitmq-load-balancing-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.228Z</lastmod>
+    <lastmod>2018-03-06T10:54:07.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2015/09/07/2016-12-03-rabbitmq-error1-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/notes-learning-spark/</loc>
     
-    <lastmod>2018-04-10T13:59:45.227Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2015/07/25/2016-12-03-rabbitmq-deployment-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.227Z</lastmod>
+    <lastmod>2018-03-06T10:53:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2015/10/14/2016-12-03-php-deployment-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/notes-chain-replication/</loc>
     
-    <lastmod>2018-04-10T13:59:45.226Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2015/10/15/2016-12-03-mysql-deployment-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.225Z</lastmod>
+    <lastmod>2018-03-06T10:53:39.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2018/04/10/2016-12-03-install-octave-on-osx-ei-capitan-10113-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/experience_with_mr_memory_parameters/</loc>
     
-    <lastmod>2018-04-10T13:59:45.225Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2015/09/23/2016-12-03-imu-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.224Z</lastmod>
+    <lastmod>2018-03-06T10:52:59.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2016/01/22/2016-12-03-git-recipe-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/two-phase-commit/</loc>
     
-    <lastmod>2018-04-10T13:59:45.223Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2016/01/26/2016-12-03-git-precommit-hook-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.223Z</lastmod>
+    <lastmod>2018-03-06T10:52:32.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2018/04/10/2016-12-03-cycling-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/notes-on-photography/</loc>
     
-    <lastmod>2018-04-10T13:59:45.222Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/2015/08/18/2016-12-03-dependency-injection-NSConflict-liqul/</loc>
-    
-    <lastmod>2018-04-10T13:59:45.222Z</lastmod>
+    <lastmod>2018-03-06T10:52:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2018/04/10/2016-12-03-book-guoshidagang-NSConflict-liqul/</loc>
+    <loc>liqul.github.io/blog/setup-sbt-development-environment/</loc>
     
-    <lastmod>2018-04-10T13:59:45.221Z</lastmod>
+    <lastmod>2018-03-06T10:52:05.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/2018/04/10/hello-world/</loc>
+    <loc>liqul.github.io/blog/using-select-for-update-for-uniqueness-in-mysql/</loc>
     
-    <lastmod>2018-04-10T13:55:29.927Z</lastmod>
+    <lastmod>2018-03-06T10:51:55.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/non-blocking-read/</loc>
+    
+    <lastmod>2018-03-06T10:51:28.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/implementing-a-lock-system/</loc>
+    
+    <lastmod>2018-03-06T10:51:07.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/an-algorithm-deduplicate-file-locks/</loc>
+    
+    <lastmod>2018-03-06T10:50:53.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/a-role-based-admission-control-system/</loc>
+    
+    <lastmod>2018-03-06T10:50:32.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/the-crowd/</loc>
+    
+    <lastmod>2018-03-06T10:50:26.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/implementing-your-own-inputformat/</loc>
+    
+    <lastmod>2018-03-06T10:49:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/toolbox/</loc>
+    
+    <lastmod>2018-03-06T10:49:34.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/useful-links/</loc>
+    
+    <lastmod>2018-03-06T10:49:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/rabbitmq-memory-management/</loc>
+    
+    <lastmod>2018-03-06T10:49:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/rabbitmq-load-balancing/</loc>
+    
+    <lastmod>2018-03-06T10:49:08.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/rabbitmq-error1/</loc>
+    
+    <lastmod>2018-03-06T10:49:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/rabbitmq-deployment/</loc>
+    
+    <lastmod>2018-03-06T10:48:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/php-deployment/</loc>
+    
+    <lastmod>2018-03-06T10:48:51.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/mysql-deployment/</loc>
+    
+    <lastmod>2018-03-06T10:48:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/imu/</loc>
+    
+    <lastmod>2018-03-06T10:47:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/git-recipe/</loc>
+    
+    <lastmod>2018-03-06T10:47:10.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/git-precommit-hook/</loc>
+    
+    <lastmod>2018-03-06T10:47:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/dependency-injection/</loc>
+    
+    <lastmod>2018-03-06T10:46:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/questions-applying-ai/</loc>
+    
+    <lastmod>2017-07-28T08:30:38.000Z</lastmod>
     
   </url>
   
