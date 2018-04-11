@@ -30,12 +30,12 @@ mysqladmin -u root -h host_name password newpassword
 <p>#删除用户<br>DROP USER username;</p>
 <p>#取消用户授权<br>REVOKE primitive ON db.table FROM username@host;<br></p>
 <ul>
-<li>备份<br>下面的命令里都省略了-u和-p，在实际操作时须补全。<br><strong>关于bin log的部分，文档《binlog基本认识》有非常详尽的介绍。</strong><br><pre class="lang:default decode:true "><h1 id="开启binlog"><a href="#开启binlog" class="headerlink" title="开启binlog"></a>开启binlog</h1>编辑my.cnf文件，在[mysqld]区块中加入log-bin=mysql-bin，重启服务即生效<br>执行show variables like ‘log_%’;来确认已经打开bin log</pre></li>
+<li>备份<br>下面的命令里都省略了-u和-p，在实际操作时须补全。<br><strong>关于bin log的部分，文档《binlog基本认识》有非常详尽的介绍。</strong><br><pre class="lang:default decode:true "><h1><span id="开启binlog">开启binlog</span></h1>编辑my.cnf文件，在[mysqld]区块中加入log-bin=mysql-bin，重启服务即生效<br>执行show variables like ‘log_%’;来确认已经打开bin log</pre></li>
 </ul>
-<h1 id="常用的bin-log操作"><a href="#常用的bin-log操作" class="headerlink" title="常用的bin log操作"></a>常用的bin log操作</h1><p>show master logs; # 查看所有bin log日志列表<br>show master status; # 查看最新一个bin log日志编号名称，以及最后一个操作事件结束点<br>flush logs; # 刷新日志，产生一个新的bin log日志文件<br>reset master; # 清空所有bin log日志</p>
-<h1 id="查看bin-log"><a href="#查看bin-log" class="headerlink" title="查看bin log"></a>查看bin log</h1><p>mysqlbinlog mysql-bin.000013 #打开一个bin log文件<br>show binlog events [IN log_name] [FROM pos] [LIMIT [offset,] row_count]<br>例如指定查询 mysql-bin.000021 这个文件，从pos点:8224开始查起，偏移2行，查询10条<br>    show binlog events in ‘mysql-bin.000021’ from 8224 limit 2,10\G;</p>
-<h1 id="利用bin-log恢复数据"><a href="#利用bin-log恢复数据" class="headerlink" title="利用bin log恢复数据"></a>利用bin log恢复数据</h1><p>mysqlbinlog mysql-bin.0000xx | mysql </p>
-<h1 id="备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行"><a href="#备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行" class="headerlink" title="备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行"></a>备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行</h1><p>mysqldump –single-transaction –all-databases &gt; backup_yy_mm_dd_hh_mm_ss.sql<br>mysql &lt; backup_yy_mm_dd_hh_mm_ss.sql<br></p>
+<h1><span id="常用的bin-log操作">常用的bin log操作</span></h1><p>show master logs; # 查看所有bin log日志列表<br>show master status; # 查看最新一个bin log日志编号名称，以及最后一个操作事件结束点<br>flush logs; # 刷新日志，产生一个新的bin log日志文件<br>reset master; # 清空所有bin log日志</p>
+<h1><span id="查看bin-log">查看bin log</span></h1><p>mysqlbinlog mysql-bin.000013 #打开一个bin log文件<br>show binlog events [IN log_name] [FROM pos] [LIMIT [offset,] row_count]<br>例如指定查询 mysql-bin.000021 这个文件，从pos点:8224开始查起，偏移2行，查询10条<br>    show binlog events in ‘mysql-bin.000021’ from 8224 limit 2,10\G;</p>
+<h1><span id="利用bin-log恢复数据">利用bin log恢复数据</span></h1><p>mysqlbinlog mysql-bin.0000xx | mysql </p>
+<h1><span id="备份整个数据库备份前需要获取全局读锁因此必须在traffic较低的时候进行">备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行</span></h1><p>mysqldump –single-transaction –all-databases &gt; backup_yy_mm_dd_hh_mm_ss.sql<br>mysql &lt; backup_yy_mm_dd_hh_mm_ss.sql<br></p>
 <ul>
 <li>主从同步<br>  完整的说明在这里：<a href="http://dev.mysql.com/doc/refman/5.6/en/replication-howto.html。" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.6/en/replication-howto.html。</a><br>  另一篇文章是个不错的简化版，并且更加实用“<a href="http://plusbryan.com/mysql-replication-without-downtime" target="_blank" rel="noopener">Setting up MySQL replication without the downtime</a>”。</li>
 </ul>
@@ -96,4 +96,4 @@ mysqladmin -u root -h host_name password newpassword
 </ul>
 </li>
 </ul>
-</div></article></div></main><footer><div class="paginator"><a href="/blog/git-recipe/" class="prev">PREV</a><a href="/blog/php-deployment/" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+</div></article></div></main><footer><div class="paginator"><a href="/blog/git-recipe/" class="prev">上一篇</a><a href="/blog/php-deployment/" class="next">下一篇</a></div><div class="copyright"><p>© 2016 - 2018 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
