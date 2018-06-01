@@ -2,51 +2,128 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>liqul.github.io/blog/consistency_model/</loc>
+    <loc>liqul.github.io/blog/news/</loc>
     
-    <lastmod>2018-04-11T13:50:20.819Z</lastmod>
+    <lastmod>2018-06-01T13:49:29.513Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/guoshidagang/</loc>
+    <loc>liqul.github.io/blog/about/index.html</loc>
     
-    <lastmod>2018-04-11T00:16:38.343Z</lastmod>
+    <lastmod>2018-05-03T08:41:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/things-about-replication-in-elasticsearch/</loc>
+    
+    <lastmod>2018-04-18T13:33:55.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/hbase/</loc>
+    
+    <lastmod>2018-04-17T15:05:03.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/invest/</loc>
+    
+    <lastmod>2018-04-12T14:14:22.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/notes-learning-spark/</loc>
+    
+    <lastmod>2018-04-12T13:41:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/notes-chain-replication/</loc>
+    
+    <lastmod>2018-04-12T13:40:43.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/new_apache_hbase_mob_compaction_policy/</loc>
+    
+    <lastmod>2018-04-12T13:40:03.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/quorum_in_amazon_aurora/</loc>
+    
+    <lastmod>2018-04-12T13:39:31.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>liqul.github.io/blog/ming_lessons/</loc>
     
-    <lastmod>2018-04-11T00:11:27.878Z</lastmod>
+    <lastmod>2018-04-12T13:39:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/about/</loc>
+    <loc>liqul.github.io/blog/ssd/</loc>
     
-    <lastmod>2018-04-10T15:16:42.659Z</lastmod>
+    <lastmod>2018-04-12T13:37:53.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/experience_with_mr_memory_parameters/</loc>
+    
+    <lastmod>2018-04-12T13:37:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/flink/</loc>
+    
+    <lastmod>2018-04-12T13:34:51.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/consistency_model/</loc>
+    
+    <lastmod>2018-04-12T13:33:38.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/guoshidagang/</loc>
+    
+    <lastmod>2018-04-11T00:13:26.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>liqul.github.io/blog/cycling/</loc>
     
-    <lastmod>2018-04-10T15:00:12.504Z</lastmod>
+    <lastmod>2018-04-10T15:00:12.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>liqul.github.io/blog/yangming/</loc>
     
-    <lastmod>2018-04-10T14:59:44.591Z</lastmod>
+    <lastmod>2018-04-10T14:59:44.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>liqul.github.io/blog/install-octave-on-osx-ei-capitan-10113/</loc>
     
-    <lastmod>2018-04-10T14:58:23.004Z</lastmod>
+    <lastmod>2018-04-10T14:58:23.000Z</lastmod>
     
   </url>
   
@@ -58,65 +135,9 @@
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/things-about-replication-in-elasticsearch/</loc>
-    
-    <lastmod>2018-03-06T10:55:29.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/ssd/</loc>
-    
-    <lastmod>2018-03-06T10:55:21.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>liqul.github.io/blog/running-mapreduce-over-openstack-swift/</loc>
     
     <lastmod>2018-03-06T10:55:14.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/quorum_in_amazon_aurora/</loc>
-    
-    <lastmod>2018-03-06T10:55:03.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/new_apache_hbase_mob_compaction_policy/</loc>
-    
-    <lastmod>2018-03-06T10:54:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/flink/</loc>
-    
-    <lastmod>2018-03-06T10:54:07.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/notes-learning-spark/</loc>
-    
-    <lastmod>2018-03-06T10:53:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/notes-chain-replication/</loc>
-    
-    <lastmod>2018-03-06T10:53:39.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/experience_with_mr_memory_parameters/</loc>
-    
-    <lastmod>2018-03-06T10:52:59.000Z</lastmod>
     
   </url>
   
