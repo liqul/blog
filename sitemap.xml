@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>liqul.github.io/blog/flink/</loc>
+    
+    <lastmod>2018-09-09T15:11:09.683Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>liqul.github.io/blog/news/</loc>
     
-    <lastmod>2018-08-26T08:33:42.161Z</lastmod>
+    <lastmod>2018-09-08T07:59:37.717Z</lastmod>
     
   </url>
   
@@ -82,13 +89,6 @@
     <loc>liqul.github.io/blog/experience_with_mr_memory_parameters/</loc>
     
     <lastmod>2018-04-12T13:37:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/flink/</loc>
-    
-    <lastmod>2018-04-12T13:34:51.000Z</lastmod>
     
   </url>
   
