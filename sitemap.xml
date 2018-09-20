@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>liqul.github.io/blog/banks/</loc>
+    
+    <lastmod>2018-09-20T14:27:51.691Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>liqul.github.io/blog/flink/</loc>
     
-    <lastmod>2018-09-09T15:25:32.979Z</lastmod>
+    <lastmod>2018-09-15T14:40:48.922Z</lastmod>
     
   </url>
   
   <url>
     <loc>liqul.github.io/blog/news/</loc>
     
-    <lastmod>2018-09-08T07:59:37.717Z</lastmod>
+    <lastmod>2018-09-15T14:35:48.661Z</lastmod>
     
   </url>
   
