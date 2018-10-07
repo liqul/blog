@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>liqul.github.io/blog/news/</loc>
+    
+    <lastmod>2018-10-07T12:22:44.974Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/etcd_raft_3/</loc>
+    
+    <lastmod>2018-09-21T10:25:24.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>liqul.github.io/blog/banks/</loc>
     
     <lastmod>2018-09-20T14:35:14.167Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>liqul.github.io/blog/flink/</loc>
     
     <lastmod>2018-09-15T14:40:48.922Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/news/</loc>
-    
-    <lastmod>2018-09-15T14:35:48.661Z</lastmod>
     
   </url>
   
