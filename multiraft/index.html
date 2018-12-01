@@ -1,0 +1,48 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 从Raft到MultiRaft · Liqun's Homepage</title><meta name="description" content="从Raft到MultiRaft - Liqun Li"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon2.jpeg"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon2.jpeg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives" target="_self" class="nav-list-link">TAGS/ARCHIVE</a></li><li class="nav-list-item"><a href="/blog/about" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">从Raft到MultiRaft</h1><div class="post-info">Nov 1, 2018</div><div class="post-content"><p>Raft是一种共识算法，在之前的文章里已经提到过。简而言之，每次集群处理一次请求，都需要经过集群中大部分节点协商。所以一个Raft集群的规模一般不会太大，否则协商的代价就会比较大。那么如果希望基于Raft实现一些规模比较大的服务该怎么扩展呢？</p>
+<p>例如我们想做一个kv存储，那么一个简单的想法是把key分为多个range，然后不同的range由不同的Raft集群来控制。实际上，MultiRaft的思想就是这么简单…只是在实现上有一些细节需要考虑。如果希望更多理解MultiRaft的概念，可以读读这篇<a href="http://sergeiturukin.com/2017/06/09/multiraft.html" target="_blank" rel="noopener">文章</a>，还有<a href="https://www.cockroachlabs.com/blog/scaling-raft/" target="_blank" rel="noopener">这里</a>。从中可以发现，MultiRaft解决的两个核心问题分别是：</p>
+<ul>
+<li><strong>共享物理节点的问题</strong>：多个Raft集群实际上是共享物理节点的，所以需要小心组织每个节点上的数据；</li>
+<li><strong>Heartbeat过多的问题</strong>：每个Raft集群逻辑节点需要处理Heartbeat消息，如果每个物理节点上都有多个Raft逻辑节点，那么开销会比较大，所以希望Heartbeat以物理节点为单位而不是逻辑节点。</li>
+</ul>
+<p>如果考虑跨Raft集群操作，实际上还有一个问题，就是如果一次操作跨不同的Raft集群怎么办？如果服务不需要提供事务那其实是没有问题的，但如果需要呢？现在使用MultiRaft的两个服务Cockroachdb和Tidb都有文档说明：</p>
+<ul>
+<li>Cockroachdb：看<a href="https://www.cockroachlabs.com/blog/how-cockroachdb-distributes-atomic-transactions/" target="_blank" rel="noopener">这里</a>和<a href="https://www.cockroachlabs.com/blog/serializable-lockless-distributed-isolation-cockroachdb/" target="_blank" rel="noopener">这里</a>；</li>
+<li>Tidb：看<a href="https://pingcap.com/blog-cn/percolator-and-txn/" target="_blank" rel="noopener">这里</a>。</li>
+</ul>
+<p>Cockroachdb的思路比较容易理解，也跟我想的差不多，而Tidb的则没有看明白，尤其是关于锁的问题。</p>
+<p>下面按照我自己的理解来说明。首先，数据需要以MVCC方式存储，即每个kv保存多个版本，例如：</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+<th>commit</th>
+<th>state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>1</td>
+<td>1</td>
+<td>stable</td>
+</tr>
+<tr>
+<td>a</td>
+<td>2</td>
+<td>2</td>
+<td>unstable</td>
+</tr>
+<tr>
+<td>b</td>
+<td>1</td>
+<td>1</td>
+<td>stable</td>
+</tr>
+</tbody>
+</table>
+<p>每个kv除了key和value额外保留两个字段，分别是commit和state。在这里stable代表一次事务已经完成，可以被外界读取的情况；反之，如果是unstable，表示事务没有完结，对外不可见。</p>
+<p>在一次写入的时候，如果所涉及的数据都分布在一个Raft集群内，那么是不需要考虑事务的，因为这些变更可以记做一条Raft日志，从而达到事务的效果。只有跨多个Raft集群时才需要用Two-phase commit (2PC)来达到整体的事务效果。</p>
+<p>在2PC的第一个阶段，每个Raft集群完成写入后，内部节点的状态（即一个kv map）对应的state都是unstable，表示这时候只是单个Raft完成写入，还需要等待2PC coordinator确定是否所有Raft集群都完成写入。数据里的commit是事务的编号，这可以由一个独立的服务来产生事务编号，保证commit单调递增。当所有Raft集群都写入成功，2PC进入第二个阶段，由coordinator向所有集群通告已经成功的commit号，接收到该信息后各个Raft集群将commit对应数据的state由unstable改变成stable，一次事务完成。</p>
+<p>总的来说，MultiRaft是对Raft的一种扩展。但是，MultiRaft还不方便简单抽取出来作为一种可供其它应用直接使用的库，与业务逻辑的关联性比较强。不过，有了Cockroachdb和Tidb的实际应用，对其它类似的存储结构的扩展是很好的参考。</p>
+</div></article></div></main><footer><div class="paginator"><a href="/blog/news/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
