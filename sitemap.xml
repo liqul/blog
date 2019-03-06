@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>liqul.github.io/blog/multiraft/</loc>
+    
+    <lastmod>2019-03-06T14:47:42.480Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>liqul.github.io/blog/credit-spread/</loc>
     
-    <lastmod>2019-03-06T13:58:33.635Z</lastmod>
+    <lastmod>2019-03-06T14:47:15.142Z</lastmod>
     
   </url>
   
   <url>
     <loc>liqul.github.io/blog/etcd_raft_4/</loc>
     
-    <lastmod>2019-03-06T13:57:18.275Z</lastmod>
+    <lastmod>2019-03-06T14:47:06.859Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/etcd_raft_3/</loc>
+    
+    <lastmod>2019-03-06T14:46:57.886Z</lastmod>
     
   </url>
   
@@ -23,23 +37,9 @@
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/etcd_raft_3/</loc>
-    
-    <lastmod>2018-11-23T06:35:00.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>liqul.github.io/blog/ming_lessons/</loc>
     
     <lastmod>2018-11-01T10:32:55.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/multiraft/</loc>
-    
-    <lastmod>2018-11-01T10:30:30.000Z</lastmod>
     
   </url>
   
