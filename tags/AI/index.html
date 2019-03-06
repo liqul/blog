@@ -1,1 +1,315 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Liqun's Homepage</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon2.jpeg"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon2.jpeg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives" target="_self" class="nav-list-link">TAGS/ARCHIVE</a></li><li class="nav-list-item"><a href="/blog/about" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="archive"><a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 10px;">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/distributed/" style="font-size: 12px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 12px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a></div><div class="archive"><h2 class="archive-year">2017</h2><div class="post-item"><div class="post-info">Feb 11, 2017</div><a href="/blog/questions-applying-ai/" class="post-title-link">Questions Asked When Applying AI</a></div></div></main><footer><div class="paginator"></div><div class="copyright"><p>© 2015 - 2019 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>Tag: AI | Liqun&#39;s Homepage</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" href="/blog/">
+  <link rel="alternate" href="/blog/atom.xml" title="Liqun's Homepage">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Liqun&#39;s Homepage">
+<meta property="og:url" content="liqul.github.io/blog/tags/AI/index.html">
+<meta property="og:site_name" content="Liqun&#39;s Homepage">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Liqun&#39;s Homepage">
+    
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Titillium+Web" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+  <link href='//cdn.bootcss.com/node-waves/0.7.5/waves.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/blog/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+</head>
+
+<body>
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+
+  <script>setLoadingBarProgress(20)</script> 
+  <header class="l_header">
+	<div class='wrapper'>
+		<div class="nav-main container container--flex">
+			<a class="logo flat-box" href='/blog/' >
+				Liqun's Homepage
+			</a>
+			<div class='menu'>
+				<ul class='h-list'>
+					
+						<li>
+							<a class='flat-box nav-home' href='/blog/'>
+								Home
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-archives' href='/blog/archives'>
+								Archives
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-gallery' href='https://photos.google.com/album/AF1QipNoqKYgspQo5O1YhlFXGCQ7p575KBH3Yxf8WHL4?hl=zh-CN'>
+								Gallery
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-about' href='/blog/about'>
+								About
+							</a>
+						</li>
+					
+				</ul>
+				<div class='underline'></div>
+			</div>
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="Search" />
+						<span class="icon icon-search"></span>
+					</form>
+				</div>
+			
+			<ul class='switcher h-list'>
+				
+					<li class='s-search'><a href='javascript:void(0)'><span class="icon icon-search flat-box"></span></a></li>
+				
+				<li class='s-menu'><a href='javascript:void(0)'><span class="icon icon-menu flat-box"></span></a></li>
+			</ul>
+		</div>
+		
+		<div class='nav-sub container container--flex'>
+			<a class="logo" class="flat-box" href='javascript:void(0)'>
+				Word of Forks
+			</a>
+
+			<ul class='switcher h-list'>
+				<li class='s-comment'><a href='javascript:void(0)'><span class="icon icon-chat_bubble_outline flat-box"></span></a></li>
+				<li class='s-top'><a href='javascript:void(0)'><span class="icon icon-arrow_upward flat-box"></span></a></li>
+				<li class='s-toc'><a href='javascript:void(0)'><span class="icon icon-format_list_numbered flat-box"></span></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+<aside class="menu-phone">
+	<nav>
+		
+			<a href="/blog/" class="nav-home nav">
+				Home
+			</a>
+		
+			<a href="/blog/archives" class="nav-archives nav">
+				Archives
+			</a>
+		
+			<a href="https://photos.google.com/album/AF1QipNoqKYgspQo5O1YhlFXGCQ7p575KBH3Yxf8WHL4?hl=zh-CN" class="nav-gallery nav">
+				Gallery
+			</a>
+		
+			<a href="/blog/about" class="nav-about nav">
+				About
+			</a>
+		
+	</nav>
+</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+  <div class="l_body">
+    <div class='container clearfix'>
+      <div class='l_main'>
+        
+  <script>
+    window.subData= { title:'Tag : AI'}
+  </script>
+
+<section class="post-list">
+	
+    <div class='post-wrapper'>
+      <article class="post reveal">
+  <section class="meta">
+    
+    <h2 class="title">
+      <a href="/blog/questions-applying-ai/">
+        Questions Asked When Applying AI
+      </a>
+    </h2>
+    
+    <time>
+      Feb 11, 2017
+    </time>
+		
+    
+    <div class='cats'>
+        <a href="/blog/categories/Thinking/">Thinking</a>
+    </div>
+
+  </section>
+  <section class="article typo">
+	  <h3><span id="artificial-intelligence-ai-or-human-intelligence-hi">Artificial Intelligence (AI) or Human Intelligence (HI)?</span></h3><p>It is not always obvious to determine using AI or HI. If you feel confident to have sufficient data to train sophisticate models, you may prefer using AI. Otherwise, using HI based rules is a more straight way tackling the problems. In practice, a hybrid solution combining both AI and HI is usually a wise choice.  </p>
+<h3><span id="classification-or-regression">Classification or Regression?</span></h3><p>It all depends on the output of the problem. If the outcome is continuous, use regression, otherwise classification. In the digital world, nothing is really continuous. So, if there are too many categories, use regression is a wiser choice. </p>
+<h3><span id="do-i-need-preprocessing">Do I need preprocessing?</span></h3><p>It is rare case that no preprocessing is required. Data usually contains a lot of noise. If the raw data is feed into the learning algorithm, unpredictable outcome may be obtained. Filtering the extraneous data before doing the learning, and most important, also apply the filter before applying the algorithm in your real system. Once you encounter an extraneous event, use HI to determine the output to your end user. </p>
+<h3><span id="complex-or-less-complex">Complex or Less complex?</span></h3><p>In the world of learning algorithm, the complexity of the problem is important to choose to apply a “legacy” algorithms like random forest, SVM, or to apply a “cutting-edge” algorithm like CNN. Though DNN beats the smartest people in some areas, it is still quite big for some applications, e.g., activity classification on smartphones. Also, keep in mind that those super powerful algorithms need tons of data as learning input. So, before tasting the cutting-edge techniques, be sure to prepare enough “food” for them. </p>
+<h3><span id="how-to-avoid-over-fitting">How to avoid over-fitting?</span></h3><p>The cue comes from cross validation. Depending on how much data you have, you make take out 30% data for testing, and the left 70% for training. Or, you may split the whole data set as 10 splits. You take out 1 split for testing and the left 9 splits for training. If you have only few data, use leave one out cross validation.</p>
+<h3><span id="whats-the-cost">What’s the cost?</span></h3><p>Learning algorithms typically treat all output result neutrally, which however is rare in practice. So, be sure to consider about your cost function, and apply it to the learning algorithm. There are a few ways of applying a cost function given a learning algorithm as a blackbox. </p>
+<h3><span id="how-domain-knowledge-comes-in">How domain-knowledge comes in?</span></h3><p>In general, domain knowledge belongs to HI. Here, I simply want to emphasis that domain knowledge may come in multiple ways. For example, the output of a classification algorithm may be smoothed with a HMM smoother powered by domain knowledge. Also, choosing the features requires deep understanding about the problem to solve. Make a stretch algorithm framework for the problem and then feed more and more domain knowledge in brain to make it better.</p>
+<p>Finally, I want to put a picture of the architecture that I designed for transportation activity detection on smartphones. </p>
+<p><img src="/blog/assets/architecture.jpg" width="400"></p>
+
+
+    
+    
+    
+	  <div class="full-width auto-padding tags">
+      
+        <a href="/blog/tags/AI/">AI</a>
+      
+	  </div>
+    
+  </section>
+</article>
+    </div>
+  
+</section>
+
+
+      </div>
+      <aside class='l_side'>
+        
+  <section class='m_widget about'>
+
+<div class='header'>Liqun Li</div>
+<div class='content'>
+<div class='desc'>Tempora mutantur, nos et mutamur in illis ...</div>
+</div>
+</section>
+
+  <section class='m_widget links'>
+<div class='header'>Links</div>
+<div class='content'>
+    <ul class="entry">
+    
+        <li><a class="flat-box" target="_blank" href="https://ccoooss.com">
+            <div class='name'>ClassicOldSong</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://frantic1048.logdown.com/">
+            <div class='name'>Frantic1048</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://hclmaster.github.io/">
+            <div class='name'>Hclmaster</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://whst.github.io/">
+            <div class='name'>WANG Hsü-Tung</div>
+        </a></li>
+    
+    </ul>
+</div>
+</section>
+
+  <section class='m_widget categories'>
+<div class='header'>Categories</div>
+<div class='content'>
+    
+    <ul class="entry">
+    
+        <li><a class="flat-box" href="/blog/categories/Book-Reading/"><div class='name'>Book Reading</div><div class='badget'>3</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Finance/"><div class='name'>Finance</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Photography/"><div class='name'>Photography</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Reading/"><div class='name'>Reading</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Tech/"><div class='name'>Tech</div><div class='badget'>39</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Thinking/"><div class='name'>Thinking</div><div class='badget'>3</div></a></li>
+    
+    </ul>
+    
+</div>
+</section>
+
+  
+<div class="m_widget tagcloud">
+    <div class="header">Tags</div>
+    <div class='content'>
+        <a href="/blog/tags/AI/" style="font-size: 14px; color: #808080">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 14px; color: #808080">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 14px; color: #808080">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 14px; color: #808080">Deadlock</a> <a href="/blog/tags/HBase/" style="font-size: 14px; color: #808080">HBase</a> <a href="/blog/tags/IMU/" style="font-size: 14px; color: #808080">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 14px; color: #808080">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 14px; color: #808080">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 14px; color: #808080">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 14px; color: #808080">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 14px; color: #808080">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18.8px; color: #1a1a1a">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 14px; color: #808080">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 14px; color: #808080">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 14px; color: #808080">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 14px; color: #808080">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px; color: #000">big data</a> <a href="/blog/tags/compaction/" style="font-size: 14px; color: #808080">compaction</a> <a href="/blog/tags/compass/" style="font-size: 14px; color: #808080">compass</a> <a href="/blog/tags/consistency/" style="font-size: 15.2px; color: #666">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 14px; color: #808080">credit spread</a> <a href="/blog/tags/distributed/" style="font-size: 15.2px; color: #666">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 14px; color: #808080">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 14px; color: #808080">flink</a> <a href="/blog/tags/git/" style="font-size: 15.2px; color: #666">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 14px; color: #808080">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 14px; color: #808080">hbase</a> <a href="/blog/tags/investment/" style="font-size: 15.2px; color: #666">investment</a> <a href="/blog/tags/links/" style="font-size: 14px; color: #808080">links</a> <a href="/blog/tags/lock/" style="font-size: 16.4px; color: #4d4d4d">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 15.2px; color: #666">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 14px; color: #808080">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 14px; color: #808080">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 14px; color: #808080">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 14px; color: #808080">octave</a> <a href="/blog/tags/openstack/" style="font-size: 14px; color: #808080">openstack</a> <a href="/blog/tags/photography/" style="font-size: 14px; color: #808080">photography</a> <a href="/blog/tags/php/" style="font-size: 15.2px; color: #666">php</a> <a href="/blog/tags/quorum/" style="font-size: 14px; color: #808080">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 17.6px; color: #333">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 14px; color: #808080">replication</a> <a href="/blog/tags/sbt/" style="font-size: 14px; color: #808080">sbt</a> <a href="/blog/tags/scala/" style="font-size: 14px; color: #808080">scala</a> <a href="/blog/tags/spark/" style="font-size: 14px; color: #808080">spark</a> <a href="/blog/tags/ssd/" style="font-size: 14px; color: #808080">ssd</a> <a href="/blog/tags/storage/" style="font-size: 14px; color: #808080">storage</a> <a href="/blog/tags/swift/" style="font-size: 14px; color: #808080">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 14px; color: #808080">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 14px; color: #808080">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 14px; color: #808080">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 14px; color: #808080">洪业</a> <a href="/blog/tags/认知/" style="font-size: 14px; color: #808080">认知</a>
+    </div>
+</div>
+
+
+
+      </aside>
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+  </div>
+  <footer id="footer" class="clearfix">
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="https://github.com/stkevintan" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="https://twitter.com/kevinsfork" class="social twitter"
+          target="_blank" rel="external">
+          <span class="icon icon-twitter"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <a href='https://github.com/stkevintan/hexo-theme-material-flow' class="codename">MaterialFlow</a> designed by <a href="http://keyin.me/" target="_blank">Kevin Tan</a>.</div>
+  
+</footer>
+
+
+  <script>setLoadingBarProgress(80);</script>
+  
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src='//cdn.bootcss.com/node-waves/0.7.5/waves.min.js'></script>
+<script src="//cdn.bootcss.com/scrollReveal.js/3.3.2/scrollreveal.min.js"></script>
+<script src="/blog/js/jquery.fitvids.js"></script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "hexo";
+  var ROOT = "/blog/"||"/";
+  if(!ROOT.endsWith('/'))ROOT += '/';
+</script>
+<script src="/blog/js/search.js"></script>
+<script src="/blog/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

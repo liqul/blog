@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>liqul.github.io/blog/news/</loc>
+    <loc>liqul.github.io/blog/credit-spread/</loc>
     
-    <lastmod>2019-01-05T14:06:44.450Z</lastmod>
+    <lastmod>2019-03-06T13:58:33.635Z</lastmod>
     
   </url>
   
   <url>
     <loc>liqul.github.io/blog/etcd_raft_4/</loc>
     
-    <lastmod>2018-11-23T06:35:01.000Z</lastmod>
+    <lastmod>2019-03-06T13:57:18.275Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/news/</loc>
+    
+    <lastmod>2019-01-05T14:06:44.450Z</lastmod>
     
   </url>
   

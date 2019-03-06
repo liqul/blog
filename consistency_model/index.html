@@ -1,4 +1,167 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Eventual Consistency vs. Strong Consistency · Liqun's Homepage</title><meta name="description" content="Understanding the differences between these two consistency models."><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon2.jpeg"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon2.jpeg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives" target="_self" class="nav-list-link">TAGS/ARCHIVE</a></li><li class="nav-list-item"><a href="/blog/about" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Eventual Consistency vs. Strong Consistency</h1><div class="post-info">Mar 16, 2018</div><div class="post-content"><p><a href="https://cloud.google.com/datastore/docs/articles/balancing-strong-and-eventual-consistency-with-google-cloud-datastore/" target="_blank" rel="noopener">Here</a> is a very good explanation about eventual consistency and strong consistency. I’d like to borrow the two figures on that page below:</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>Eventual Consistency vs. Strong Consistency | Liqun&#39;s Homepage</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" href="/blog/">
+  <link rel="alternate" href="/blog/atom.xml" title="Liqun's Homepage">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Here is a very good explanation about eventual consistency and strong consistency. I’d like to borrow the two figures on that page below: Fig. 1 figure for eventual consistency">
+<meta name="keywords" content="big data,distributed,consistency">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Eventual Consistency vs. Strong Consistency">
+<meta property="og:url" content="liqul.github.io/blog/consistency_model/index.html">
+<meta property="og:site_name" content="Liqun&#39;s Homepage">
+<meta property="og:description" content="Here is a very good explanation about eventual consistency and strong consistency. I’d like to borrow the two figures on that page below: Fig. 1 figure for eventual consistency">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="/blog/assets/eventual-consistency.png">
+<meta property="og:image" content="/blog/assets/strong-consistency.png">
+<meta property="og:updated_time" content="2018-04-12T13:33:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Eventual Consistency vs. Strong Consistency">
+<meta name="twitter:description" content="Here is a very good explanation about eventual consistency and strong consistency. I’d like to borrow the two figures on that page below: Fig. 1 figure for eventual consistency">
+<meta name="twitter:image" content="/blog/assets/eventual-consistency.png">
+    
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Titillium+Web" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+  <link href='//cdn.bootcss.com/node-waves/0.7.5/waves.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/blog/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+</head>
+
+<body>
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+
+  <script>setLoadingBarProgress(20)</script> 
+  <header class="l_header">
+	<div class='wrapper'>
+		<div class="nav-main container container--flex">
+			<a class="logo flat-box" href='/blog/' >
+				Liqun's Homepage
+			</a>
+			<div class='menu'>
+				<ul class='h-list'>
+					
+						<li>
+							<a class='flat-box nav-home' href='/blog/'>
+								Home
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-archives' href='/blog/archives'>
+								Archives
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-gallery' href='https://photos.google.com/album/AF1QipNoqKYgspQo5O1YhlFXGCQ7p575KBH3Yxf8WHL4?hl=zh-CN'>
+								Gallery
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-about' href='/blog/about'>
+								About
+							</a>
+						</li>
+					
+				</ul>
+				<div class='underline'></div>
+			</div>
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="Search" />
+						<span class="icon icon-search"></span>
+					</form>
+				</div>
+			
+			<ul class='switcher h-list'>
+				
+					<li class='s-search'><a href='javascript:void(0)'><span class="icon icon-search flat-box"></span></a></li>
+				
+				<li class='s-menu'><a href='javascript:void(0)'><span class="icon icon-menu flat-box"></span></a></li>
+			</ul>
+		</div>
+		
+		<div class='nav-sub container container--flex'>
+			<a class="logo" class="flat-box" href='javascript:void(0)'>
+				Word of Forks
+			</a>
+
+			<ul class='switcher h-list'>
+				<li class='s-comment'><a href='javascript:void(0)'><span class="icon icon-chat_bubble_outline flat-box"></span></a></li>
+				<li class='s-top'><a href='javascript:void(0)'><span class="icon icon-arrow_upward flat-box"></span></a></li>
+				<li class='s-toc'><a href='javascript:void(0)'><span class="icon icon-format_list_numbered flat-box"></span></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+<aside class="menu-phone">
+	<nav>
+		
+			<a href="/blog/" class="nav-home nav">
+				Home
+			</a>
+		
+			<a href="/blog/archives" class="nav-archives nav">
+				Archives
+			</a>
+		
+			<a href="https://photos.google.com/album/AF1QipNoqKYgspQo5O1YhlFXGCQ7p575KBH3Yxf8WHL4?hl=zh-CN" class="nav-gallery nav">
+				Gallery
+			</a>
+		
+			<a href="/blog/about" class="nav-about nav">
+				About
+			</a>
+		
+	</nav>
+</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+  <div class="l_body">
+    <div class='container clearfix'>
+      <div class='l_main'>
+        <article id="post-consistency_model"
+  class="post white-box article-type-post"
+  itemscope itemprop="blogPost">
+	<section class='meta'>
+	<h2 class="title">
+  	<a href="/blog/consistency_model/">
+    	Eventual Consistency vs. Strong Consistency
+    </a>
+  </h2>
+	<time>
+	  Mar 16, 2018
+	</time>
+	
+    
+    <div class='cats'>
+        <a href="/blog/categories/Tech/">Tech</a>
+    </div>
+
+	</section>
+	
+		<section class="toc-wrapper"></section>
+	
+	<section class="article typo">
+  	<div class="article-entry" itemprop="articleBody">
+    	<p><a href="https://cloud.google.com/datastore/docs/articles/balancing-strong-and-eventual-consistency-with-google-cloud-datastore/" target="_blank" rel="noopener">Here</a> is a very good explanation about eventual consistency and strong consistency. I’d like to borrow the two figures on that page below:</p>
 <p><img src="/blog/assets/eventual-consistency.png"><br>Fig. 1 figure for eventual consistency</p>
 <a id="more"></a>
 <p>In this example above, Node A is the master, which replicate X to its followers Node B and C. Suppose the time when X is successfully writen to Node A is t_1, and the time when X  is replicated to Node B is t_2. Any time between t_1 and t_2, if a client reads from Node A, it gets the latest value of X. But if the client reads from Node B, it gets an old version of X. In other words, the result of a read depends on which Node the client reads from, and therefore, the storage service presents an inconsistent global view for the client. </p>
@@ -15,4 +178,170 @@
 <p>These steps are only used to understand the basic idea of strong consistency, which is not necessary a best practice. If you want to know more details, research some real systems such as Spanner or Kudu.</p>
 <p>While sounds more understandable for developers, strong consistency trades Availability for Consistency. In the instance shown in Fig. 2, a client may need to wait for a while before it reads the value of X. If the networking fails apart (for example, Node C is partitioned from Node A and B), any write requests to Node A will fail if each value is forced to have 3 replications. In addition, if the global lock service fails, the storage service will also be unavailable. In general, a storage service with strong consistency has much higher requirements to the infrastructure in order to function well, and therefore, is more difficult to scale compared to one with eventual consistency.</p>
 <p><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/Introduction.html#ConsistencyModel" target="_blank" rel="noopener">AWS S3’s consistency model</a>.</p>
-</div></article></div></main><footer><div class="paginator"><a href="/blog/invest/" class="prev">PREV</a><a href="/blog/experience_with_mr_memory_parameters/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2019 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+
+  	</div>
+	  
+	  <div class="article-tags tags">
+      
+        <a href="/blog/tags/big-data/">big data</a>
+      
+        <a href="/blog/tags/distributed/">distributed</a>
+      
+        <a href="/blog/tags/consistency/">consistency</a>
+      
+	  </div>
+    
+		
+	
+		<div class="art-item-footer">
+				
+					<span class="art-item-left"><i class="icon icon-chevron-thin-left"></i>prev：<a href="/blog/invest/" rel="prev"  title="投资的心法">
+						投资的心法 
+					</a></span>
+				
+				
+					<span class="art-item-right">next：<a href="/blog/experience_with_mr_memory_parameters/" rel="next"  title="Notes on MR memory issues">
+						Notes on MR memory issues
+					</a><i class="icon icon-chevron-thin-right"></i></span>
+				
+		</div>
+	
+	</section>
+	
+</article>
+<script>
+	window.subData = {
+		title: 'Eventual Consistency vs. Strong Consistency',
+		tools: true
+	}
+</script>
+
+      </div>
+      <aside class='l_side'>
+        
+  <section class='m_widget about'>
+
+<div class='header'>Liqun Li</div>
+<div class='content'>
+<div class='desc'>Tempora mutantur, nos et mutamur in illis ...</div>
+</div>
+</section>
+
+  <section class='m_widget links'>
+<div class='header'>Links</div>
+<div class='content'>
+    <ul class="entry">
+    
+        <li><a class="flat-box" target="_blank" href="https://ccoooss.com">
+            <div class='name'>ClassicOldSong</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://frantic1048.logdown.com/">
+            <div class='name'>Frantic1048</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://hclmaster.github.io/">
+            <div class='name'>Hclmaster</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://whst.github.io/">
+            <div class='name'>WANG Hsü-Tung</div>
+        </a></li>
+    
+    </ul>
+</div>
+</section>
+
+  <section class='m_widget categories'>
+<div class='header'>Categories</div>
+<div class='content'>
+    
+    <ul class="entry">
+    
+        <li><a class="flat-box" href="/blog/categories/Book-Reading/"><div class='name'>Book Reading</div><div class='badget'>3</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Finance/"><div class='name'>Finance</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Photography/"><div class='name'>Photography</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Reading/"><div class='name'>Reading</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Tech/"><div class='name'>Tech</div><div class='badget'>39</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Thinking/"><div class='name'>Thinking</div><div class='badget'>3</div></a></li>
+    
+    </ul>
+    
+</div>
+</section>
+
+  
+<div class="m_widget tagcloud">
+    <div class="header">Tags</div>
+    <div class='content'>
+        <a href="/blog/tags/AI/" style="font-size: 14px; color: #808080">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 14px; color: #808080">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 14px; color: #808080">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 14px; color: #808080">Deadlock</a> <a href="/blog/tags/HBase/" style="font-size: 14px; color: #808080">HBase</a> <a href="/blog/tags/IMU/" style="font-size: 14px; color: #808080">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 14px; color: #808080">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 14px; color: #808080">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 14px; color: #808080">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 14px; color: #808080">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 14px; color: #808080">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18.8px; color: #1a1a1a">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 14px; color: #808080">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 14px; color: #808080">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 14px; color: #808080">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 14px; color: #808080">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px; color: #000">big data</a> <a href="/blog/tags/compaction/" style="font-size: 14px; color: #808080">compaction</a> <a href="/blog/tags/compass/" style="font-size: 14px; color: #808080">compass</a> <a href="/blog/tags/consistency/" style="font-size: 15.2px; color: #666">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 14px; color: #808080">credit spread</a> <a href="/blog/tags/distributed/" style="font-size: 15.2px; color: #666">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 14px; color: #808080">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 14px; color: #808080">flink</a> <a href="/blog/tags/git/" style="font-size: 15.2px; color: #666">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 14px; color: #808080">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 14px; color: #808080">hbase</a> <a href="/blog/tags/investment/" style="font-size: 15.2px; color: #666">investment</a> <a href="/blog/tags/links/" style="font-size: 14px; color: #808080">links</a> <a href="/blog/tags/lock/" style="font-size: 16.4px; color: #4d4d4d">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 15.2px; color: #666">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 14px; color: #808080">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 14px; color: #808080">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 14px; color: #808080">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 14px; color: #808080">octave</a> <a href="/blog/tags/openstack/" style="font-size: 14px; color: #808080">openstack</a> <a href="/blog/tags/photography/" style="font-size: 14px; color: #808080">photography</a> <a href="/blog/tags/php/" style="font-size: 15.2px; color: #666">php</a> <a href="/blog/tags/quorum/" style="font-size: 14px; color: #808080">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 17.6px; color: #333">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 14px; color: #808080">replication</a> <a href="/blog/tags/sbt/" style="font-size: 14px; color: #808080">sbt</a> <a href="/blog/tags/scala/" style="font-size: 14px; color: #808080">scala</a> <a href="/blog/tags/spark/" style="font-size: 14px; color: #808080">spark</a> <a href="/blog/tags/ssd/" style="font-size: 14px; color: #808080">ssd</a> <a href="/blog/tags/storage/" style="font-size: 14px; color: #808080">storage</a> <a href="/blog/tags/swift/" style="font-size: 14px; color: #808080">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 14px; color: #808080">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 14px; color: #808080">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 14px; color: #808080">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 14px; color: #808080">洪业</a> <a href="/blog/tags/认知/" style="font-size: 14px; color: #808080">认知</a>
+    </div>
+</div>
+
+
+
+      </aside>
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+  </div>
+  <footer id="footer" class="clearfix">
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="https://github.com/stkevintan" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="https://twitter.com/kevinsfork" class="social twitter"
+          target="_blank" rel="external">
+          <span class="icon icon-twitter"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <a href='https://github.com/stkevintan/hexo-theme-material-flow' class="codename">MaterialFlow</a> designed by <a href="http://keyin.me/" target="_blank">Kevin Tan</a>.</div>
+  
+</footer>
+
+
+  <script>setLoadingBarProgress(80);</script>
+  
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src='//cdn.bootcss.com/node-waves/0.7.5/waves.min.js'></script>
+<script src="//cdn.bootcss.com/scrollReveal.js/3.3.2/scrollreveal.min.js"></script>
+<script src="/blog/js/jquery.fitvids.js"></script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "hexo";
+  var ROOT = "/blog/"||"/";
+  if(!ROOT.endsWith('/'))ROOT += '/';
+</script>
+<script src="/blog/js/search.js"></script>
+<script src="/blog/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

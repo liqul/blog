@@ -1,1 +1,346 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Liqun's Homepage</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon2.jpeg"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon2.jpeg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives" target="_self" class="nav-list-link">TAGS/ARCHIVE</a></li><li class="nav-list-item"><a href="/blog/about" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="archive"><a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 10px;">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/distributed/" style="font-size: 12px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 12px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a></div><div class="archive"><h2 class="archive-year">2017</h2><div class="post-item"><div class="post-info">Mar 31, 2017</div><a href="/blog/the-raft-consensus-algorithm/" class="post-title-link">Notes on The Raft Consensus Algorithm</a></div></div></main><footer><div class="paginator"></div><div class="copyright"><p>© 2015 - 2019 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>Tag: Copycat | Liqun&#39;s Homepage</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" href="/blog/">
+  <link rel="alternate" href="/blog/atom.xml" title="Liqun's Homepage">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Liqun&#39;s Homepage">
+<meta property="og:url" content="liqul.github.io/blog/tags/Copycat/index.html">
+<meta property="og:site_name" content="Liqun&#39;s Homepage">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Liqun&#39;s Homepage">
+    
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Titillium+Web" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+  <link href='//cdn.bootcss.com/node-waves/0.7.5/waves.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/blog/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+</head>
+
+<body>
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+
+  <script>setLoadingBarProgress(20)</script> 
+  <header class="l_header">
+	<div class='wrapper'>
+		<div class="nav-main container container--flex">
+			<a class="logo flat-box" href='/blog/' >
+				Liqun's Homepage
+			</a>
+			<div class='menu'>
+				<ul class='h-list'>
+					
+						<li>
+							<a class='flat-box nav-home' href='/blog/'>
+								Home
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-archives' href='/blog/archives'>
+								Archives
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-gallery' href='https://photos.google.com/album/AF1QipNoqKYgspQo5O1YhlFXGCQ7p575KBH3Yxf8WHL4?hl=zh-CN'>
+								Gallery
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-about' href='/blog/about'>
+								About
+							</a>
+						</li>
+					
+				</ul>
+				<div class='underline'></div>
+			</div>
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="Search" />
+						<span class="icon icon-search"></span>
+					</form>
+				</div>
+			
+			<ul class='switcher h-list'>
+				
+					<li class='s-search'><a href='javascript:void(0)'><span class="icon icon-search flat-box"></span></a></li>
+				
+				<li class='s-menu'><a href='javascript:void(0)'><span class="icon icon-menu flat-box"></span></a></li>
+			</ul>
+		</div>
+		
+		<div class='nav-sub container container--flex'>
+			<a class="logo" class="flat-box" href='javascript:void(0)'>
+				Word of Forks
+			</a>
+
+			<ul class='switcher h-list'>
+				<li class='s-comment'><a href='javascript:void(0)'><span class="icon icon-chat_bubble_outline flat-box"></span></a></li>
+				<li class='s-top'><a href='javascript:void(0)'><span class="icon icon-arrow_upward flat-box"></span></a></li>
+				<li class='s-toc'><a href='javascript:void(0)'><span class="icon icon-format_list_numbered flat-box"></span></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+<aside class="menu-phone">
+	<nav>
+		
+			<a href="/blog/" class="nav-home nav">
+				Home
+			</a>
+		
+			<a href="/blog/archives" class="nav-archives nav">
+				Archives
+			</a>
+		
+			<a href="https://photos.google.com/album/AF1QipNoqKYgspQo5O1YhlFXGCQ7p575KBH3Yxf8WHL4?hl=zh-CN" class="nav-gallery nav">
+				Gallery
+			</a>
+		
+			<a href="/blog/about" class="nav-about nav">
+				About
+			</a>
+		
+	</nav>
+</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+  <div class="l_body">
+    <div class='container clearfix'>
+      <div class='l_main'>
+        
+  <script>
+    window.subData= { title:'Tag : Copycat'}
+  </script>
+
+<section class="post-list">
+	
+    <div class='post-wrapper'>
+      <article class="post reveal">
+  <section class="meta">
+    
+    <h2 class="title">
+      <a href="/blog/the-raft-consensus-algorithm/">
+        Notes on The Raft Consensus Algorithm
+      </a>
+    </h2>
+    
+    <time>
+      Mar 31, 2017
+    </time>
+		
+    
+    <div class='cats'>
+        <a href="/blog/categories/Tech/">Tech</a>
+    </div>
+
+  </section>
+  <section class="article typo">
+	  <p>What’s consensus?</p>
+<blockquote>
+<p>It allows a collection of machines to work as a coherent group that can survive the failures of some of its members.</p>
+</blockquote>
+<p>It means not only a group of machines reach a final decision for a request, but also the state machine is replicated across these machines, so that some failures do not affect the functioning. Raft is a consensus algorithm seeking to be correct, implementable, and understandable. </p>
+<p>The <a href="https://ramcloud.stanford.edu/~ongaro/thesis.pdf" target="_blank" rel="noopener">thesis</a> is very well written. It is much more comprehensive compared to the NSDI paper. Implementing Raft based on the thesis shouldn’t be too difficult (of course, also not trivial). The author also built a <a href="https://raft.github.io/" target="_blank" rel="noopener">website</a> putting all kinds of helping things there. I read the paper and decide to take some notes here.</p>
+<p><img src="/blog/assets/state.png" width="800"></p>
+<p>There are two key parts sitting in the core of the algorithm:</p>
+<p><strong>Leader election</strong></p>
+<p>The election is triggered by a timeout. If a server failed to detect heartbeats from the current leader, it start a new <em>term</em> of election. During the term, it broadcast requests to collect votes from other servers. If equal or more than majority of servers reply with a vote, the server becomes the leader of this term. The “term” here is a monotonically increasing logic time. From the perspective of a server receiving the vote request, it decides whether to give the vote based on a few considerations. First of all, if the sender even falls behind the receiver in terms of log index, the receiver should not vote for it. Also, if the receiver can still hear the heartbeats from current leader, it should not vote too. In this case, the requester might be a <em>disruptive server</em>. In other cases, the receiver should vote for the sender. </p>
+<p><img src="/blog/assets/leader election.png" width="800"></p>
+<p><strong>Log replication</strong></p>
+<p>Once a server becomes the leader, it’s mission is simply replicate it’s log to every other follower. The replication means make the log of a follower <em>exactly</em> the same as the leader. For each pair of leader and follower, the leader first identify the highest index where they reach an agreement. Starting from there, the leader overwrite its log to the follower. The leader handles all requests from clients. Once it receives a new request, it first put the request into its own log. Then, it replicate the request to all followers. If equal or more than majority followers (including the leader itself) answer the replication request with success, the leader apply the request into its state machine (this is called commit). The leader put the new log index into its heartbeats, so followers know if the request has been committed, after which each follower commit the request too.</p>
+<p><img src="/blog/assets/log replication.png" width="800"></p>
+<p>More formal introduction of the core Raft could be found in Fig. 3.1 in the thesis paper. There are also a few extensions to make the algorithm practical to be used in production systems, such as the group management. I also found Fig. 10.1 a very good reference of architecture. </p>
+<p>There are quite a lot of implementations of Raft, which could be found <a href="https://raft.github.io/" target="_blank" rel="noopener">here</a>. I also find a project named Copycat, with code <a href="https://github.com/atomix/copycat" target="_blank" rel="noopener">here</a> and document <a href="http://atomix.io/copycat/" target="_blank" rel="noopener">here</a>. Copycat is a full featured implementation of Raft in java. Building your own application based on Copycat shouldn’t be too difficult. They provide an example of implementing a KV store based on Copycat in their source code <a href="https://github.com/atomix/copycat/tree/master/examples" target="_blank" rel="noopener">here</a>, which is used as the “<a href="http://atomix.io/copycat/docs/getting-started/" target="_blank" rel="noopener">Get Started</a>“ tutorial. Another very important reason, why I think Copycat a good reference, is that it emphases the abstraction of state machine, client, server, and operations. Therefore, going through it’s document enhanced my understanding of Raft. </p>
+<p>If you don’t want to build your own Raft, may be Copycat is worthwhile a try, though I haven’t any real experience beyond a toy project.</p>
+<p>The annotated thesis could be found <a href="/blog/assets/raft-thesis.pdf">here</a>.</p>
+<p><strong>A go-through case for understanding</strong></p>
+<p>A typical request handling process is as follows:</p>
+<ol>
+<li>The client sends a request to the cluster;</li>
+<li>The leader handles the request by putting it to a WAL;</li>
+<li>The leader sends the request to all followers;</li>
+<li>Each follower puts the received request to its WAL, and responds to the leader;</li>
+<li>Once the leader has heard a majority number of responses from its followers, the leader commit the request by applying the WAL to its state machine;</li>
+<li>The leader inform the client that the request has been handled properly, and then, put the index of the request into its heartbeat to let all followers know the status of each request;</li>
+<li>Once the follower knows that the request has been committed by the leader, the follower commit the request too by applying it to its own state machine. </li>
+</ol>
+<p>There are a few key points to understand in the process above:</p>
+<p>1.Does the client always know if its request has been handled properly?</p>
+<p>No. If the leader commits the request and then crashes, the client will not know if the request has been actually successfully handled. In some cases, the client will resend the request which may lead to duplicated data. It leaves for the client to avoid such kind of duplication. </p>
+<p>2.How about the leader crashes before inform its followers that the request has been committed?</p>
+<p>If the leader crashes, a follower will be elected to be the next leader. The follower must have the latest state according to the mechanism of Raft. Therefore, the next leader definitely has the WAL for the request, and the request has definitely been replicated across a majority number of hosts. Therefore, it is safe to replicate its state to all followers. </p>
+<p>3.Key feature of a consensus algorithm (or strong consistency)?</p>
+<p>Under normal situations, if there’s a state change, the key step changing the state should be always handled by a certain node. The state changing should be replicated to a majority number of followers before informing the requester a success. Each read request goes to that certain node as well. Once there’s node failures or networking partitions, the service stop working until returning to the normal situation again.</p>
+
+
+    
+    
+    
+	  <div class="full-width auto-padding tags">
+      
+        <a href="/blog/tags/Raft/">Raft</a>
+      
+        <a href="/blog/tags/Consensus/">Consensus</a>
+      
+        <a href="/blog/tags/Copycat/">Copycat</a>
+      
+	  </div>
+    
+  </section>
+</article>
+    </div>
+  
+</section>
+
+
+      </div>
+      <aside class='l_side'>
+        
+  <section class='m_widget about'>
+
+<div class='header'>Liqun Li</div>
+<div class='content'>
+<div class='desc'>Tempora mutantur, nos et mutamur in illis ...</div>
+</div>
+</section>
+
+  <section class='m_widget links'>
+<div class='header'>Links</div>
+<div class='content'>
+    <ul class="entry">
+    
+        <li><a class="flat-box" target="_blank" href="https://ccoooss.com">
+            <div class='name'>ClassicOldSong</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://frantic1048.logdown.com/">
+            <div class='name'>Frantic1048</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://hclmaster.github.io/">
+            <div class='name'>Hclmaster</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://whst.github.io/">
+            <div class='name'>WANG Hsü-Tung</div>
+        </a></li>
+    
+    </ul>
+</div>
+</section>
+
+  <section class='m_widget categories'>
+<div class='header'>Categories</div>
+<div class='content'>
+    
+    <ul class="entry">
+    
+        <li><a class="flat-box" href="/blog/categories/Book-Reading/"><div class='name'>Book Reading</div><div class='badget'>3</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Finance/"><div class='name'>Finance</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Photography/"><div class='name'>Photography</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Reading/"><div class='name'>Reading</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Tech/"><div class='name'>Tech</div><div class='badget'>39</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Thinking/"><div class='name'>Thinking</div><div class='badget'>3</div></a></li>
+    
+    </ul>
+    
+</div>
+</section>
+
+  
+<div class="m_widget tagcloud">
+    <div class="header">Tags</div>
+    <div class='content'>
+        <a href="/blog/tags/AI/" style="font-size: 14px; color: #808080">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 14px; color: #808080">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 14px; color: #808080">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 14px; color: #808080">Deadlock</a> <a href="/blog/tags/HBase/" style="font-size: 14px; color: #808080">HBase</a> <a href="/blog/tags/IMU/" style="font-size: 14px; color: #808080">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 14px; color: #808080">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 14px; color: #808080">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 14px; color: #808080">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 14px; color: #808080">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 14px; color: #808080">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18.8px; color: #1a1a1a">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 14px; color: #808080">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 14px; color: #808080">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 14px; color: #808080">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 14px; color: #808080">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px; color: #000">big data</a> <a href="/blog/tags/compaction/" style="font-size: 14px; color: #808080">compaction</a> <a href="/blog/tags/compass/" style="font-size: 14px; color: #808080">compass</a> <a href="/blog/tags/consistency/" style="font-size: 15.2px; color: #666">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 14px; color: #808080">credit spread</a> <a href="/blog/tags/distributed/" style="font-size: 15.2px; color: #666">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 14px; color: #808080">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 14px; color: #808080">flink</a> <a href="/blog/tags/git/" style="font-size: 15.2px; color: #666">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 14px; color: #808080">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 14px; color: #808080">hbase</a> <a href="/blog/tags/investment/" style="font-size: 15.2px; color: #666">investment</a> <a href="/blog/tags/links/" style="font-size: 14px; color: #808080">links</a> <a href="/blog/tags/lock/" style="font-size: 16.4px; color: #4d4d4d">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 15.2px; color: #666">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 14px; color: #808080">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 14px; color: #808080">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 14px; color: #808080">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 14px; color: #808080">octave</a> <a href="/blog/tags/openstack/" style="font-size: 14px; color: #808080">openstack</a> <a href="/blog/tags/photography/" style="font-size: 14px; color: #808080">photography</a> <a href="/blog/tags/php/" style="font-size: 15.2px; color: #666">php</a> <a href="/blog/tags/quorum/" style="font-size: 14px; color: #808080">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 17.6px; color: #333">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 14px; color: #808080">replication</a> <a href="/blog/tags/sbt/" style="font-size: 14px; color: #808080">sbt</a> <a href="/blog/tags/scala/" style="font-size: 14px; color: #808080">scala</a> <a href="/blog/tags/spark/" style="font-size: 14px; color: #808080">spark</a> <a href="/blog/tags/ssd/" style="font-size: 14px; color: #808080">ssd</a> <a href="/blog/tags/storage/" style="font-size: 14px; color: #808080">storage</a> <a href="/blog/tags/swift/" style="font-size: 14px; color: #808080">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 14px; color: #808080">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 14px; color: #808080">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 14px; color: #808080">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 14px; color: #808080">洪业</a> <a href="/blog/tags/认知/" style="font-size: 14px; color: #808080">认知</a>
+    </div>
+</div>
+
+
+
+      </aside>
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+  </div>
+  <footer id="footer" class="clearfix">
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="https://github.com/stkevintan" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="https://twitter.com/kevinsfork" class="social twitter"
+          target="_blank" rel="external">
+          <span class="icon icon-twitter"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <a href='https://github.com/stkevintan/hexo-theme-material-flow' class="codename">MaterialFlow</a> designed by <a href="http://keyin.me/" target="_blank">Kevin Tan</a>.</div>
+  
+</footer>
+
+
+  <script>setLoadingBarProgress(80);</script>
+  
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src='//cdn.bootcss.com/node-waves/0.7.5/waves.min.js'></script>
+<script src="//cdn.bootcss.com/scrollReveal.js/3.3.2/scrollreveal.min.js"></script>
+<script src="/blog/js/jquery.fitvids.js"></script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "hexo";
+  var ROOT = "/blog/"||"/";
+  if(!ROOT.endsWith('/'))ROOT += '/';
+</script>
+<script src="/blog/js/search.js"></script>
+<script src="/blog/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

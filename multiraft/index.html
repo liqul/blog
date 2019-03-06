@@ -1,4 +1,164 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 从Raft到MultiRaft · Liqun's Homepage</title><meta name="description" content="从Raft到MultiRaft - Liqun Li"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon2.jpeg"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon2.jpeg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives" target="_self" class="nav-list-link">TAGS/ARCHIVE</a></li><li class="nav-list-item"><a href="/blog/about" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">从Raft到MultiRaft</h1><div class="post-info">Nov 1, 2018</div><div class="post-content"><p>Raft是一种共识算法，在之前的文章里已经提到过。简而言之，每次集群处理一次请求，都需要经过集群中大部分节点协商。所以一个Raft集群的规模一般不会太大，否则协商的代价就会比较大。那么如果希望基于Raft实现一些规模比较大的服务该怎么扩展呢？</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>从Raft到MultiRaft | Liqun&#39;s Homepage</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" href="/blog/">
+  <link rel="alternate" href="/blog/atom.xml" title="Liqun's Homepage">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Raft是一种共识算法，在之前的文章里已经提到过。简而言之，每次集群处理一次请求，都需要经过集群中大部分节点协商。所以一个Raft集群的规模一般不会太大，否则协商的代价就会比较大。那么如果希望基于Raft实现一些规模比较大的服务该怎么扩展呢？ 例如我们想做一个kv存储，那么一个简单的想法是把key分为多个range，然后不同的range由不同的Raft集群来控制。实际上，MultiRaft的思想就">
+<meta name="keywords" content="Raft">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Raft到MultiRaft">
+<meta property="og:url" content="liqul.github.io/blog/multiraft/index.html">
+<meta property="og:site_name" content="Liqun&#39;s Homepage">
+<meta property="og:description" content="Raft是一种共识算法，在之前的文章里已经提到过。简而言之，每次集群处理一次请求，都需要经过集群中大部分节点协商。所以一个Raft集群的规模一般不会太大，否则协商的代价就会比较大。那么如果希望基于Raft实现一些规模比较大的服务该怎么扩展呢？ 例如我们想做一个kv存储，那么一个简单的想法是把key分为多个range，然后不同的range由不同的Raft集群来控制。实际上，MultiRaft的思想就">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-01T10:30:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从Raft到MultiRaft">
+<meta name="twitter:description" content="Raft是一种共识算法，在之前的文章里已经提到过。简而言之，每次集群处理一次请求，都需要经过集群中大部分节点协商。所以一个Raft集群的规模一般不会太大，否则协商的代价就会比较大。那么如果希望基于Raft实现一些规模比较大的服务该怎么扩展呢？ 例如我们想做一个kv存储，那么一个简单的想法是把key分为多个range，然后不同的range由不同的Raft集群来控制。实际上，MultiRaft的思想就">
+    
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Titillium+Web" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+  <link href='//cdn.bootcss.com/node-waves/0.7.5/waves.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/blog/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+</head>
+
+<body>
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+
+  <script>setLoadingBarProgress(20)</script> 
+  <header class="l_header">
+	<div class='wrapper'>
+		<div class="nav-main container container--flex">
+			<a class="logo flat-box" href='/blog/' >
+				Liqun's Homepage
+			</a>
+			<div class='menu'>
+				<ul class='h-list'>
+					
+						<li>
+							<a class='flat-box nav-home' href='/blog/'>
+								Home
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-archives' href='/blog/archives'>
+								Archives
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-gallery' href='https://photos.google.com/album/AF1QipNoqKYgspQo5O1YhlFXGCQ7p575KBH3Yxf8WHL4?hl=zh-CN'>
+								Gallery
+							</a>
+						</li>
+					
+						<li>
+							<a class='flat-box nav-about' href='/blog/about'>
+								About
+							</a>
+						</li>
+					
+				</ul>
+				<div class='underline'></div>
+			</div>
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="Search" />
+						<span class="icon icon-search"></span>
+					</form>
+				</div>
+			
+			<ul class='switcher h-list'>
+				
+					<li class='s-search'><a href='javascript:void(0)'><span class="icon icon-search flat-box"></span></a></li>
+				
+				<li class='s-menu'><a href='javascript:void(0)'><span class="icon icon-menu flat-box"></span></a></li>
+			</ul>
+		</div>
+		
+		<div class='nav-sub container container--flex'>
+			<a class="logo" class="flat-box" href='javascript:void(0)'>
+				Word of Forks
+			</a>
+
+			<ul class='switcher h-list'>
+				<li class='s-comment'><a href='javascript:void(0)'><span class="icon icon-chat_bubble_outline flat-box"></span></a></li>
+				<li class='s-top'><a href='javascript:void(0)'><span class="icon icon-arrow_upward flat-box"></span></a></li>
+				<li class='s-toc'><a href='javascript:void(0)'><span class="icon icon-format_list_numbered flat-box"></span></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+<aside class="menu-phone">
+	<nav>
+		
+			<a href="/blog/" class="nav-home nav">
+				Home
+			</a>
+		
+			<a href="/blog/archives" class="nav-archives nav">
+				Archives
+			</a>
+		
+			<a href="https://photos.google.com/album/AF1QipNoqKYgspQo5O1YhlFXGCQ7p575KBH3Yxf8WHL4?hl=zh-CN" class="nav-gallery nav">
+				Gallery
+			</a>
+		
+			<a href="/blog/about" class="nav-about nav">
+				About
+			</a>
+		
+	</nav>
+</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+  <div class="l_body">
+    <div class='container clearfix'>
+      <div class='l_main'>
+        <article id="post-multiraft"
+  class="post white-box article-type-post"
+  itemscope itemprop="blogPost">
+	<section class='meta'>
+	<h2 class="title">
+  	<a href="/blog/multiraft/">
+    	从Raft到MultiRaft
+    </a>
+  </h2>
+	<time>
+	  Nov 1, 2018
+	</time>
+	
+    
+    <div class='cats'>
+        <a href="/blog/categories/Tech/">Tech</a>
+    </div>
+
+	</section>
+	
+		<section class="toc-wrapper"></section>
+	
+	<section class="article typo">
+  	<div class="article-entry" itemprop="articleBody">
+    	<p>Raft是一种共识算法，在之前的文章里已经提到过。简而言之，每次集群处理一次请求，都需要经过集群中大部分节点协商。所以一个Raft集群的规模一般不会太大，否则协商的代价就会比较大。那么如果希望基于Raft实现一些规模比较大的服务该怎么扩展呢？</p>
 <p>例如我们想做一个kv存储，那么一个简单的想法是把key分为多个range，然后不同的range由不同的Raft集群来控制。实际上，MultiRaft的思想就是这么简单…只是在实现上有一些细节需要考虑。如果希望更多理解MultiRaft的概念，可以读读这篇<a href="http://sergeiturukin.com/2017/06/09/multiraft.html" target="_blank" rel="noopener">文章</a>，还有<a href="https://www.cockroachlabs.com/blog/scaling-raft/" target="_blank" rel="noopener">这里</a>。从中可以发现，MultiRaft解决的两个核心问题分别是：</p>
 <ul>
 <li><strong>共享物理节点的问题</strong>：多个Raft集群实际上是共享物理节点的，所以需要小心组织每个节点上的数据；</li>
@@ -45,4 +205,166 @@
 <p>在一次写入的时候，如果所涉及的数据都分布在一个Raft集群内，那么是不需要考虑事务的，因为这些变更可以记做一条Raft日志，从而达到事务的效果。只有跨多个Raft集群时才需要用Two-phase commit (2PC)来达到整体的事务效果。</p>
 <p>在2PC的第一个阶段，每个Raft集群完成写入后，内部节点的状态（即一个kv map）对应的state都是unstable，表示这时候只是单个Raft完成写入，还需要等待2PC coordinator确定是否所有Raft集群都完成写入。数据里的commit是事务的编号，这可以由一个独立的服务来产生事务编号，保证commit单调递增。当所有Raft集群都写入成功，2PC进入第二个阶段，由coordinator向所有集群通告已经成功的commit号，接收到该信息后各个Raft集群将commit对应数据的state由unstable改变成stable，一次事务完成。</p>
 <p>总的来说，MultiRaft是对Raft的一种扩展。但是，MultiRaft还不方便简单抽取出来作为一种可供其它应用直接使用的库，与业务逻辑的关联性比较强。不过，有了Cockroachdb和Tidb的实际应用，对其它类似的存储结构的扩展是很好的参考。</p>
-</div></article></div></main><footer><div class="paginator"><a href="/blog/news/" class="prev">PREV</a><a href="/blog/banks/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2019 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+
+  	</div>
+	  
+	  <div class="article-tags tags">
+      
+        <a href="/blog/tags/Raft/">Raft</a>
+      
+	  </div>
+    
+		
+	
+		<div class="art-item-footer">
+				
+					<span class="art-item-left"><i class="icon icon-chevron-thin-left"></i>prev：<a href="/blog/etcd_raft_4/" rel="prev"  title="Raft协议实现学习之—写入过程">
+						Raft协议实现学习之—写入过程 
+					</a></span>
+				
+				
+					<span class="art-item-right">next：<a href="/blog/banks/" rel="next"  title="《人为制造的脆弱性》--读后感">
+						《人为制造的脆弱性》--读后感
+					</a><i class="icon icon-chevron-thin-right"></i></span>
+				
+		</div>
+	
+	</section>
+	
+</article>
+<script>
+	window.subData = {
+		title: '从Raft到MultiRaft',
+		tools: true
+	}
+</script>
+
+      </div>
+      <aside class='l_side'>
+        
+  <section class='m_widget about'>
+
+<div class='header'>Liqun Li</div>
+<div class='content'>
+<div class='desc'>Tempora mutantur, nos et mutamur in illis ...</div>
+</div>
+</section>
+
+  <section class='m_widget links'>
+<div class='header'>Links</div>
+<div class='content'>
+    <ul class="entry">
+    
+        <li><a class="flat-box" target="_blank" href="https://ccoooss.com">
+            <div class='name'>ClassicOldSong</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://frantic1048.logdown.com/">
+            <div class='name'>Frantic1048</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://hclmaster.github.io/">
+            <div class='name'>Hclmaster</div>
+        </a></li>
+    
+        <li><a class="flat-box" target="_blank" href="https://whst.github.io/">
+            <div class='name'>WANG Hsü-Tung</div>
+        </a></li>
+    
+    </ul>
+</div>
+</section>
+
+  <section class='m_widget categories'>
+<div class='header'>Categories</div>
+<div class='content'>
+    
+    <ul class="entry">
+    
+        <li><a class="flat-box" href="/blog/categories/Book-Reading/"><div class='name'>Book Reading</div><div class='badget'>3</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Finance/"><div class='name'>Finance</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Photography/"><div class='name'>Photography</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Reading/"><div class='name'>Reading</div><div class='badget'>1</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Tech/"><div class='name'>Tech</div><div class='badget'>39</div></a></li>
+    
+        <li><a class="flat-box" href="/blog/categories/Thinking/"><div class='name'>Thinking</div><div class='badget'>3</div></a></li>
+    
+    </ul>
+    
+</div>
+</section>
+
+  
+<div class="m_widget tagcloud">
+    <div class="header">Tags</div>
+    <div class='content'>
+        <a href="/blog/tags/AI/" style="font-size: 14px; color: #808080">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 14px; color: #808080">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 14px; color: #808080">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 14px; color: #808080">Deadlock</a> <a href="/blog/tags/HBase/" style="font-size: 14px; color: #808080">HBase</a> <a href="/blog/tags/IMU/" style="font-size: 14px; color: #808080">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 14px; color: #808080">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 14px; color: #808080">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 14px; color: #808080">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 14px; color: #808080">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 14px; color: #808080">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18.8px; color: #1a1a1a">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 14px; color: #808080">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 14px; color: #808080">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 14px; color: #808080">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 14px; color: #808080">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px; color: #000">big data</a> <a href="/blog/tags/compaction/" style="font-size: 14px; color: #808080">compaction</a> <a href="/blog/tags/compass/" style="font-size: 14px; color: #808080">compass</a> <a href="/blog/tags/consistency/" style="font-size: 15.2px; color: #666">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 14px; color: #808080">credit spread</a> <a href="/blog/tags/distributed/" style="font-size: 15.2px; color: #666">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 14px; color: #808080">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 14px; color: #808080">flink</a> <a href="/blog/tags/git/" style="font-size: 15.2px; color: #666">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 14px; color: #808080">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 14px; color: #808080">hbase</a> <a href="/blog/tags/investment/" style="font-size: 15.2px; color: #666">investment</a> <a href="/blog/tags/links/" style="font-size: 14px; color: #808080">links</a> <a href="/blog/tags/lock/" style="font-size: 16.4px; color: #4d4d4d">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 15.2px; color: #666">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 14px; color: #808080">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 14px; color: #808080">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 14px; color: #808080">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 14px; color: #808080">octave</a> <a href="/blog/tags/openstack/" style="font-size: 14px; color: #808080">openstack</a> <a href="/blog/tags/photography/" style="font-size: 14px; color: #808080">photography</a> <a href="/blog/tags/php/" style="font-size: 15.2px; color: #666">php</a> <a href="/blog/tags/quorum/" style="font-size: 14px; color: #808080">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 17.6px; color: #333">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 14px; color: #808080">replication</a> <a href="/blog/tags/sbt/" style="font-size: 14px; color: #808080">sbt</a> <a href="/blog/tags/scala/" style="font-size: 14px; color: #808080">scala</a> <a href="/blog/tags/spark/" style="font-size: 14px; color: #808080">spark</a> <a href="/blog/tags/ssd/" style="font-size: 14px; color: #808080">ssd</a> <a href="/blog/tags/storage/" style="font-size: 14px; color: #808080">storage</a> <a href="/blog/tags/swift/" style="font-size: 14px; color: #808080">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 14px; color: #808080">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 14px; color: #808080">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 14px; color: #808080">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 14px; color: #808080">洪业</a> <a href="/blog/tags/认知/" style="font-size: 14px; color: #808080">认知</a>
+    </div>
+</div>
+
+
+
+      </aside>
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+  </div>
+  <footer id="footer" class="clearfix">
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="https://github.com/stkevintan" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="https://twitter.com/kevinsfork" class="social twitter"
+          target="_blank" rel="external">
+          <span class="icon icon-twitter"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <a href='https://github.com/stkevintan/hexo-theme-material-flow' class="codename">MaterialFlow</a> designed by <a href="http://keyin.me/" target="_blank">Kevin Tan</a>.</div>
+  
+</footer>
+
+
+  <script>setLoadingBarProgress(80);</script>
+  
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src='//cdn.bootcss.com/node-waves/0.7.5/waves.min.js'></script>
+<script src="//cdn.bootcss.com/scrollReveal.js/3.3.2/scrollreveal.min.js"></script>
+<script src="/blog/js/jquery.fitvids.js"></script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "hexo";
+  var ROOT = "/blog/"||"/";
+  if(!ROOT.endsWith('/'))ROOT += '/';
+</script>
+<script src="/blog/js/search.js"></script>
+<script src="/blog/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
