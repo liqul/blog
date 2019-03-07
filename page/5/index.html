@@ -1,1 +1,1277 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Liqun's Homepage</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon2.jpeg"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon2.jpeg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives" target="_self" class="nav-list-link">TAGS/ARCHIVE</a></li><li class="nav-list-item"><a href="/blog/about" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/git-recipe/" class="post-title-link">有用的Git相关汇总</a></h2><div class="post-info">Jan 22, 2016</div><div class="post-content"></div><a href="/blog/git-recipe/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/mysql-deployment/" class="post-title-link">MySQL安装部署</a></h2><div class="post-info">Oct 15, 2015</div><div class="post-content"></div><a href="/blog/mysql-deployment/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/php-deployment/" class="post-title-link">Nginx+PHP安装部署</a></h2><div class="post-info">Oct 14, 2015</div><div class="post-content"></div><a href="/blog/php-deployment/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/imu/" class="post-title-link">基于惯性传感器的姿态恢复</a></h2><div class="post-info">Sep 23, 2015</div><div class="post-content"></div><a href="/blog/imu/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/rabbitmq-error1/" class="post-title-link">RabbitMQ报错[ERROR: node with name 'rabbit' already running on 'localhost']</a></h2><div class="post-info">Sep 7, 2015</div><div class="post-content"></div><a href="/blog/rabbitmq-error1/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/dependency-injection/" class="post-title-link">Dependency Injection</a></h2><div class="post-info">Aug 18, 2015</div><div class="post-content"></div><a href="/blog/dependency-injection/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/rabbitmq-memory-management/" class="post-title-link">RabbitMQ内存管理</a></h2><div class="post-info">Aug 15, 2015</div><div class="post-content"></div><a href="/blog/rabbitmq-memory-management/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/rabbitmq-load-balancing/" class="post-title-link">RabbitMQ负载均衡</a></h2><div class="post-info">Aug 15, 2015</div><div class="post-content"></div><a href="/blog/rabbitmq-load-balancing/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/rabbitmq-deployment/" class="post-title-link">RabbitMQ安装部署</a></h2><div class="post-info">Jul 25, 2015</div><div class="post-content"></div><a href="/blog/rabbitmq-deployment/" class="read-more">...阅读全文</a></article></li></ul></main><footer><div class="paginator"><a href="/blog/page/4/" class="prev">上一页</a></div><div class="copyright"><p>© 2015 - 2019 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Page 5 | Bucket &amp; Hammer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Knowlege, Knowlege, Knowlege" />
+  
+  
+  
+  
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Bucket &amp; Hammer">
+<meta property="og:url" content="liqul.github.io/blog/page/5/index.html">
+<meta property="og:site_name" content="Bucket &amp; Hammer">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bucket &amp; Hammer">
+  
+    <link rel="alternate" href="/atom.xml" title="Bucket &amp; Hammer" type="application/atom+xml">
+  
+  <link rel="icon" href="/blog/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/blog/css/style.css">
+
+  <script src="/blog/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/blog/css/bootstrap.css" >
+  <link rel="stylesheet" href="/blog/css/fashion.css" >
+  <link rel="stylesheet" href="/blog/css/glyphs.css" >
+
+</head>
+
+
+
+  <body>
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/blog/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="650px" height="124px" alt="Hike News" src=" /blog/css/images/title.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main">
+  
+    <article id="post-useful-links"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/useful-links/">Useful Links</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/useful-links/" class="article-date">
+	  <time datetime="2016-01-26T02:55:00.000Z" itemprop="datePublished">January 26, 2016</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>下面按照分类列举一些非常有用的信息。</p>
+<!--break-->
+<h2><span id="php相关">PHP相关</span></h2><ul>
+<li><a href="http://codular.com/curl-with-php" target="_blank" rel="noopener">PHP curl的使用</a>。</li>
+<li><a href="http://chrsm.org/2013/05/05/static-analysis-tools-for-php/" target="_blank" rel="noopener">PHP代码静态分析工具讨论</a>。</li>
+</ul>
+<h2><span id="算法相关">算法相关</span></h2><ul>
+<li><a href="http://csclab.murraystate.edu/bob.pilgrim/445/munkres.html" target="_blank" rel="noopener">任务分配算法Munkres’s Algorithm</a>。</li>
+</ul>
+<h2><span id="jekyll相关">Jekyll相关</span></h2><ul>
+<li><a href="http://ask.xmodulo.com/upgrade-ruby-centos.html" target="_blank" rel="noopener">CentOS上升级Ruby</a>。</li>
+</ul>
+<h2><span id="git相关">Git相关</span></h2><ul>
+<li><a href="http://tecadmin.net/how-to-upgrade-git-version-1-7-10-on-centos-6/" target="_blank" rel="noopener">CentOS上升级Git</a>。</li>
+<li><a href="https://www.atlassian.com/git/tutorials/setting-up-a-repository" target="_blank" rel="noopener">tlassian给出的非常好的Git入门文档</a>。</li>
+</ul>
+<h2><span id="分布式系统">分布式系统</span></h2><ul>
+<li><a href="https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying" target="_blank" rel="noopener">有关Log基本原理的经典好文，理解Kafka必读</a>。</li>
+</ul>
+<h2><span id="计算机网络">计算机网络</span></h2><ul>
+<li><a href="http://www.cse.wustl.edu/~jain/videos.htm" target="_blank" rel="noopener">Raj Jain的视频资源</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/links/">links</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-git-recipe"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/git-recipe/">有用的Git相关汇总</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/git-recipe/" class="article-date">
+	  <time datetime="2016-01-22T02:55:00.000Z" itemprop="datePublished">January 22, 2016</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4><span id="平时收集的一些有用的git命令持续更新">平时收集的一些有用的git命令（持续更新）：</span></h4><ul>
+<li>git reset –hard: 去掉所有改动，比如某些文件被改动了，用这招可以将它们都干掉，主要用于处理刚刚接手的杂乱版本，后面跟上commit号就会跳到对应的版本。</li>
+<li>git diff –diff-filter=D –name-only -z &brvbar; xargs -0 git rm 批量删除所有被delete的文件</li>
+<li>git branch –merged master &brvbar; grep -v master &brvbar; xargs git branch -d 删除所有已经与master合并的分支，用于清理中间的一个本地git库<!--break--></li>
+<li>git clean -fd: 干掉所有untracked file and folder，上面这招不会去掉新添加的文件或文件夹，靠这招更加彻底清除。</li>
+<li>git branch -D: 干掉一个分支，主要用于去掉那些已经没有意义的分支，如fix某个bug的分支。</li>
+<li>git checkout – <filename>：去掉被add了的文件，用.表示去掉所有被add的文件。</filename></li>
+<li>git checkout -b <branchname>: 从当前分支分出一个新分支，主要用于创建一个feature或bug分支。</branchname></li>
+<li>git diff &lt;commit id1/reflog id&gt; &lt;commit id2/reflog id&gt; <filename>: 查看某个文件两个不同版本间的差别。</filename></li>
+<li>git log <filename>：查看某个文件的历史记录，如果没<filename>则表示整个branch的历史记录，加–color表示生成一个树状图，-p表示查看修改详情。</filename></filename></li>
+<li>git fetch会同步git库和本地库的版本信息，而不会真正下载代码。</li>
+<li>git checkout version_number /path/to/file 将某个文件切换到指定的版本。</li>
+<li>git stash用于将当前修改缓存下来，方便切到其它分支工作；完成工作后切回来用git stash pop。</li>
+<li>git 回滚远程代码库</li>
+</ul>
+<blockquote>
+<p><strong>步骤一</strong>：本地先回滚到正确的版本。用git reset –hard version_number version_number可以是commit号或reflog编号。</p>
+</blockquote>
+<blockquote>
+<p><strong>步骤二</strong>：将本地版本强制推送到远端，覆盖远程版本。用git push origin master -f</p>
+</blockquote>
+<blockquote>
+<p><strong>步骤三</strong>：将线上服务器同步到git代码库。直接用git pull origin master是不行的，因为这时候往往线上服务器比代码库更新。所以需要执行下面的命令来强制同步：<br></p>
+<ol>
+<li>git fetch –all <br></li>
+<li>git reset –hard origin/master <br><br>这样就同步好了。基本原理可以参考<a href="http://stackoverflow.com/questions/1125968/force-git-to-overwrite-local-files-on-pull。这样做比直接删代码风险要小一些。" target="_blank" rel="noopener">http://stackoverflow.com/questions/1125968/force-git-to-overwrite-local-files-on-pull。这样做比直接删代码风险要小一些。</a> </li>
+</ol>
+</blockquote>
+<ul>
+<li>git log -p –name-only 其中的–name-only是个非常好用的参数，可以用来只显示改动的文件，可以与其它很多命令搭配起来用。</li>
+<li>git init –bare用于在server端新建一个repo，随后在本地代码文件夹下git init再git add remote对应的地址就可以将本地与server关联上了。</li>
+<li>git checkout -b –orphan branchname 从当前分支产生一个无历史的新分支，可以用来分享代码。</li>
+<li>git config –global push.default current 设置全局push默认的分支为当前分支，执行后可以通过git push来推送当前分支，而不需要显式写出分知名。</li>
+<li>git reflog 查看本地的git命令执行历史。</li>
+<li>git fetch 同步本地和远程的分支信息，尤其可以消除“Your branch is ahead of ‘origin/master’ by 1 commit.”这样的提醒。</li>
+<li>git mv old_name new_name 用于重命名一个文件。免去rm+add的重复劳动。</li>
+<li>git branch -a 查看远程分支。</li>
+<li>git push origin –delete branch_name 根据分支名删除远程分支。</li>
+<li>git push origin –delete tag tag_name 根据tag删除远程分支。</li>
+<li>git checkout mybranch; git rebase origin 把自己的分支以patch的形式加到origin分支上，与pull或merge产生的效果类似，但“看起来“历史不同，参考<a href="http://gitbook.liuhui998.com/4_2.html。" target="_blank" rel="noopener">http://gitbook.liuhui998.com/4_2.html。</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/git/">git</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-mysql-deployment"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/mysql-deployment/">MySQL安装部署</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/mysql-deployment/" class="article-date">
+	  <time datetime="2015-10-14T23:52:21.000Z" itemprop="datePublished">October 15, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>参考<a href="http://dev.mysql.com/doc/refman/5.6/en/installing-source-distribution.html。" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.6/en/installing-source-distribution.html。</a></p>
+<ul>
+<li>安装前配置<pre class="lang:default decode:true ">
+groupadd mysql
+useradd -r -g mysql mysql
+yum install cmake
+</pre></li>
+<li>安装<br><pre class="lang:default decode:true "><br>tar zxvf mysql-VERSION.tar.gz<br>cd mysql-VERSION<br>cmake .<br>make<br>make install<br></pre><!--break--></li>
+<li>安装后配置</li>
+</ul>
+<pre class="lang:default decode:true ">cd /usr/local/mysql
+chown -R mysql .
+chgrp -R mysql .
+# df -ha 用于查看各个分区的使用率，在处理之前确保有足够存储空间
+bin/mysql_install_db --datadir=/var/lib/mysql --user=mysql
+chown -R root .
+chown -R mysql data
+bin/mysqld_safe --user=mysql &amp;
+mysqladmin -u root -h host_name password newpassword
+# 启动服务
+/usr/local/mysql/bin/mysqld_safe --user=mysql &;
+# my.cnf在/etc目录下</pre> 
+
+
+<ul>
+<li>设置用户<br><pre class="lang:default decode:true "><br>#创建一个新用户，host可以用%替换，表示从任意ip地址登陆<br>CREATE USER ‘username‘@’host’ IDENTIFIED BY ‘password’;</pre></li>
+</ul>
+<p>#查看用户信息<br>SELECT user, host, password FROM user WHERE user=’username’;</p>
+<p>#分配权限，primitive包括select, insert, update, delete, create, drop, index, alter, grant, reference, reload, shutdown, process, file共14个权限<br>GRANT primitive1, primitive2, …, primitiven ON db.table TO username@host IDENTIFIED BY password</p>
+<p>#删除用户<br>DROP USER username;</p>
+<p>#取消用户授权<br>REVOKE primitive ON db.table FROM username@host;<br></p>
+<ul>
+<li>备份<br>下面的命令里都省略了-u和-p，在实际操作时须补全。<br><strong>关于bin log的部分，文档《binlog基本认识》有非常详尽的介绍。</strong><br><pre class="lang:default decode:true "><h1><span id="开启binlog">开启binlog</span></h1>编辑my.cnf文件，在[mysqld]区块中加入log-bin=mysql-bin，重启服务即生效<br>执行show variables like ‘log_%’;来确认已经打开bin log</pre></li>
+</ul>
+<h1><span id="常用的bin-log操作">常用的bin log操作</span></h1><p>show master logs; # 查看所有bin log日志列表<br>show master status; # 查看最新一个bin log日志编号名称，以及最后一个操作事件结束点<br>flush logs; # 刷新日志，产生一个新的bin log日志文件<br>reset master; # 清空所有bin log日志</p>
+<h1><span id="查看bin-log">查看bin log</span></h1><p>mysqlbinlog mysql-bin.000013 #打开一个bin log文件<br>show binlog events [IN log_name] [FROM pos] [LIMIT [offset,] row_count]<br>例如指定查询 mysql-bin.000021 这个文件，从pos点:8224开始查起，偏移2行，查询10条<br>    show binlog events in ‘mysql-bin.000021’ from 8224 limit 2,10\G;</p>
+<h1><span id="利用bin-log恢复数据">利用bin log恢复数据</span></h1><p>mysqlbinlog mysql-bin.0000xx | mysql </p>
+<h1><span id="备份整个数据库备份前需要获取全局读锁因此必须在traffic较低的时候进行">备份整个数据库，备份前需要获取全局读锁，因此必须在traffic较低的时候进行</span></h1><p>mysqldump –single-transaction –all-databases &gt; backup_yy_mm_dd_hh_mm_ss.sql<br>mysql &lt; backup_yy_mm_dd_hh_mm_ss.sql<br></p>
+<ul>
+<li>主从同步<br>  完整的说明在这里：<a href="http://dev.mysql.com/doc/refman/5.6/en/replication-howto.html。" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.6/en/replication-howto.html。</a><br>  另一篇文章是个不错的简化版，并且更加实用“<a href="http://plusbryan.com/mysql-replication-without-downtime" target="_blank" rel="noopener">Setting up MySQL replication without the downtime</a>”。</li>
+</ul>
+<pre class="lang:default decode:true ">
+    ## 设置主服务器
+    # 确保master已经通过log-bin来开启bin log
+    # 确保每个host对应的server-id是不同的
+        [mysqld]
+        log-bin=mysql-bin
+        server-id=1
+        innodb_flush_log_at_trx_commit=1
+        sync_binlog=1
+    # 为slave创建专门的用户名
+    create user 'repl'@'%.mydomain.com' identified by 'slavepass';
+    grant replication slave on *.* to 'repl'@'%.mydomain.com';
+
+    ## 设置从服务器
+    # 确保slave的server-id与其它服务器不同
+        [mysqld]
+        server-id=2
+
+    ## 获取master的同步位置
+    # 执行flush操作，开启一个client session，执行下面语句后保持不退出
+    flush tables with read lock;
+    # 在另一个client session执行，记录File、Position对应的值
+    show master status;
+    +------------------+----------+--------------+------------------+
+    | File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
+    +------------------+----------+--------------+------------------+
+    | mysql-bin.000003 | 73       | test         | manual,mysql     |
+    +------------------+----------+--------------+------------------+
+    # 回到锁住的session执行
+    unlock tables;
+
+    ## 创建master的镜像
+    mysqldump --all-database --master-data > dbdump.db
+    # 如果需要选择性同步，需要在slave上配置--replicate-ignore-db=db_name来完成，详细使用方法参考官方文档
+
+    ## 在slave导入镜像
+    #带--skip-slave-start选项启动slave上的mysql
+    #导入dump文件
+    mysql < dbdump.db
+    #在slave执行change master to指令
+    CHANGE MASTER TO
+         MASTER_HOST='master_host_name',
+         MASTER_USER='replication_user_name',
+         MASTER_PASSWORD='replication_password',
+         MASTER_LOG_FILE='recorded_log_file_name',
+         MASTER_LOG_POS=recorded_log_position;
+    start slave;
+</pre>
+
+<ul>
+<li>配置实例<br>  <strong>注意：配置MySQL的目的不是有什么秘诀，关键在于根据系统本身的配置高低和处理的业务类型来调整各种资源配置</strong><ul>
+<li>这里有根据不同业务量级给出的实例，<a href="https://github.com/onddo/mysql_tuning-cookbook。" target="_blank" rel="noopener">https://github.com/onddo/mysql_tuning-cookbook。</a></li>
+<li>可以从这里出发，按照步骤来配置<a href="https://tools.percona.com/wizard" target="_blank" rel="noopener">https://tools.percona.com/wizard</a></li>
+<li>执行一下这个工具来获得优化建议<a href="https://github.com/major/MySQLTuner-perl" target="_blank" rel="noopener">https://github.com/major/MySQLTuner-perl</a></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/mysql/">mysql</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-php-deployment"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/php-deployment/">Nginx+PHP安装部署</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/php-deployment/" class="article-date">
+	  <time datetime="2015-10-13T23:52:21.000Z" itemprop="datePublished">October 14, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这里记录安装部署Nginx+PHP相关的一些东西。<br><!--break--></p>
+<h2><span id="环境依赖">环境+依赖</span></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># 基本编译环境</span><br><span class="line">yum -y install gcc automake autoconf libtool make gcc-c++ glibc</span><br><span class="line"># PHP依赖</span><br><span class="line">yum -y install libmcrypt-devel mhash-devel libxslt-devel libjpeg \</span><br><span class="line">libjpeg-devel libpng libpng-devel freetype freetype-devel libxml2 \</span><br><span class="line">libxml2-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel \</span><br><span class="line">bzip2 bzip2-devel ncurses ncurses-devel curl curl-devel e2fsprogs \</span><br><span class="line">e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel</span><br><span class="line"># 安装pcre:</span><br><span class="line">cd /usr/local/src</span><br><span class="line">wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-xx.xx.tar.gz </span><br><span class="line">tar -zxvf pcre-xx.xx.tar.gz</span><br><span class="line">cd pcre-xx.xx</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"># 安装zlib:</span><br><span class="line">cd /usr/local/src</span><br><span class="line">wget http://zlib.net/zlib-x.x.x.tar.gz</span><br><span class="line">tar -zxvf zlib-x.x.x.tar.gz</span><br><span class="line">cd zlib-x.x.x</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"># 安装ssl:</span><br><span class="line">cd /usr/local/src</span><br><span class="line">wget http://www.openssl.org/source/openssl-x.x.x.tar.gz</span><br><span class="line">tar -zxvf openssl-x.x.x.tar.gz</span><br></pre></td></tr></table></figure>
+<h2><span id="安装php">安装PHP</span></h2><h3><span id="安装">安装</span></h3><p>这里可能遇到各种缺少依赖的错误，遇到什么就安装什么就行，可以参考文章“20+ common PHP compilation errors and fix”。这里的配置项比较多，也很难对每一项都非常了解，所以其实可以设置少一些选项，然后等真的需要的时候再重新编译。这其实非常容易，重新安装一遍后重启php-fpm就可以了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">wget http://cn2.php.net/distributions/php-xx.xx.xx.tar.gz</span><br><span class="line">tar zvxf php-xx.xx.xx.tar.gz</span><br><span class="line">cd php-xx.xx.xx.tar.gz</span><br><span class="line">./configure </span><br><span class="line">--prefix=/usr/local/php  \</span><br><span class="line">--enable-fpm \</span><br><span class="line">--with-fpm-user=www-data \</span><br><span class="line">--with-fpm-group=www-data \</span><br><span class="line">--with-mcrypt \</span><br><span class="line">--enable-mbstring \ </span><br><span class="line">--disable-pdo \</span><br><span class="line">--with-curl \</span><br><span class="line">--disable-debug \</span><br><span class="line">--disable-rpath \</span><br><span class="line">--enable-inline-optimization \</span><br><span class="line">--with-bz2 \</span><br><span class="line">--with-zlib \</span><br><span class="line">--enable-sockets \</span><br><span class="line">--enable-sysvsem \</span><br><span class="line">--enable-sysvshm \</span><br><span class="line">--enable-sysvmsg \</span><br><span class="line">--enable-pcntl \</span><br><span class="line">--enable-mbregex \ </span><br><span class="line">--with-mhash \</span><br><span class="line">--enable-zip \</span><br><span class="line">--with-pcre-regex \</span><br><span class="line">--with-mysql \</span><br><span class="line">--with-mysqli \</span><br><span class="line">--with-gd \</span><br><span class="line">--with-jpeg-dir \</span><br><span class="line">--with-openssl \</span><br><span class="line">--enable-pdo \</span><br><span class="line">--with-pdo-mysql \</span><br><span class="line">--with-mysql-sock=/var/lib/mysql/mysql.sock \</span><br><span class="line">--with-config-file-path=/usr/local/php/etc</span><br><span class="line"></span><br><span class="line">make all install </span><br><span class="line"># 把php.ini放到指定的位置</span><br><span class="line">cp php.ini-development（根据需要换成其它） /usr/local/php/etc/php.ini</span><br><span class="line"># 配置php.ini中的timezone参数为Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<h3><span id="配置">配置</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/php</span><br><span class="line">cp etc/php-fpm.conf.defautl etc/php-fpm.conf</span><br><span class="line">vi etc/php-fpm.conf</span><br><span class="line"># 修改</span><br><span class="line">user = www-data</span><br><span class="line">group = www-data</span><br><span class="line"># 如果www-data用户不存在则添加www-data用户：</span><br><span class="line">groupadd www-data &amp;&amp; useradd -g www-data www-data</span><br><span class="line"># 添加php到环境变量</span><br><span class="line">vi /etc/profile</span><br><span class="line"># 在底部增加一行export PATH=/usr/local/php/bin:$PATH</span><br><span class="line">source /etc/profile</span><br><span class="line"># 检查php cli配置文件</span><br><span class="line">php --ini 若输出路径与--with-config-file-path对应的路径不同，需要建一个软链</span><br></pre></td></tr></table></figure>
+<h3><span id="启动重启">启动/重启</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#启动：/usr/local/php/sbin/php-fpm</span><br><span class="line">#关闭：kill -INT pid</span><br><span class="line">#重启：kill -USR2 pid</span><br></pre></td></tr></table></figure>
+<h3><span id="phpini的问题">php.ini的问题</span></h3><p>偶然发现一个问题，phpinfo()里输出的配置文件路径与php –ini的路径不同。而实际上在编译PHP的时候明确设定了–with-config-file-path参数，设置与phpinfo()输出相同，与php –ini不同。这与<a href="http://php.net/manual/en/configuration.file.php" target="_blank" rel="noopener">文档</a>中描述的有点不一致。</p>
+<p>搜索了一把，发现phpinfo()实际对应php/bin/php-cgi，而运行php –ini的时候对应的是php/bin/php，因而两者调用的实际上是不同的可执行文件。只能理解，在我使用的版本里，cli对应的php.ini与cgi的不同。解决方法最简单的则是在php –ini里显示的配置文件路径上放一个php.ini软链，这就好了。</p>
+<h3><span id="composer的应用">Composer的应用</span></h3><p>Composer对于框架的各个组件来说，就好像Container对于各种类一样。如果用一句话来概括Composer的作用，那应该是：</p>
+<blockquote>
+<p>Composer is a tool for dependency management in PHP. </p>
+</blockquote>
+<p>从实际应用的角度，Composer的作用体现在两个方面：</p>
+<ol>
+<li>安装和维护项目依赖的第三方库</li>
+<li>支持项目内部autoload</li>
+</ol>
+<h4><span id="用composer安装第三方库">用Composer安装第三方库</span></h4><p>在Composer的支持下，安装和使用第三方库非常方便。大概步骤包括（1）更改composer.json；（2）执行composer install下载和安装库；（3）在项目的入口中引用vendor目录下的autoload.php。一个最简单的composer.json看起来是这样的：</p>
+<p><pre class="lang:default decode:true ">{<br>    “require”: {<br>        “monolog/monolog”: “1.0.*”<br>    }<br>}</pre><br>它定义了项目依赖的第三方库。</p>
+<h4><span id="用composer支持autoload">用Composer支持autoload</span></h4><p>虽然autoload.php位于vendor目录下，但它实际上也支持项目自身的autoload。Composer支持4种autoload方式，分别是psr-0、psr-4、classmap和files。其中psr-0/psr-4属于按规则autoload，而classmap和files则属于按配置autoload。所谓“按规则”是指：只要文件命名、文件路径、类命名符合一定规则，autoloader就能根据类的命名空间和类名加载对应的文件。先举个psr-4的例子：</p>
+<p><pre class="lang:default decode:true "><br>$obj = new App\MyLib\TestComposer();<br></pre><br>假设composer.json像下面这样：</p>
+<p><pre class="lang:default decode:true "><br>{<br>    “autoload”: {<br>        “psr-4”: {<br>            “App\“: “src/“,<br>        }<br>    }<br>}<br></pre><br>那么对应的文件将是src/MyLib/TestComposer.php里的TestComposer类。如果上面的规则是psr-0，那么对应的文件则是src/App/MyLib/TestComposer.php。可以看到两者的差别其实很小，psr-4里是把左边（App\）替换成右边（src/）。psr-0则是把左边连接到右边后面。因此，psr-4的一个主要目的是简化项目的目录结构。</p>
+<p>另外两种方式classmap和files比较容易理解，如下面的例子：</p>
+<p><pre class="lang:default decode:true "><br>{<br>    “autoload”: {<br>        “classmap”: [“src/MyLib/“, “TestComposer.php”],<br>        “files”: [“src/MyLib/functions.php”]<br>    }<br>}<br></pre><br>classmap针对文件里定义的class，可以配置整个目录或某个文件。files则用于加载非class的内容，例如函数实现。</p>
+<p>最后，增加了新的文件或修改了composer.json还需要执行</p>
+<p><pre class="lang:default decode:true "><br>composer dump-autoload<br></pre><br>来重新生成autoload逻辑。对于psr-0/psr-4的还可以加-o来优化autoload速度。</p>
+<h2><span id="安装nginx">安装Nginx</span></h2><h3><span id="安装">安装</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/src</span><br><span class="line">wget http://nginx.org/download/nginx-x.x.x.tar.gz</span><br><span class="line">tar -zxvf nginx-x.x.x.tar.gz</span><br><span class="line">cd nginx-x.x.x</span><br><span class="line">./configure --sbin-path=/usr/local/nginx/nginx \</span><br><span class="line">--conf-path=/usr/local/nginx/nginx.conf \</span><br><span class="line">--pid-path=/usr/local/nginx/nginx.pid --with-http_ssl_module \</span><br><span class="line">--with-pcre=/usr/local/src/pcre-xx.xx --with-zlib=/usr/local/src/zlib-x.x.x \</span><br><span class="line">--with-openssl=/usr/local/src/openssl-x.x.x</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h3><span id="启动">启动</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/local/nginx/nginx</span><br></pre></td></tr></table></figure>
+<h3><span id="配置实例">配置实例</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">user  www-data;</span><br><span class="line">worker_processes  1;</span><br><span class="line">pid        logs/nginx.pid;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</span><br><span class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</span><br><span class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$request_time&quot;&apos;;</span><br><span class="line">    #[important] need to specify the index</span><br><span class="line">    index  index.php index.html index.htm;</span><br><span class="line"></span><br><span class="line">    access_log  logs/access.log  main;</span><br><span class="line">    error_log  logs/error.log;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    tcp_nopush     on;</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #若有多个server，建议分为多个文件，每个包含一个server模块，用include包含</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  example.com;</span><br><span class="line"></span><br><span class="line">        #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">        #[important] need to make sure each subpath in the root have +x permission</span><br><span class="line">        root   /home/work/laravel/public;</span><br><span class="line"></span><br><span class="line">        #[important] need to do the rewrite here</span><br><span class="line">        location / &#123;</span><br><span class="line">            try_files  $uri $uri/ /index.php?$query_string;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        #error_page  404              /404.html;</span><br><span class="line"></span><br><span class="line">        # redirect server error pages to the static page /50x.html</span><br><span class="line">        #</span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">            location = /50x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br><span class="line">        #</span><br><span class="line">        #[important] need to have the * below</span><br><span class="line">        location ~* \.php$ &#123;</span><br><span class="line">            fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">            fastcgi_index  index.php;</span><br><span class="line">            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;</span><br><span class="line">            include        fastcgi_params;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # deny access to .htaccess files, if Apache&apos;s document root</span><br><span class="line">        # concurs with nginx&apos;s one</span><br><span class="line">        #</span><br><span class="line">        location ~ /\.ht &#123;</span><br><span class="line">            deny  all;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="维护">维护</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 把下面的命令放在脚本里用于备份配置文件</span><br><span class="line">cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.$(date &quot;+%b_%d_%Y_%H.%M.%S&quot;)</span><br><span class="line">#重新加载conf：</span><br><span class="line">#测试：sudo /usr/local/nginx/nginx -t</span><br><span class="line">#重载：sudo /usr/local/nginx/nginx -s reload</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/nginx/">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/php/">php</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-imu"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/imu/">基于惯性传感器的姿态恢复</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/imu/" class="article-date">
+	  <time datetime="2015-09-22T23:52:21.000Z" itemprop="datePublished">September 23, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个物体在空间中的存在可以从两个维度描述：一方面是在什么位置，这可以由其所在坐标$${x,y,z}$$来描述；另一方面是处于什么姿态（orientation)，例如它是倾斜的还是正的。要知道一个物体在空间的位置是困难的，需要借助外在测量系统，例如GPS利用24颗卫星定位一个物体在地球上的经纬度和海拔。即便有GPS，要知道物体在室内的位置还是不行，需要相应的室内定位技术。扯远了，室内定位以后再说。要知道一个物体的姿态，相对容易一些，这可以借助惯性传感器（inertial sensor）。<br><!--break--></p>
+<p>惯性传感器通常指代下面三个具体的传感器：</p>
+<ul>
+<li>加速度计（accelerometer）：测量三轴加速度，单位$$m/s^2$$；</li>
+<li>陀螺仪 （gyroscope）：测量绕三轴旋转的角速度，单位是$$degree/s$$；</li>
+<li>磁力计（magnetometer）：测量三轴磁力的大小，单位是$$tesla$$；</li>
+</ul>
+<p>惯性传感器的应用非常广泛，几乎遍及所有的智能硬件设备（如手机、手环等）。它能用于姿势识别，如apple watch自动识别用户是否正在看表；zepp捕捉网球、棒球姿势辅助训练；手环识别走路、跑步、骑车等等。这些看似神奇的应用都基于惯性传感器，以后有机会再深入讨论这些算法。</p>
+<p>怎么才能测量一个物体的姿态呢？首先我们必须假定该物体与惯性传感器之间是刚体连接的，这样通过读取惯性传感器的值就能推测物体的姿态。加速度计可以用来测量物体的倾斜。如果物体处于静止状态，因为我们知道重力的方向总是向下的，这是非常容易做到的。如果物体静止，测量到的加速度方向就是重力的方向。此外，陀螺仪也可以用来计算物体的姿态。假定已知物体的初始姿态，那么我们将物体沿三轴旋转的角速度积分，就知道物体的姿态了。</p>
+<p><img src="/blog/assets/imu_sensor.png" alt="IMU sensor"></p>
+<p>但实际情况比这复杂。物体可能处于运动状态，而陀螺仪读数有严重的漂移，使得姿态估计并不容易。现有的主流思路是结合加速度计和陀螺仪，根据两者的读数分别估算物体姿态，然后依据某种方法将两方面融合起来。其中的算法细节，没有比这篇文章讲得更清楚的了，感兴趣的话可以好好读一遍（<a href="http://blog.tkjelectronics.dk/2012/09/a-practical-approach-to-kalman-filter-and-how-to-implement-it/" target="_blank" rel="noopener">A practical approach to Kalman filter and how to implement it</a>），<a href="!--￼0--&gt;/assets/kalman.pdf">中文翻译</a>）。</p>
+<p>Demo采用<a href="http://www.arduino.cc" target="_blank" rel="noopener">Arduino</a>和<a href="https://www.sparkfun.com/products/10724" target="_blank" rel="noopener">SparkFun 9Dof Sensor Stick</a>。连接和代码借鉴<a href="http://robotosh.blogspot.nl/2012/03/sparkfun-9dof-imu-sensor-stick.html" target="_blank" rel="noopener">这篇文章</a>，讲得比较详细，照着做一遍就行了，代码参考<a href="https://github.com/liqul/imu-demo/blob/master/arduino-9dof-sensor-stick.c" target="_blank" rel="noopener">这里</a>。在上面代码的accelerometer_norm和gyro_comp需要用到两个数组，需要在校准中获得。</p>
+<p><img src="/blog/assets/arduino-spark.png" alt="arduino+spark"></p>
+<p>传感器得到的原始读数无法直接使用。例如加速度计在水平静止时的读数可能是$$ x=0, y=0, z=-211$$，这里的211其实是g的大小，而我们需要把这个值与g对应起来。对应上面的代码，accelerometer_norm[2]就应该是211。同理，需要找到x轴、y轴与g的对应关系。将传感器的x轴、y轴与水平面垂直静止放置（即分别使x轴、y轴朝上），得到的读数分别对应accelerometer_norm[0]和accelerometer_norm[1]。陀螺仪的校准与加速度计不同。陀螺仪的问题在于即使处于静止状态，各个轴角速度一般都不为0，这是明显错误的。所以简单的做法是把传感器静止放置，记录陀螺仪各个轴角速度测量值，例如$$ x=5, y=30, z=-10$$，那么对应的gyro_comp[3] = {-5, -30, 10}。需要注意的是，这里的校准是非常粗糙的，也并不能完全消除误差，而实际的误差模型非常复杂，如果需要得到更加精确的测量结果还需要更加复杂的校准过程。</p>
+<p>姿态恢复采用<a href="https://github.com/xioTechnologies/Open-Source-AHRS-With-x-IMU" target="_blank" rel="noopener">开源项目</a>。这个项目本来是针对xio自产的传感器设备，为了接入自己的设备需要做一些修改。只需要修改<a href="https://github.com/liqul/imu-demo/blob/master/main.cs" target="_blank" rel="noopener">program.cs</a>。</p>
+<p>建议安装Arduino IDE则不需要安装额外的驱动了。</p>
+<p>改变传感器的姿态可以从Visual Studio执行的项目中看到下面的画面：</p>
+<p><img src="/blog/assets/imu-demo.png" alt="IMU sensor"></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/IMU/">IMU</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/accelerometer/">accelerometer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/compass/">compass</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/gyroscope/">gyroscope</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-rabbitmq-error1"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/rabbitmq-error1/">RabbitMQ报错[ERROR: node with name &#39;rabbit&#39; already running on &#39;localhost&#39;]</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/rabbitmq-error1/" class="article-date">
+	  <time datetime="2015-09-07T10:52:21.000Z" itemprop="datePublished">September 7, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个报错是在执行./rabbitmq-server -detached的时候报出来的，除了这句以外没有任何信息。这个报错的本意是rabbit@localhost已经在运行了，不允许再启动一个实例。于是尝试干掉已有的进程：<br><!--break--></p>
+<p><pre class="lang:default decode:true ">ps aux | grep rabbit</pre><br>执行后发现没有任何进程。尝试Google类似的问题，找了很久终于发现一个可能的<a href="http://stackoverflow.com/questions/8737754/node-with-name-rabbit-already-running-but-also-unable-to-connect-to-node" target="_blank" rel="noopener">问题</a>——/etc/hosts文件可能被改出问题了。</p>
+<p>这要回到RabbitMQ的一个基本认识上，它是通过hostname来唯一确定本机的，甚至包括队列存储都与hostname直接对应，如果hostname被改了，意味着实例本身都变化了。于是执行</p>
+<p><pre class="lang:default decode:true ">hostname -s</pre><br>发现居然没问题，还是localhost。所以，的确感觉非常奇怪。</p>
+<p>进一步检查/etc/hosts文件，发现无意间把localhost指向了局域网内的另一台机器：</p>
+<p><pre class="lang:default decode:true ">192.168.1.56 localhost</pre><br>于是终于找到原因了，RabbitMQ启动时检查localhost，发现上面已经启动了一个RabbitMQ实例，于是报了最前面的错误。只需要去掉hosts文件里的配置就好了。</p>
+<p>上面说的是主要原因，另一个意外操作导致这个错误的原因是erlang的守护进程被其它用户启动了，这可以通过：</p>
+<p><pre class="lang:default decode:true ">ps aux | grep epmd</pre><br>检查。需要干掉这个进程才能顺利把RabbitMQ启动起来。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/rabbitmq/">rabbitmq</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-dependency-injection"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/dependency-injection/">Dependency Injection</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/dependency-injection/" class="article-date">
+	  <time datetime="2015-08-17T23:52:21.000Z" itemprop="datePublished">August 18, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>面向对象的一条准则就是将类与类之间的依赖关系解耦，这并不是什么新概念。Dependency Injection（DI）的目的也是一样，引用《implementing laravel》的一句原文：</p>
+<blockquote>
+<p>Dependency Injection is the act of adding (injecting) any dependencies into a class, rather than instantiating them somewhere within the class code itself. </p>
+</blockquote>
+<p>举一个例子来区分这两种情况：</p>
+<pre class="lang:php decode:true ">class NoDI 
+{
+    function __construct()
+    {
+        $this->inner_class = new InnerClass();
+    }
+}</pre> 
+
+<p><pre class="lang:php decode:true ">class DI<br>{<br>    function __construct(SomeInterface $implementation)<br>    {<br>        $this-&gt;inner_class = $implementation;<br>    }<br>}</pre><br>上面前一种情况下，如果inner_class的实现发生变化，例如需要重写一个NewInnerClass()，那么需要在NoDI中修改这行代码。而后一种情况下，由于inner_class是从外部传入的，所以DI类本身不需要发生任何变化。</p>
+<p>这个道理并不新颖，所以乍一眼看来这没有什么有意思的东西。如果无论什么情况都需要为类额外写一个interface，反倒是一种负担。另外，如果类之间的依赖关系比较复杂，使用起来也不方便，例如：类A依赖类B，类B又依赖类C，那么如果要获取一个A的对象，需要先得到B的对象，进一步递推到C的对象。</p>
+<p>为了减少这种重复的实例化过程，Laravel提供了Container。实际上一个Laravel的APP对象本身就继承自Container。还是以A、B、C之间的依赖关系为例：</p>
+<p><pre class="lang:php decode:true "><br>interface B_Interface {}<br>interface C_Interface {}</pre></p>
+<p>class A {<br>    function __construct(B_Interface $b){}<br>}</p>
+<p>class B implements B_Interface {<br>    function __construct(C_Interface $c){}<br>}</p>
+<p>class C implements C_Interface {<br>    function __construct(){}<br>}<br><br>在没有Container的情况下，会像下面一样来实例化A对象：</p>
+<p><pre class="lang:php decode:true "><br>$c = new C();<br>$b = new B($c);<br>$a = new A($b);<br></pre><br>试想我们每次获取A对象都需要写这样的3行代码。在面向对象的开发中，类之间的依赖关系是非常复杂的，这使得这样实例化变得不可行。这或许是许多人更加倾向于面向过程来开发（即使他们的代码里也充满了类定义）。</p>
+<p>有了Container以后这样的情况得到了很大的改善。如下面所示：</p>
+<p><pre class="lang:php decode:true "><br>APP::bind(‘B_Interface’, ‘B’);</pre></p>
+<p>APP::bind(‘C_Interface’, function(){<br>    return new C();<br>});</p>
+<p>$a = APP::make(‘A’);<br><br>在Laravel中，上面的代码会这样执行：</p>
+<p><ol><br>    <li>尝试实例化类A，发现其依赖B_Interface</li><br>    <li>尝试找到实现B_Interface的类，发现已注册的B_Interface指向B类</li><br>    <li>尝试实例化类B，发现其依赖C_Interface</li><br>    <li>尝试找到实现C_Interface的类，发现已注册的C_Interface执行一个closure，返回一个C类对象</li><br>    <li>按照上面相反的顺序依次获得C、B、A对象</li><br></ol><br>Laravel自动完成上面这样的递归式实例化过程。在PHP中，只要利用反射就能做到这一点。也许有人会说，上面这样的代码岂止3行，比前面的实现更加麻烦了。但是，在真实的场景下，两个bind语句是由服务提供方来实现的，而且只要做一次，在全局都能使用。所以，其实只需要最后一句话就够了。</p>
+<p>上面的例子里，生成实现B_Interface的类的时候用的是：</p>
+<p><pre class="lang:php decode:true "><br>APP::bind(‘B_Interface’, ‘B’);<br></pre><br>但对于C_Interface，用的是closure。这样做是由于B依赖于C_Interface，如果也用closure的话就不方便写了。</p>
+<p>Container在Laravel处于绝对核心地位。可以说所有类实例化都是经过Container来完成的，上面举的例子其实只是一种用法而已，在使用Laravel的过程中，由于Container的存在还有非常多技巧。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/php/">php</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-rabbitmq-memory-management"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/rabbitmq-memory-management/">RabbitMQ内存管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/rabbitmq-memory-management/" class="article-date">
+	  <time datetime="2015-08-15T10:52:21.000Z" itemprop="datePublished">August 15, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前一直有个疑问：如果一个exchange关联n个queue，那么一份消息会不会需要拷贝n份呢？这个问题十分关键。如果真的会有n个拷贝，那么queue的数量就必须严格限制了。庆幸的是RabbitMQ官方文档的确完整，于是看摘抄如下（<a href="https://www.rabbitmq.com/blog/2014/10/30/understanding-memory-use-with-rabbitmq-3-4/" target="_blank" rel="noopener">完整文章在此</a>）：<br><!--break--></p>
+<blockquote>
+<p><strong>A bit of background</strong><br>First of all we need to understand how Erlang manages memory. Erlang is a bit different from most garbage-collected languages in that it does not have a global heap. Instead, each process has a separate heap that’s private to it. In RabbitMQ terms process might be queues, channels, connections and so on. This means that the entire system does not have to come to a halt every time garbage collection needs to happen; instead each process collects garbage on its own schedule.</p>
+</blockquote>
+<blockquote>
+<p>That’s fine, but as a message passes through RabbitMQ, it will pass through several different processes. We’d like to avoid doing too much copying as this happens. Therefore Erlang gives us a different memory management scheme for binaries, which are used for a number of things inside RabbitMQ, of which the most interesting is message bodies. Binaries are shared between processes and reference-counted (with references being held by processes and garbage-collected along with everything else).</p>
+</blockquote>
+<blockquote>
+<p>How this applies to RabbitMQ<br>This means that memory used by message bodies is shared among processes in RabbitMQ. And this sharing also happens between queues too: <ins datetime="2015-08-13T14:22:21+00:00">if an exchange routes a message to many queues, the message body is only stored in memory once</ins>.</p>
+</blockquote>
+<p>由此可见，RabbitMQ在内存处理上还是考虑周到的，每个消息无论在内存还是disk都只会保留一个拷贝，队列里只保存对消息的引用。因此，在设计系统时，队列数量可以作为一个相对比较廉价的开销。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/rabbitmq/">rabbitmq</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-rabbitmq-load-balancing"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/rabbitmq-load-balancing/">RabbitMQ负载均衡</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/rabbitmq-load-balancing/" class="article-date">
+	  <time datetime="2015-08-15T10:52:21.000Z" itemprop="datePublished">August 15, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>读RabbitMQ文档的时候奇怪为什么它不支持负载均衡。后来看过别人写的Haproxy+RabbitMQ实现负载均衡，觉得似乎这样做就完美了，直到读到这篇文章《<a href="http://insidethecpu.com/2014/11/17/load-balancing-a-rabbitmq-cluster/" target="_blank" rel="noopener">Load Balancing a RabbitMQ Cluster</a>》。<br><!--break--></p>
+<p>这篇文章里介绍了RabbitMQ在队列备份时的一些细节：假设一个cluster里有两个实例，记作rabbitA和rabbitB。如果某个队列在rabbitA上创建，随后在rabbitB上镜像备份，那么rabbitA上的队列称为该队列的<strong>主队列</strong>（master queue），其它备份均为<strong>从队列</strong>。接下来，无论client访问rabbitA或rabbitB，最终消费的队列都是主队列。换句话说，即使在连接时主动连接rabbitB，RabbitMQ的cluster会自动把连接转向rabbitA。当且仅当rabbitA服务down掉以后，在剩余的从队列中再选举一个作为继任的主队列。</p>
+<p>如果这种机制是真的，那么负载均衡就不能简单随机化连接就能做到了。需要满足下面的条件：</p>
+<ol>
+<li>队列本身的建立需要随机化，即将队列分布于各个服务器；</li>
+<li>client访问需要知道每个队列的主队列保存在哪个服务器；</li>
+<li>如果某个服务器down了，需要知道哪个从队列被选择成为继任的主队列。<br>于是，Load Balancing a RabbitMQ Cluster的作者给出了下图的结构。</li>
+</ol>
+<p><img src="/blog/assets/rabbitmq-cluster-with-monitor-service.png" alt="负载均衡架构"></p>
+<p>这还是颇有点复杂的。首先，在建立一个新队列的时候，Randomiser会随机选择一个服务器，这样能够保证队列均匀分散在各个服务器（这里暂且不考虑负载）。建立队列后需要在Meta data里记录这个队列对应的服务器；另外，Monitor Service是关键，它用于处理某个服务器down掉的情况。一旦发生down机，它需要为之前主队列在该服务器的队列重新建立起与服务器的映射关系。</p>
+<p>这里会遇到一个问题，即怎么判断某个队列的主队列呢？一个方法是通过rabbitmqctl，如下面的例子：</p>
+<pre class="toolbar:2 lang:default decode:true ">./rabbitmqctl -p production list_queues pid slave_pids
+registration-email-queue        &lt;rabbit@mq01.2.1076.0&gt;       [&lt;rabbit@mq00.1.285.0&gt;]
+registration-sms-queue  &lt;rabbit@mq01.2.1067.0&gt;       [&lt;rabbit@mq00.1.281.0&gt;]</pre> 
+
+<p>可以看到pid和slave_pids分别对应主队列所在的服务器和从服务器（可能有多个）。利用这个命令就可以了解每个队列所在的主服务器了。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/rabbitmq/">rabbitmq</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-rabbitmq-deployment"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/rabbitmq-deployment/">RabbitMQ安装部署</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/rabbitmq-deployment/" class="article-date">
+	  <time datetime="2015-07-25T10:52:21.000Z" itemprop="datePublished">July 25, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>安装Erlang</strong><br>RabbitMQ是由Erlang编写的，所以需要先安装Erlang。RabbitMQ官方提供了一个足够RabbitMQ使用的Erlang的rpm，可以这样安装：<br><!--break--></p>
+<pre class="toolbar:2 lang:sh decode:true ">wget https://www.rabbitmq.com/releases/erlang/erlang-17.4-1.el6.x86_64.rpm
+rpm -i erlang-17.4-1.el6.x86_64.rpm</pre> 
+
+<p><strong>安装RabbitMQ</strong><br>RabbitMQ的安装非常简单，只需要下载tar包即可。</p>
+<pre class="toolbar:2 lang:sh decode:true ">wget https://github.com/rabbitmq/rabbitmq-server/releases/download/rabbitmq_v3_5_3/rabbitmq-server-generic-unix-3.5.3.tar.gz
+tar zxvf rabbitmq-server-generic-unix-3.5.3.tar.gz</pre>
+启动/关闭RabbitMQ服务
+<pre class="toolbar:2 lang:sh decode:true ">sbin/rabbitmq-server -detached
+sbin/rabbitctl stop #关闭服务</pre>
+
+<p><strong>端口配置</strong><br>如果需要建立RabbitMQ集群，需要打开下面的端口：<br>4369 (epmd), 25672 (Erlang distribution)<br>5672 (AMQP 0-9-1 without TLS)<br>一些插件还需要打开额外的端口，暂时不需要。例如rabbitmq-management需要打开15672端口（推荐打开）。</p>
+<pre class="toolbar:2 lang:sh decode:true ">iptables -I INPUT 1 -p tcp –dport 5672 -j ACCEPT
+iptables -I INPUT 1 -p tcp –dport 4369 -j ACCEPT
+iptables -I INPUT 1 -p tcp –dport 25672 -j ACCEPT
+iptables -I INPUT 1 -p tcp –dport 15672 -j ACCEPT
+/etc/init.d/iptables save
+/etc/init.d/iptables restart</pre>
+
+<p><strong>建立集群</strong><br>官方文档在此<a href="https://www.rabbitmq.com/clustering.html" target="_blank" rel="noopener">https://www.rabbitmq.com/clustering.html</a></p>
+<ol>
+<li>需要在多台机器上部署RabbitMQ，并保证上面提到的端口没有被防火墙盾掉。注意，不需要每台机器去配置vhost、exchange、queue等等，待建立集群后在任意一节点上创建就好了。</li>
+<li>将一个节点的/var/lib/rabbitmq/.erlang.cookie（如果该目录无权限则在$HOME下）拷贝到其它节点对应的位置，注意权限要保持一致400（即启动rabbitmq的用户下400）。另外，在每个节点上要保证可以通过短hostname（hostname -s来查看）来找到对应的ip地址，所以需要修通/etc/hosts文件，将所有节点的hostname和ip添加到该文件里。</li>
+<li>以任意一个节点为主节点（例如rabbit1），在非主节点节点上执行下面操作：</li>
+</ol>
+<pre class="toolbar:2 lang:sh decode:true ">rabbit2$ sbin/rabbitmqctl stop_app
+Stopping node rabbit@rabbit2 ...done.
+rabbit2$ sbin/rabbitmqctl join_cluster rabbit@rabbit1
+Clustering node rabbit@rabbit2 with [rabbit@rabbit1] ...done.
+rabbit2$ sbin/rabbitmqctl start_app
+Starting node rabbit@rabbit2 ...done.</pre>
+
+<p>这样rabbit2上的节点就与rabbit1上的节点组成一个cluster。在其它非主节点上依次执行上面的操作即可。</p>
+<pre class="toolbar:2 lang:sh decode:true ">查看集群状态：sbin/rabbitmqctl cluster_status
+停止某个节点：在对应节点上执行sbin/rabbitmqctl stop
+某个节点退出：在对应节点上执行sbin/rabbitmqctl stop_app；sbin/rabbitmqctl reset；sbin/rabbitmqctl start_app</pre>
+
+<p><em>hostname的问题</em>：<br>RabbitMQ直接读取hostname来写数据，如果hostname变了RabbitMQ会重新建立一个新的数据库。</p>
+<p><em>单个节点异常后如何恢复</em>：<br>前提必须保证 /var/lib/rabbitmq/.erlang.cookie一致</p>
+<pre class="toolbar:2 lang:sh decode:true ">rabbitmqctl stop_app；rabbitmqctl update_cluster_nodes rabbit@hostname；rabbitmqctl start_app</pre>
+
+<p><strong>用户配置</strong><br>RabbitMQ默认的用户名密码为guest:guest，这个用户只能在localhost环境下使用，不能远程使用。RabbitMQ大部分配置都可以用sbin/rabbitmqctl完成，可以参考<a href="https://www.rabbitmq.com/man/rabbitmqctl.1.man.html。" target="_blank" rel="noopener">https://www.rabbitmq.com/man/rabbitmqctl.1.man.html。</a></p>
+<pre class="toolbar:2 lang:sh decode:true ">增加用户：sbin/rabbitmqctl add_user user-name this-is-the-password
+删除用户：sbin/rabbitmqctl delete_user user-name
+更改密码：sbin/rabbitmqctl change_password user-name new-password
+列举所有用户：sbin/rabbitmqctl list_users
+为用户打tag：sbin/rabbitmqctl set_user_tags production monitoring</pre>
+
+<p><em>virtual host</em><br>RabbitMQ设计了virtual host这个概念，类似于文件系统的不同路径。一个应用是将同一组服务器给线上、线下使用，这时候可以建立两个不同的virtual host，它们相互不影响。</p>
+<pre class="toolbar:2 lang:sh decode:true ">增加virtual host：sbin/rabbitmqctl add_vhost vhost-path
+删除virtual host：sbin/rabbitmqctl delete_vhost vhost-path
+列举所有virtual host：sbin/rabbitmqctl list_vhosts</pre>
+
+<p><em>设置用户权限</em></p>
+<pre class="toolbar:2 lang:sh decode:true ">sbin/rabbitmqctl set_permissions [-p vhostpath] user-name conf-regex write-regex read-regex</pre>
+这个命令可以指定virtual host路径，跟前面提到的对应。需要注意的是后三个参数均为正则表达式，conf控制配置权限，write控制写权限，read控制读权限。例如：
+<pre class="toolbar:2 lang:sh decode:true ">rabbitmqctl set_permissions -p /myvhost tonyg "^tonyg-.*" ".*" ".*"</pre>
+这个命令配置用户tonyg只能配置以tongyg-开头的资源，但可以读写所有资源。
+<pre class="toolbar:2 lang:sh decode:true ">清空权限：sbin/rabbitmqctl clear_permissions [-p vhostpath] user-name
+列举所有用户权限：sbin/rabbitmqctl list_permissions [-p vhostpath]
+列举特定用户权限：sbin/rabbitmqctl list_user_permissions user-name</pre>
+
+<p><strong>设置服务规则</strong><br>一个RabbitMQ cluster中所有节点都共享访问user、vhost、queue、exchange等等，其中queue默认只在创建的node上保存，虽然其他节点可以访问这个queue，但如果创建节点down掉就没法访问了。一个解决方案是让队列在多个节点上备份。关于High availability的配置参考<a href="https://www.rabbitmq.com/ha.html" target="_blank" rel="noopener">https://www.rabbitmq.com/ha.html</a><br>一个常用的policy是</p>
+<pre class="toolbar:2 lang:sh decode:true ">sbin/rabbitmqctl [-p vhostpath] set_policy ha-all ".*" '{"ha-mode":"all"}'</pre> 
+这将所有queue都设置为全节点备份，在小规模的cluster中是可行的。
+
+**文件位置**
+RabbitMQ默认把所有相关文件都保存在安装目录下，一些常用的目录包括：
+* sbin目录保存控制服务的可执行脚本；
+* etc目录保存配置文件；
+* var目录保存服务日志文件；
+
+**PHP client库部署**
+RabbitMQ有多个PHP client实现，其官方tutorial对应的库是https://github.com/videlalvaro/php-amqplib。php-amqplib是一个完全用PHP实现的库。安装方法见github说明文档。
+
+**维护**
+RabbitMQ自带rabbitmq_management 插件可以用来监控队列状态。https://www.rabbitmq.com/management.html
+<pre class="toolbar:2 lang:sh decode:true ">打开插件：sbin/rabbitmq-plugins enable rabbitmq_management
+关闭插件：sbin/rabbitmq-plugins disable rabbitmq_management</pre>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/rabbitmq/">rabbitmq</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/blog/page/4/">Prev</a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/3/">3</a><a class="page-number" href="/blog/page/4/">4</a><span class="page-number current">5</span>
+  </nav>
+
+</section>
+          <aside id="sidebar">
+  
+    <div style="margin: 20px 0;">
+	<div id="search-form-wrap">
+
+    <form class="search-form">
+        <label style="width: 72%;">
+            <span class="screen-reader-text">Search for:</span>
+            <input type="search" class="search-field" style="height: 36px; width: 100%;" placeholder=" Search…" value="" name="s" title="Search for:">
+        </label>
+        <input type="submit" class="search-form-submit" value="Search">
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/blog/',
+        CONTENT_URL: '/blog/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/blog/js/insight.js"></script>
+
+</div>
+</div>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Connect With Us</h3>
+    <div class="widget widget_athemes_social_icons">
+
+    	<ul class="clearfix widget-social-icons">   
+    	
+   			<li><a href="https://www.linkedin.com/in/liqunli/" title="Linkedin"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li> 
+
+   		
+   			<li><a href="https://scholar.google.com/citations?user=icgetesAAAAJ&amp;hl=en" title="Google Scholar"><i class="fa fa-google scholar" aria-hidden="true"></i></a></li> 
+
+   		
+   			<li><a href="https://500px.com/liqul" title="500Px"><i class="fa fa-500px" aria-hidden="true"></i></a></li> 
+
+   		
+   		</ul>
+
+
+   		<!--
+   		<ul class="clearfix widget-social-icons">   		
+   		<li class="widget-si-twitter"><a href="http://twitter.com" title="Twitter"><i class="ico-twitter"></i></a></li> 
+		<li class="widget-si-facebook"><a href="http://facebook.com" title="Facebook"><i class="ico-facebook"></i></a></li>
+			<li class="widget-si-gplus"><a href="http://plus.google.com" title="Google+"><i class="ico-gplus"></i></a></li>
+			<li class="widget-si-pinterest"><a href="http://pinterest.com" title="Pinterest"><i class="ico-pinterest"></i></a></li>
+			<li class="widget-si-flickr"><a href="http://flickr.com" title="Flickr"><i class="ico-flickr"></i></a></li>
+			<li class="widget-si-instagram"><a href="http://instagram.com" title="Instagram"><i class="ico-instagram"></i></a></li>
+		</ul> -->
+
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget_athemes_tabs">
+    <ul id="widget-tab" class="clearfix widget-tab-nav">
+      <li class="active"><a>Recent Posts</a></li>
+    </ul>
+    <div class="widget">
+      <ul>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/housing-price-as-indicator/">金融概念整理——房价指标</a></h6>
+              <span>March 7, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/credit-spread/">金融概念整理——信用利差（credit spread）</a></h6>
+              <span>March 6, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/news/">新闻纪录</a></h6>
+              <span>January 3, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/etcd_raft_4/">Raft协议实现学习之—写入过程</a></h6>
+              <span>November 23, 2018</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/multiraft/">从Raft到MultiRaft</a></h6>
+              <span>November 1, 2018</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/banks/">《人为制造的脆弱性》--读后感</a></h6>
+              <span>September 20, 2018</span>
+            </div>
+
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Book-Reading/">Book Reading</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Finance/">Finance</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Photography/">Photography</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Reading/">Reading</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Tech/">Tech</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Thinking/">Thinking</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/Finance/" style="font-size: 10px;">Finance</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/Housing/" style="font-size: 10px;">Housing</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 10px;">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 10px;">credit spread</a> <a href="/blog/tags/distributed/" style="font-size: 12px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 12px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">March 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">September 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">March 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">March 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">February 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/12/">December 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/01/">January 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/08/">August 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/blog/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/blog/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/blog/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2019 Bucket &amp; Hammer All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css">
+  <script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+<script src="/blog/js/bootstrap.js"></script>
+<script src="/blog/js/main.js"></script>
+
+
+
+
+
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

@@ -1,14 +1,1028 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Liqun's Homepage</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon2.jpeg"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon2.jpeg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link active">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives" target="_self" class="nav-list-link">TAGS/ARCHIVE</a></li><li class="nav-list-item"><a href="/blog/about" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/credit-spread/" class="post-title-link">金融概念学习——信用利差（credit spread）</a></h2><div class="post-info">Mar 6, 2019</div><div class="post-content"><p>不同债券的利率是不一样的，为什么呢？想想如果5年国债的收益率是3%，那么一个企业发行一种5年的债券，它的利率应该定在多少？显然要高于3%，否则傻子才去买，因为企业是可能违约的，而国家会违约吗？所以，不同债券的利率本来就该不一样。</p></div><a href="/blog/credit-spread/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/news/" class="post-title-link">新闻纪录</a></h2><div class="post-info">Jan 3, 2019</div><div class="post-content"><p>每天读新闻，学习思考一些基本的经济逻辑。</p></div><a href="/blog/news/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/etcd_raft_4/" class="post-title-link">Raft协议实现学习之—写入过程</a></h2><div class="post-info">Nov 23, 2018</div><div class="post-content"><p>在上一篇文章重点梳理了选举的过程，而这一篇想着重梳理一下写入的过程。仍然沿着节点初始化的日志开始： </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="comment"># 阶段7：节点1成为leader后向其它节点广播MsgApp</span></span><br><span class="line">17:40:19 1-&gt;2 MsgApp Term:2 Log:1/3 Commit:3 Entries:[2/4 EntryNormal <span class="string">""</span>]</span><br><span class="line">17:40:19 3-&gt;1 MsgVoteResp Term:2 Log:0/0</span><br><span class="line">17:40:19 INFO: raft.node: 2 elected leader 1 at term 2</span><br><span class="line">17:40:19 1-&gt;3 MsgApp Term:2 Log:1/3 Commit:3 Entries:[2/4 EntryNormal <span class="string">""</span>]</span><br><span class="line">17:40:19 2-&gt;1 MsgAppResp Term:2 Log:0/4 <span class="comment"># 这里2汇报已经保存了新的entry</span></span><br><span class="line">17:40:19 INFO: raft.node: 3 elected leader 1 at term 2</span><br><span class="line">17:40:19 1-&gt;2 MsgApp Term:2 Log:2/4 Commit:4 <span class="comment"># 在这里commit从3变成4</span></span><br><span class="line">17:40:19 3-&gt;1 MsgAppResp Term:2 Log:0/4 </span><br><span class="line">17:40:19 node 1: processing entry: &#123;2 4 EntryNormal [] []&#125; <span class="comment"># 由于已经确认大部分节点都保存成功，可以apply到state machine</span></span><br><span class="line">17:40:19 1-&gt;3 MsgApp Term:2 Log:2/4 Commit:4</span><br><span class="line">17:40:19 2-&gt;1 MsgAppResp Term:2 Log:0/4</span><br><span class="line">17:40:19 node 2: processing entry: &#123;2 4 EntryNormal [] []&#125; <span class="comment"># 2在接收到来自1的MsgApp后得知commit=4，可以apply到本地的state machie</span></span><br><span class="line">17:40:19 3-&gt;1 MsgAppResp Term:2 Log:0/4</span><br><span class="line">17:40:19 node 3: processing entry: &#123;2 4 EntryNormal [] []&#125;</span><br></pre></td></tr></table></figure></div><a href="/blog/etcd_raft_4/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/multiraft/" class="post-title-link">从Raft到MultiRaft</a></h2><div class="post-info">Nov 1, 2018</div><div class="post-content"><p>Raft是一种共识算法，在之前的文章里已经提到过。简而言之，每次集群处理一次请求，都需要经过集群中大部分节点协商。所以一个Raft集群的规模一般不会太大，否则协商的代价就会比较大。那么如果希望基于Raft实现一些规模比较大的服务该怎么扩展呢？</p></div><a href="/blog/multiraft/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/banks/" class="post-title-link">《人为制造的脆弱性》--读后感</a></h2><div class="post-info">Sep 20, 2018</div><div class="post-content"><p>断断续续读了一遍《人为制造的脆弱性》。作者在第一部分里已经基本讲明了自己的观点，后面几部分只是列举一些国家佐证自己的论点，所以我也只重点看了前面前两个部分，后面的部分大致翻看了几眼。这本书现在可以在网上<a href="https://yuedu.baidu.com/ebook/9d86229dcd22bcd126fff705cc175" target="_blank" rel="noopener">直接看</a>。</p>
-<p>刚开始读的时候就被前两段话吸引了，一个好的开头的确能起到吸引读者的作用，贴在下面：</p>
-<blockquote>
-<p>每个人都知道生活是不公平的，即所谓“政治在起作用”。当最钟爱的电影痛失奥斯卡奖时，我们会这样说；当办公室最底层的蠢人陪领导打高尔夫而获得了本应属于我们的升职机会时，我们会这么说；当发现一座毫无用途的大桥得以建成，仅仅是因为某个很有权势的参议员将联邦基础设施建设资金带回了家乡时，我们会这么说；当发现一个有关系的企业家获得数百亿政府补贴去组建一个根本不可能有竞争力的公司时，我们也会这么说。</p>
-</blockquote></div><a href="/blog/banks/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/etcd_raft_3/" class="post-title-link">Raft协议实现学习之—初始化和Leader Election过程</a></h2><div class="post-info">Sep 13, 2018</div><div class="post-content"><h2 id="实验代码和输出"><a href="#实验代码和输出" class="headerlink" title="实验代码和输出"></a>实验代码和输出</h2><p>实验代码是基于作者<a href="http://github.com/otm/raft-part-1" target="_blank" rel="noopener">原来的代码</a>稍微修改而来，main函数如下所示:<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	nodes = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]*node)</span><br><span class="line">)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// start a small cluster</span></span><br><span class="line">	nodes[<span class="number">1</span>] = newNode(<span class="number">1</span>, []raft.Peer&#123;&#123;ID: <span class="number">1</span>&#125;, &#123;ID: <span class="number">2</span>&#125;, &#123;ID: <span class="number">3</span>&#125;&#125;)</span><br><span class="line">	<span class="keyword">go</span> nodes[<span class="number">1</span>].run()</span><br><span class="line"></span><br><span class="line">	nodes[<span class="number">2</span>] = newNode(<span class="number">2</span>, []raft.Peer&#123;&#123;ID: <span class="number">1</span>&#125;, &#123;ID: <span class="number">2</span>&#125;, &#123;ID: <span class="number">3</span>&#125;&#125;)</span><br><span class="line">	<span class="keyword">go</span> nodes[<span class="number">2</span>].run()</span><br><span class="line"></span><br><span class="line">	nodes[<span class="number">3</span>] = newNode(<span class="number">3</span>, []raft.Peer&#123;&#123;ID: <span class="number">1</span>&#125;, &#123;ID: <span class="number">2</span>&#125;, &#123;ID: <span class="number">3</span>&#125;&#125;)</span><br><span class="line">	<span class="keyword">go</span> nodes[<span class="number">3</span>].run()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Wait for leader election</span></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></div><a href="/blog/etcd_raft_3/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/etcd_raft_2/" class="post-title-link">Raft协议实现学习之—etcd/raft库的使用</a></h2><div class="post-info">Sep 13, 2018</div><div class="post-content"><h1 id="Etcd中的Raft协议实现"><a href="#Etcd中的Raft协议实现" class="headerlink" title="Etcd中的Raft协议实现"></a>Etcd中的Raft协议实现</h1><p>Etcd里Raft协议的实现的在<a href="https://github.com/etcd-io/etcd/tree/master/raft" target="_blank" rel="noopener">这里</a>。etcd并不是Raft的唯一实现，事实上Raft协议有<a href="https://raft.github.io/#implementations" target="_blank" rel="noopener">许多实现</a>，还有我简单尝试过的<a href="https://github.com/atomix/" target="_blank" rel="noopener">atomix</a>。选择etcd/raft是因为个人对etcd和go语言比较感兴趣，而且Raft论文里提到的实现方法恰好比较适合用go语言的goroutine来实现。</p>
-<p>另外的一个原因正如etcd/raft在github上的readme所说：</p>
-<blockquote>
-<p>To keep the codebase small as well as provide flexibility, the library only implements the Raft algorithm; both network and disk IO are left to the user. Library users must implement their own transportation layer for message passing between Raft peers over the wire. Similarly, users must implement their own storage layer to persist the Raft log and state.</p>
-</blockquote></div><a href="/blog/etcd_raft_2/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/etcd_raft_1/" class="post-title-link">Raft协议实现学习之—概览</a></h2><div class="post-info">Sep 13, 2018</div><div class="post-content"><h1 id="Raft协议概览"><a href="#Raft协议概览" class="headerlink" title="Raft协议概览"></a>Raft协议概览</h1><h2 id="Raft是什么？"><a href="#Raft是什么？" class="headerlink" title="Raft是什么？"></a>Raft是什么？</h2><p>Raft是一种共识协议。与Raft完成相同任务的系统有Chubby和Zookeeper，以及一些系统内置的完成类似功能的组件，例如Elasticsearch里的Zen-Discovery。简而言之，共识协议的目的是让一组节点在响应外界输入时能表现的像一个节点一样。共识系统往往应用于有主备结构的存储系统中，如果缺少这种协议，就无法避免数据<a href="http://www.bailis.org/blog/when-does-consistency-require-coordination/" target="_blank" rel="noopener">错误</a>。</p></div><a href="/blog/etcd_raft_1/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/flink/" class="post-title-link">Reading "State Management in Apache Flink"</a></h2><div class="post-info">Sep 9, 2018</div><div class="post-content"><div class="tip"><br>Updated on 2018-09-09<br></div>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Page 1 | Bucket &amp; Hammer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Knowlege, Knowlege, Knowlege" />
+  
+  
+  
+  
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Bucket &amp; Hammer">
+<meta property="og:url" content="liqul.github.io/blog/index.html">
+<meta property="og:site_name" content="Bucket &amp; Hammer">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bucket &amp; Hammer">
+  
+    <link rel="alternate" href="/atom.xml" title="Bucket &amp; Hammer" type="application/atom+xml">
+  
+  <link rel="icon" href="/blog/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
-<p>I’m playing with Flink (1.6) and Structured Streaming (2.3.1) recently. I’m no expert for either framework, so my opinion is based on my very short experience with each of them. </p></div><a href="/blog/flink/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/blog/things-about-replication-in-elasticsearch/" class="post-title-link">Things about replication in Elasticsearch</a></h2><div class="post-info">Apr 18, 2018</div><div class="post-content"><div class="tip"><br>Updated on 2018-04-18<br></div>
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/blog/css/style.css">
 
-<p>Elasticsearch is evolving fast in the past few years. There have been quite some discussions on data loss during node crashes, which can be found <a href="https://github.com/elastic/elasticsearch/issues/10933" target="_blank" rel="noopener">here</a> and <a href="https://github.com/elastic/elasticsearch/issues/14252" target="_blank" rel="noopener">here</a>. Most of the issues have been fixed as described <a href="https://www.elastic.co/guide/en/elasticsearch/resiliency/current/index.html" target="_blank" rel="noopener">here</a>. However, since Elasticsearch carried out a major upgrade to version 5+, some serious issues still remain for low versions, e.g., the stale replica problem described <a href="https://github.com/elastic/elasticsearch/issues/14671" target="_blank" rel="noopener">here</a>. </p></div><a href="/blog/things-about-replication-in-elasticsearch/" class="read-more">...阅读全文</a></article></li></ul></main><footer><div class="paginator"><a href="/blog/page/2/" class="next">下一页</a></div><div class="copyright"><p>© 2015 - 2019 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+  <script src="/blog/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/blog/css/bootstrap.css" >
+  <link rel="stylesheet" href="/blog/css/fashion.css" >
+  <link rel="stylesheet" href="/blog/css/glyphs.css" >
+
+</head>
+
+
+
+  <body>
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/blog/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="650px" height="124px" alt="Hike News" src=" /blog/css/images/title.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main">
+  
+    <article id="post-housing-price-as-indicator"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/housing-price-as-indicator/">金融概念整理——房价指标</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/housing-price-as-indicator/" class="article-date">
+	  <time datetime="2019-03-07T07:29:22.000Z" itemprop="datePublished">March 7, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Finance/">Finance</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          经济好的时候，人们总喜欢买房子，这是一种自然的规律。如果你住在一个“老破小”里，这几年赚了不少钱，难道你不想来个升级？所以，房价一直是经济的一个观察指标。如果房价一直在上涨，多半大家收入也在上涨，经济处于扩张期；反之，则说明大家收入增长停止了，或放缓了。行政手段虽然能起到一定的稳定作用，但本质上是无法阻挡这种趋势的。
+
+        
+          <p class="article-more-link">
+            <a href="/blog/housing-price-as-indicator/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Finance/">Finance</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Finance/">Finance</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Housing/">Housing</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-credit-spread"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/credit-spread/">金融概念整理——信用利差（credit spread）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/credit-spread/" class="article-date">
+	  <time datetime="2019-03-06T13:55:05.031Z" itemprop="datePublished">March 6, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Finance/">Finance</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          不同债券的利率是不一样的，为什么呢？想想如果5年国债的收益率是3%，那么一个企业发行一种5年的债券，它的利率应该定在多少？显然要高于3%，否则傻子才去买，因为企业是可能违约的，而国家会违约吗？所以，不同债券的利率本来就该不一样。
+
+        
+          <p class="article-more-link">
+            <a href="/blog/credit-spread/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Finance/">Finance</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/credit-spread/">credit spread</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-news"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/news/">新闻纪录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/news/" class="article-date">
+	  <time datetime="2019-01-02T16:00:00.000Z" itemprop="datePublished">January 3, 2019</time>
+	</a>
+
+       
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          每天读新闻，学习思考一些基本的经济逻辑。
+
+        
+          <p class="article-more-link">
+            <a href="/blog/news/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/investment/">investment</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-etcd_raft_4"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/etcd_raft_4/">Raft协议实现学习之—写入过程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/etcd_raft_4/" class="article-date">
+	  <time datetime="2018-11-23T13:22:31.847Z" itemprop="datePublished">November 23, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          在上一篇文章重点梳理了选举的过程，而这一篇想着重梳理一下写入的过程。仍然沿着节点初始化的日志开始： 
+12345678910111213141516# ...# 阶段7：节点1成为leader后向其它节点广播MsgApp17:40:19 1-&gt;2 MsgApp Term:2 Log:1/3 Commit:3 Entries:[2/4 EntryNormal ""]17:40:19 3-&gt;1 MsgVoteResp Term:2 Log:0/017:40:19 INFO: raft.node: 2 elected leader 1 at term 217:40:19 1-&gt;3 MsgApp Term:2 Log:1/3 Commit:3 Entries:[2/4 EntryNormal ""]17:40:19 2-&gt;1 MsgAppResp Term:2 Log:0/4 # 这里2汇报已经保存了新的entry17:40:19 INFO: raft.node: 3 elected leader 1 at term 217:40:19 1-&gt;2 MsgApp Term:2 Log:2/4 Commit:4 # 在这里commit从3变成417:40:19 3-&gt;1 MsgAppResp Term:2 Log:0/4 17:40:19 node 1: processing entry: &#123;2 4 EntryNormal [] []&#125; # 由于已经确认大部分节点都保存成功，可以apply到state machine17:40:19 1-&gt;3 MsgApp Term:2 Log:2/4 Commit:417:40:19 2-&gt;1 MsgAppResp Term:2 Log:0/417:40:19 node 2: processing entry: &#123;2 4 EntryNormal [] []&#125; # 2在接收到来自1的MsgApp后得知commit=4，可以apply到本地的state machie17:40:19 3-&gt;1 MsgAppResp Term:2 Log:0/417:40:19 node 3: processing entry: &#123;2 4 EntryNormal [] []&#125;
+
+        
+          <p class="article-more-link">
+            <a href="/blog/etcd_raft_4/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-multiraft"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/multiraft/">从Raft到MultiRaft</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/multiraft/" class="article-date">
+	  <time datetime="2018-11-01T08:52:03.000Z" itemprop="datePublished">November 1, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          Raft是一种共识算法，在之前的文章里已经提到过。简而言之，每次集群处理一次请求，都需要经过集群中大部分节点协商。所以一个Raft集群的规模一般不会太大，否则协商的代价就会比较大。那么如果希望基于Raft实现一些规模比较大的服务该怎么扩展呢？
+
+        
+          <p class="article-more-link">
+            <a href="/blog/multiraft/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-banks"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/banks/">《人为制造的脆弱性》--读后感</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/banks/" class="article-date">
+	  <time datetime="2018-09-20T14:04:03.000Z" itemprop="datePublished">September 20, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Reading/">Reading</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          断断续续读了一遍《人为制造的脆弱性》。作者在第一部分里已经基本讲明了自己的观点，后面几部分只是列举一些国家佐证自己的论点，所以我也只重点看了前面前两个部分，后面的部分大致翻看了几眼。这本书现在可以在网上直接看。
+刚开始读的时候就被前两段话吸引了，一个好的开头的确能起到吸引读者的作用，贴在下面：
+
+每个人都知道生活是不公平的，即所谓“政治在起作用”。当最钟爱的电影痛失奥斯卡奖时，我们会这样说；当办公室最底层的蠢人陪领导打高尔夫而获得了本应属于我们的升职机会时，我们会这么说；当发现一座毫无用途的大桥得以建成，仅仅是因为某个很有权势的参议员将联邦基础设施建设资金带回了家乡时，我们会这么说；当发现一个有关系的企业家获得数百亿政府补贴去组建一个根本不可能有竞争力的公司时，我们也会这么说。
+
+
+        
+          <p class="article-more-link">
+            <a href="/blog/banks/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Reading/">Reading</a>
+
+      
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-etcd_raft_1"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/etcd_raft_1/">Raft协议实现学习之—概览</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/etcd_raft_1/" class="article-date">
+	  <time datetime="2018-09-13T07:50:03.000Z" itemprop="datePublished">September 13, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          Raft协议概览Raft是什么？Raft是一种共识协议。与Raft完成相同任务的系统有Chubby和Zookeeper，以及一些系统内置的完成类似功能的组件，例如Elasticsearch里的Zen-Discovery。简而言之，共识协议的目的是让一组节点在响应外界输入时能表现的像一个节点一样。共识系统往往应用于有主备结构的存储系统中，如果缺少这种协议，就无法避免数据错误。
+
+        
+          <p class="article-more-link">
+            <a href="/blog/etcd_raft_1/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-etcd_raft_2"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/etcd_raft_2/">Raft协议实现学习之—etcd/raft库的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/etcd_raft_2/" class="article-date">
+	  <time datetime="2018-09-13T07:50:03.000Z" itemprop="datePublished">September 13, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          Etcd中的Raft协议实现Etcd里Raft协议的实现的在这里。etcd并不是Raft的唯一实现，事实上Raft协议有许多实现，还有我简单尝试过的atomix。选择etcd/raft是因为个人对etcd和go语言比较感兴趣，而且Raft论文里提到的实现方法恰好比较适合用go语言的goroutine来实现。
+另外的一个原因正如etcd/raft在github上的readme所说：
+
+To keep the codebase small as well as provide flexibility, the library only implements the Raft algorithm; both network and disk IO are left to the user. Library users must implement their own transportation layer for message passing between Raft peers over the wire. Similarly, users must implement their own storage layer to persist the Raft log and state.
+
+
+        
+          <p class="article-more-link">
+            <a href="/blog/etcd_raft_2/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-etcd_raft_3"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/etcd_raft_3/">Raft协议实现学习之—初始化和Leader Election过程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/etcd_raft_3/" class="article-date">
+	  <time datetime="2018-09-13T07:50:03.000Z" itemprop="datePublished">September 13, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          实验代码和输出实验代码是基于作者原来的代码稍微修改而来，main函数如下所示:12345678910111213141516171819var (	nodes = make(map[int]*node))func main() &#123;	// start a small cluster	nodes[1] = newNode(1, []raft.Peer&#123;&#123;ID: 1&#125;, &#123;ID: 2&#125;, &#123;ID: 3&#125;&#125;)	go nodes[1].run()	nodes[2] = newNode(2, []raft.Peer&#123;&#123;ID: 1&#125;, &#123;ID: 2&#125;, &#123;ID: 3&#125;&#125;)	go nodes[2].run()	nodes[3] = newNode(3, []raft.Peer&#123;&#123;ID: 1&#125;, &#123;ID: 2&#125;, &#123;ID: 3&#125;&#125;)	go nodes[3].run()	// Wait for leader election	for &#123;		time.Sleep(100 * time.Millisecond)	&#125;&#125;
+
+        
+          <p class="article-more-link">
+            <a href="/blog/etcd_raft_3/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-flink"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/flink/">Reading &#34;State Management in Apache Flink&#34;</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/flink/" class="article-date">
+	  <time datetime="2018-09-09T14:47:09.000Z" itemprop="datePublished">September 9, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          Updated on 2018-09-09
+
+I’m playing with Flink (1.6) and Structured Streaming (2.3.1) recently. I’m no expert for either framework, so my opinion is based on my very short experience with each of them. 
+
+        
+          <p class="article-more-link">
+            <a href="/blog/flink/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/flink/">flink</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/5/">5</a><a class="extend next" rel="next" href="/blog/page/2/">Next</a>
+  </nav>
+
+</section>
+          <aside id="sidebar">
+  
+    <div style="margin: 20px 0;">
+	<div id="search-form-wrap">
+
+    <form class="search-form">
+        <label style="width: 72%;">
+            <span class="screen-reader-text">Search for:</span>
+            <input type="search" class="search-field" style="height: 36px; width: 100%;" placeholder=" Search…" value="" name="s" title="Search for:">
+        </label>
+        <input type="submit" class="search-form-submit" value="Search">
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/blog/',
+        CONTENT_URL: '/blog/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/blog/js/insight.js"></script>
+
+</div>
+</div>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Connect With Us</h3>
+    <div class="widget widget_athemes_social_icons">
+
+    	<ul class="clearfix widget-social-icons">   
+    	
+   			<li><a href="https://www.linkedin.com/in/liqunli/" title="Linkedin"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li> 
+
+   		
+   			<li><a href="https://scholar.google.com/citations?user=icgetesAAAAJ&amp;hl=en" title="Google Scholar"><i class="fa fa-google scholar" aria-hidden="true"></i></a></li> 
+
+   		
+   			<li><a href="https://500px.com/liqul" title="500Px"><i class="fa fa-500px" aria-hidden="true"></i></a></li> 
+
+   		
+   		</ul>
+
+
+   		<!--
+   		<ul class="clearfix widget-social-icons">   		
+   		<li class="widget-si-twitter"><a href="http://twitter.com" title="Twitter"><i class="ico-twitter"></i></a></li> 
+		<li class="widget-si-facebook"><a href="http://facebook.com" title="Facebook"><i class="ico-facebook"></i></a></li>
+			<li class="widget-si-gplus"><a href="http://plus.google.com" title="Google+"><i class="ico-gplus"></i></a></li>
+			<li class="widget-si-pinterest"><a href="http://pinterest.com" title="Pinterest"><i class="ico-pinterest"></i></a></li>
+			<li class="widget-si-flickr"><a href="http://flickr.com" title="Flickr"><i class="ico-flickr"></i></a></li>
+			<li class="widget-si-instagram"><a href="http://instagram.com" title="Instagram"><i class="ico-instagram"></i></a></li>
+		</ul> -->
+
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget_athemes_tabs">
+    <ul id="widget-tab" class="clearfix widget-tab-nav">
+      <li class="active"><a>Recent Posts</a></li>
+    </ul>
+    <div class="widget">
+      <ul>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/housing-price-as-indicator/">金融概念整理——房价指标</a></h6>
+              <span>March 7, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/credit-spread/">金融概念整理——信用利差（credit spread）</a></h6>
+              <span>March 6, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/news/">新闻纪录</a></h6>
+              <span>January 3, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/etcd_raft_4/">Raft协议实现学习之—写入过程</a></h6>
+              <span>November 23, 2018</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/multiraft/">从Raft到MultiRaft</a></h6>
+              <span>November 1, 2018</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/banks/">《人为制造的脆弱性》--读后感</a></h6>
+              <span>September 20, 2018</span>
+            </div>
+
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Book-Reading/">Book Reading</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Finance/">Finance</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Photography/">Photography</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Reading/">Reading</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Tech/">Tech</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Thinking/">Thinking</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/Finance/" style="font-size: 10px;">Finance</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/Housing/" style="font-size: 10px;">Housing</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 10px;">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 10px;">credit spread</a> <a href="/blog/tags/distributed/" style="font-size: 12px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 12px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">March 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">September 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">March 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">March 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">February 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/12/">December 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/01/">January 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/08/">August 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/blog/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/blog/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/blog/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2019 Bucket &amp; Hammer All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css">
+  <script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+<script src="/blog/js/bootstrap.js"></script>
+<script src="/blog/js/main.js"></script>
+
+
+
+
+
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

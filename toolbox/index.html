@@ -1,4 +1,145 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Toolbox · Liqun's Homepage</title><meta name="description" content="Toolbox - Liqun Li"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon2.jpeg"><link rel="stylesheet" href="/blog/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="liqul.github.io/blog/atom.xml" title="Liqun's Homepage"></head><body><div class="wrap"><header><a href="/blog/" class="logo-link"><img src="/blog/favicon2.jpeg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/blog/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/blog/archives" target="_self" class="nav-list-link">TAGS/ARCHIVE</a></li><li class="nav-list-item"><a href="/blog/about" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/blog/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Toolbox</h1><div class="post-info">Dec 18, 2016</div><div class="post-content"><h2><span id="particle-filtering">Particle Filtering</span></h2><p>Particle filtering is essentially a heuristic continious search process. Each particle represents a probe of the whole search space. Thus, the number of particles represents the size of the search space. There are a few key steps in the search process: initialization, update weight, andd resampling. Each of these steps can be heuristically tuned following the physic world rules. A good example of applying particle filtering can be found in “Robust Indoor Localization on a Commercial Smart-Phone”, CMU TR 2011. In the paper, they adopted <em>Importance Resampling</em> which is a typical approach by selecting these <em>important</em> particles each iteration. Alternatively, another popular approach is to learn the distribution of the particles and re-generate them based on the learnt model. For example, we assume the particles follow a Normal distribution (learnt based on mean and stddev of their positions), and the observation implies another Normal distribution (pre-knowledge), we can then use a joint distribution to generate the new batch of particles. Two must read papers are <a href="https://kabru.eecs.umich.edu/yuanchao/paper/jsac15magicol.pdf" target="_blank" rel="noopener">Magicol</a> and <a href="http://ieeexplore.ieee.org/document/7272098/?arnumber=7272098" target="_blank" rel="noopener">this one</a>.</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Toolbox | Bucket &amp; Hammer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Knowlege, Knowlege, Knowlege" />
+  
+  
+  
+  
+  <meta name="description" content="My toolbox~">
+<meta name="keywords" content="tool collection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Toolbox">
+<meta property="og:url" content="liqul.github.io/blog/toolbox/index.html">
+<meta property="og:site_name" content="Bucket &amp; Hammer">
+<meta property="og:description" content="My toolbox~">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-03-06T10:49:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Toolbox">
+<meta name="twitter:description" content="My toolbox~">
+  
+    <link rel="alternate" href="/atom.xml" title="Bucket &amp; Hammer" type="application/atom+xml">
+  
+  <link rel="icon" href="/blog/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/blog/css/style.css">
+
+  <script src="/blog/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/blog/css/bootstrap.css" >
+  <link rel="stylesheet" href="/blog/css/fashion.css" >
+  <link rel="stylesheet" href="/blog/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/blog/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="650px" height="124px" alt="Hike News" src=" /blog/css/images/title.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/blog/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-toolbox" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Toolbox
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/toolbox/" class="article-date">
+	  <time datetime="2016-12-18T03:42:47.000Z" itemprop="datePublished">December 18, 2016</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2><span id="particle-filtering">Particle Filtering</span></h2><p>Particle filtering is essentially a heuristic continious search process. Each particle represents a probe of the whole search space. Thus, the number of particles represents the size of the search space. There are a few key steps in the search process: initialization, update weight, andd resampling. Each of these steps can be heuristically tuned following the physic world rules. A good example of applying particle filtering can be found in “Robust Indoor Localization on a Commercial Smart-Phone”, CMU TR 2011. In the paper, they adopted <em>Importance Resampling</em> which is a typical approach by selecting these <em>important</em> particles each iteration. Alternatively, another popular approach is to learn the distribution of the particles and re-generate them based on the learnt model. For example, we assume the particles follow a Normal distribution (learnt based on mean and stddev of their positions), and the observation implies another Normal distribution (pre-knowledge), we can then use a joint distribution to generate the new batch of particles. Two must read papers are <a href="https://kabru.eecs.umich.edu/yuanchao/paper/jsac15magicol.pdf" target="_blank" rel="noopener">Magicol</a> and <a href="http://ieeexplore.ieee.org/document/7272098/?arnumber=7272098" target="_blank" rel="noopener">this one</a>.</p>
 <h2><span id="forward-error-correction">Forward Error Correction</span></h2><p>The purpose of FEC is to ease the correction of error packets in a packet-based network. Though there are various ways to accomplish this goal, a easy-to-follow paper is “Effective erasure codes for reliable computer communication protocols”, Sigcomm Comput. Commun. Rev. 1997. The key idea is to treat N packets as N unknowns, and generate M (M greater than or equal N) un-collinear equations such that any N equations (among M) can derive the original N packets. There is actually no inherent difference between FEC and <em>network coding</em>. The key idea of network coding is to exploit the broadcast nature of wireless communication to save as much bandwidth as possible. Dina Katabi has been working on this back to a few years ago, which could be found <a href="http://groups.csail.mit.edu/netmit/wordpress/projects/network-coding/cope/" target="_blank" rel="noopener">here</a>. </p>
 <h2><span id="periodicity-detection">Periodicity Detection</span></h2><p>There are basically two mechanisms: short-time FFT and auto-correlation. A very easy-to-follow paper “On Periodicity Detection and Structural Periodic Similarity” SDM’05. The key idea of that paper is to fuse them for robustness. The paper is written in an interesting fashion.  This paper also gives a high-level description on FFT. </p>
 <p>Periodicity detection is actually independent to the sensor. However, with different sensors, the specific approach may vary a little bit. A very good reference using RGB camera sensor is “Real-Time Periodic Motion Detection, Analysis, and Applications” CVPR 2000. The approach in the reference paper is quite intuitive and easy to follow. </p>
@@ -15,4 +156,171 @@
 <h2><span id="kernel-density-estimation-kde">Kernel Density Estimation (KDE)</span></h2><p>Kernel density estimation (<a href="https://en.wikipedia.org/wiki/Kernel_density_estimation" target="_blank" rel="noopener">KDE</a>) is a technique typically used to smooth the discrete density function, or more precisely the histogram, learnt from a finite set of samples. For instance, we observed 10 samples of the RSSI of a Wi-Fi access point, ranging from -40dB to -90dB. Then, we can derive the histogram distributing the samples in to 10dB sized bins. However, due to the limited number of samples, we may result in a coarse-grained shape. KDE is used to deal with such situations. The key idea is to “leak” some probability density into neighboring bins. To achieve this goal, KDE involves a kernel, commonly uniform, triangular, bi-weight, normal, or others, and apply it across the histogram. An intuitive example could be found on the Wikipedia with normal kernel. Thus, to perform KDE, one needs to choose an appropriate kernel, as well as a bandwidth for the kernel. Generally, KDE is an empirical method to make the discrete probability density function more reasonable. However, one definitely need to understand the domain knowledge to ensure that KDE really makes some sense. </p>
 <h2><span id="apriori-algorithm">Apriori Algorithm</span></h2><p>Apriori is a classic algorithm for mining association rules in a large dataset. One famous application of Apriori is to mine common merchandise itemset bought by customers. There are two key metric in Apriori, i.e., support and confidence. Support quantify the number of transactions containing the itemset of interest. For instance, there are a total of 1000 transactions where 100 of them contains both bread and butter, then the support ratio is 100/1000=0.1. Another important metric is the confidence which measures the reasoning confidence. Use the same example. If 200 transactions contains bread and only 100 of them have butter, then the confidence is 100/200. In other words, we have 50% confidence to say that if someone buy break, she will also buy butter. Before mining the dataset, one need to specify these two metrics. Typically, confidence is set to a very high value like 99% to ensure the derived rules are significant and meaningful. The ratio of support depends heavily to the domain knowledge. In the market transaction example, support needs to be high to motivate the rearrange the goods being aware of the cost. However, in some cases, we focus more on the confidence, where the support could be low. </p>
 <p>The algorithm works in a bottom up way. Apriori first finds out all one-item sets with support higher than the chosen metric. Then it elaborate all combinations of one-item sets to form two-item sets. The process keeps on until no more higher level set satisfies the support metric. Then, Aporiori applies the confidence metric to filter out invalid itemsets. Apriori is with many implementations which can be found easily.</p>
-</div></article></div></main><footer><div class="paginator"><a href="/blog/questions-applying-ai/" class="prev">上一篇</a><a href="/blog/cycling/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2019 <a href="liqul.github.io/blog">Liqun Li</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/tool-collection/">tool collection</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/questions-applying-ai/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Questions Asked When Applying AI
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/yangming/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">阳明先生的哲学</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Particle Filtering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Forward Error Correction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">Periodicity Detection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">Local Regression</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Modulation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Rolling Shutter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">IMU Sensor Fusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">Random Sample Consensus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">Diff Algorithm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">Kernel Density Estimation (KDE)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">Apriori Algorithm</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/blog/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/blog/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/blog/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2019 Bucket &amp; Hammer All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css">
+  <script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+<script src="/blog/js/bootstrap.js"></script>
+<script src="/blog/js/main.js"></script>
+
+
+
+
+
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
