@@ -383,92 +383,6 @@ Scala的一种入门方式是：
 <!-- Table of Contents -->
 
   
-    <article id="post-the-raft-consensus-algorithm"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/the-raft-consensus-algorithm/">Notes on The Raft Consensus Algorithm</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/the-raft-consensus-algorithm/" class="article-date">
-	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>What’s consensus?</p>
-<blockquote>
-<p>It allows a collection of machines to work as a coherent group that can survive the failures of some of its members.</p>
-</blockquote>
-<p>It means not only a group of machines reach a final decision for a request, but also the state machine is replicated across these machines, so that some failures do not affect the functioning. Raft is a consensus algorithm seeking to be correct, implementable, and understandable. </p>
-<p>The <a href="https://ramcloud.stanford.edu/~ongaro/thesis.pdf" target="_blank" rel="noopener">thesis</a> is very well written. It is much more comprehensive compared to the NSDI paper. Implementing Raft based on the thesis shouldn’t be too difficult (of course, also not trivial). The author also built a <a href="https://raft.github.io/" target="_blank" rel="noopener">website</a> putting all kinds of helping things there. I read the paper and decide to take some notes here.</p>
-<p><img src="/blog/assets/state.png" width="800"></p>
-<p>There are two key parts sitting in the core of the algorithm:</p>
-<p><strong>Leader election</strong></p>
-<p>The election is triggered by a timeout. If a server failed to detect heartbeats from the current leader, it start a new <em>term</em> of election. During the term, it broadcast requests to collect votes from other servers. If equal or more than majority of servers reply with a vote, the server becomes the leader of this term. The “term” here is a monotonically increasing logic time. From the perspective of a server receiving the vote request, it decides whether to give the vote based on a few considerations. First of all, if the sender even falls behind the receiver in terms of log index, the receiver should not vote for it. Also, if the receiver can still hear the heartbeats from current leader, it should not vote too. In this case, the requester might be a <em>disruptive server</em>. In other cases, the receiver should vote for the sender. </p>
-<p><img src="/blog/assets/leader election.png" width="800"></p>
-<p><strong>Log replication</strong></p>
-<p>Once a server becomes the leader, it’s mission is simply replicate it’s log to every other follower. The replication means make the log of a follower <em>exactly</em> the same as the leader. For each pair of leader and follower, the leader first identify the highest index where they reach an agreement. Starting from there, the leader overwrite its log to the follower. The leader handles all requests from clients. Once it receives a new request, it first put the request into its own log. Then, it replicate the request to all followers. If equal or more than majority followers (including the leader itself) answer the replication request with success, the leader apply the request into its state machine (this is called commit). The leader put the new log index into its heartbeats, so followers know if the request has been committed, after which each follower commit the request too.</p>
-<p><img src="/blog/assets/log replication.png" width="800"></p>
-<p>More formal introduction of the core Raft could be found in Fig. 3.1 in the thesis paper. There are also a few extensions to make the algorithm practical to be used in production systems, such as the group management. I also found Fig. 10.1 a very good reference of architecture. </p>
-<p>There are quite a lot of implementations of Raft, which could be found <a href="https://raft.github.io/" target="_blank" rel="noopener">here</a>. I also find a project named Copycat, with code <a href="https://github.com/atomix/copycat" target="_blank" rel="noopener">here</a> and document <a href="http://atomix.io/copycat/" target="_blank" rel="noopener">here</a>. Copycat is a full featured implementation of Raft in java. Building your own application based on Copycat shouldn’t be too difficult. They provide an example of implementing a KV store based on Copycat in their source code <a href="https://github.com/atomix/copycat/tree/master/examples" target="_blank" rel="noopener">here</a>, which is used as the “<a href="http://atomix.io/copycat/docs/getting-started/" target="_blank" rel="noopener">Get Started</a>“ tutorial. Another very important reason, why I think Copycat a good reference, is that it emphases the abstraction of state machine, client, server, and operations. Therefore, going through it’s document enhanced my understanding of Raft. </p>
-<p>If you don’t want to build your own Raft, may be Copycat is worthwhile a try, though I haven’t any real experience beyond a toy project.</p>
-<p>The annotated thesis could be found <a href="/blog/assets/raft-thesis.pdf">here</a>.</p>
-<p><strong>A go-through case for understanding</strong></p>
-<p>A typical request handling process is as follows:</p>
-<ol>
-<li>The client sends a request to the cluster;</li>
-<li>The leader handles the request by putting it to a WAL;</li>
-<li>The leader sends the request to all followers;</li>
-<li>Each follower puts the received request to its WAL, and responds to the leader;</li>
-<li>Once the leader has heard a majority number of responses from its followers, the leader commit the request by applying the WAL to its state machine;</li>
-<li>The leader inform the client that the request has been handled properly, and then, put the index of the request into its heartbeat to let all followers know the status of each request;</li>
-<li>Once the follower knows that the request has been committed by the leader, the follower commit the request too by applying it to its own state machine. </li>
-</ol>
-<p>There are a few key points to understand in the process above:</p>
-<p>1.Does the client always know if its request has been handled properly?</p>
-<p>No. If the leader commits the request and then crashes, the client will not know if the request has been actually successfully handled. In some cases, the client will resend the request which may lead to duplicated data. It leaves for the client to avoid such kind of duplication. </p>
-<p>2.How about the leader crashes before inform its followers that the request has been committed?</p>
-<p>If the leader crashes, a follower will be elected to be the next leader. The follower must have the latest state according to the mechanism of Raft. Therefore, the next leader definitely has the WAL for the request, and the request has definitely been replicated across a majority number of hosts. Therefore, it is safe to replicate its state to all followers. </p>
-<p>3.Key feature of a consensus algorithm (or strong consistency)?</p>
-<p>Under normal situations, if there’s a state change, the key step changing the state should be always handled by a certain node. The state changing should be replicated to a majority number of followers before informing the requester a success. Each read request goes to that certain node as well. Once there’s node failures or networking partitions, the service stop working until returning to the normal situation again.</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Consensus/">Consensus</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Copycat/">Copycat</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
     <article id="post-implementing-a-lock-system"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -518,75 +432,6 @@ Scala的一种入门方式是：
       
   <span class="ico-tags"></span>
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-using-select-for-update-for-uniqueness-in-mysql"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/using-select-for-update-for-uniqueness-in-mysql/">Notes on Using &#34;Select ... For Update&#34; for Uniqueness in Mysql</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/using-select-for-update-for-uniqueness-in-mysql/" class="article-date">
-	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>I encountered a deadlock recently. Similar questions have been asked on StackOverflow, e.g., <a href="http://stackoverflow.com/questions/21851119/deadlock-using-select-for-update-in-mysql" target="_blank" rel="noopener">this</a> and <a href="http://stackoverflow.com/questions/43251975/mysql-select-for-update-blocks-1st-insert-if-using-non-primary-key-in-where-clau" target="_blank" rel="noopener">this</a>. But the answers didn’t really explain why this happens. </p>
-<p>The situation is quite easy to reproduce @ Mysql 5.7.17 (also tested on other versions in 5.5 or 5.6):</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`val`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`search`</span> (<span class="string">`val`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">4</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'pre-lock'</span>;</span><br></pre></td></tr></table></figure>
-<p><strong>session1</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
-<p><strong>session2</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
-<p><strong>session1</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'/a/b/c'</span>;</span><br></pre></td></tr></table></figure></p>
-<p><strong>session2</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1213 (40001): Deadlock found when trying to get <span class="keyword">lock</span>; try restarting transaction</span><br></pre></td></tr></table></figure></p>
-<p>The result of show engine innodb status:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">LATEST DETECTED DEADLOCK</span><br><span class="line"><span class="comment">------------------------</span></span><br><span class="line">2017-04-06 23:54:03 0x7000057db000</span><br><span class="line">*** (1) TRANSACTION:</span><br><span class="line">TRANSACTION 1333, ACTIVE 18 sec starting index read</span><br><span class="line">mysql tables in <span class="keyword">use</span> <span class="number">1</span>, <span class="keyword">locked</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">LOCK</span> <span class="keyword">WAIT</span> <span class="number">2</span> <span class="keyword">lock</span> <span class="keyword">struct</span>(s), <span class="keyword">heap</span> <span class="keyword">size</span> <span class="number">1136</span>, <span class="number">1</span> <span class="keyword">row</span> <span class="keyword">lock</span>(s)</span><br><span class="line">MySQL <span class="keyword">thread</span> <span class="keyword">id</span> <span class="number">5</span>, OS <span class="keyword">thread</span> handle <span class="number">123145394155520</span>, <span class="keyword">query</span> <span class="keyword">id</span> <span class="number">62</span> localhost root Sending <span class="keyword">data</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span></span><br><span class="line">*** (<span class="number">1</span>) WAITING <span class="keyword">FOR</span> THIS <span class="keyword">LOCK</span> <span class="keyword">TO</span> BE GRANTED:</span><br><span class="line"><span class="built_in">RECORD</span> LOCKS <span class="keyword">space</span> <span class="keyword">id</span> <span class="number">24</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">72</span> <span class="keyword">index</span> <span class="keyword">search</span> <span class="keyword">of</span> <span class="keyword">table</span> <span class="string">`test_tnx`</span>.<span class="string">`test`</span> trx <span class="keyword">id</span> <span class="number">1333</span> lock_mode X waiting</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** (2) TRANSACTION:</span><br><span class="line">TRANSACTION 1332, ACTIVE 29 sec inserting</span><br><span class="line">mysql tables in <span class="keyword">use</span> <span class="number">1</span>, <span class="keyword">locked</span> <span class="number">1</span></span><br><span class="line"><span class="number">4</span> <span class="keyword">lock</span> <span class="keyword">struct</span>(s), <span class="keyword">heap</span> <span class="keyword">size</span> <span class="number">1136</span>, <span class="number">4</span> <span class="keyword">row</span> <span class="keyword">lock</span>(s), <span class="keyword">undo</span> <span class="keyword">log</span> entries <span class="number">1</span></span><br><span class="line">MySQL <span class="keyword">thread</span> <span class="keyword">id</span> <span class="number">62</span>, OS <span class="keyword">thread</span> handle <span class="number">123145394434048</span>, <span class="keyword">query</span> <span class="keyword">id</span> <span class="number">63</span> localhost root <span class="keyword">update</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'/a/b/c'</span></span><br><span class="line">*** (<span class="number">2</span>) HOLDS THE <span class="keyword">LOCK</span>(S):</span><br><span class="line"><span class="built_in">RECORD</span> LOCKS <span class="keyword">space</span> <span class="keyword">id</span> <span class="number">24</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">72</span> <span class="keyword">index</span> <span class="keyword">search</span> <span class="keyword">of</span> <span class="keyword">table</span> <span class="string">`test_tnx`</span>.<span class="string">`test`</span> trx <span class="keyword">id</span> <span class="number">1332</span> lock_mode X</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">1</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">1</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 73757072656d756d; asc supremum;;</span><br><span class="line"></span><br><span class="line">Record <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 24 page no 4 n bits 72 index search of table `test_tnx`.`test` trx id 1332 lock_mode X locks gap before rec <span class="keyword">insert</span> intention waiting</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** WE ROLL BACK TRANSACTION (1)</span><br></pre></td></tr></table></figure>
-<p>My objective is to use <code>select ... for update</code> as a uniqueness check for a following sequence of insertions. I expected that Tnx 2 would wait until Tnx 1 released the lock, and then continue its own business. However, Tnx 2 is rolled back due to deadlock. The innodb status looks quite confusing. Tnx 1 is holding and waiting for the same lock. </p>
-<p>After some research, though I still cannot figure out the root cause, my perception is that the insertion in Tnx 1 acquires a gap lock which is somehow overlapping with the gap lock by the <code>select ... for update</code>. And therefore, this create a deadlock where Tnx 1 waits for Tnx 2 and Tnx 2 waits for Tnx 1. </p>
-<p>During my research, I found that the right <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="noopener">use case</a> for <code>select ... for update</code> is as follows:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [condition] <span class="keyword">for</span> <span class="keyword">update</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> [<span class="keyword">table</span>] <span class="keyword">values</span> [belongs <span class="keyword">to</span> condition];</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [belongs <span class="keyword">to</span> condition];</span><br></pre></td></tr></table></figure>
-<p>The rows being mutated should be explicitly locked by the <code>select ... for update</code>. Also, the condition should be as clear as possible. For example, put only an unique key in the condition. This is to make the gap lock with a simple and clear range, in order not to cause deadlocks.</p>
-<p>Generally, using <code>select ... for update</code> is non-trivial since the underlying locking mechanism seems quite complicated. For my scenario, I got two workarounds:</p>
-<ol>
-<li>Disable gap locks by setting the <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html" target="_blank" rel="noopener">isolation level</a> to <code>READ COMMITTED</code>.</li>
-<li>Apply <code>select ... for update</code> on a row from another table, which avoid possible lock overlap.</li>
-</ol>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Deadlock/">Deadlock</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Mysql/">Mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Uniqueness/">Uniqueness</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
 
       
     </footer>
@@ -687,6 +532,161 @@ Scala的一种入门方式是：
       
   <span class="ico-tags"></span>
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/non-blocking/">non-blocking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/storage/">storage</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-the-raft-consensus-algorithm"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/the-raft-consensus-algorithm/">Notes on The Raft Consensus Algorithm</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/the-raft-consensus-algorithm/" class="article-date">
+	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>What’s consensus?</p>
+<blockquote>
+<p>It allows a collection of machines to work as a coherent group that can survive the failures of some of its members.</p>
+</blockquote>
+<p>It means not only a group of machines reach a final decision for a request, but also the state machine is replicated across these machines, so that some failures do not affect the functioning. Raft is a consensus algorithm seeking to be correct, implementable, and understandable. </p>
+<p>The <a href="https://ramcloud.stanford.edu/~ongaro/thesis.pdf" target="_blank" rel="noopener">thesis</a> is very well written. It is much more comprehensive compared to the NSDI paper. Implementing Raft based on the thesis shouldn’t be too difficult (of course, also not trivial). The author also built a <a href="https://raft.github.io/" target="_blank" rel="noopener">website</a> putting all kinds of helping things there. I read the paper and decide to take some notes here.</p>
+<p><img src="/blog/assets/state.png" width="800"></p>
+<p>There are two key parts sitting in the core of the algorithm:</p>
+<p><strong>Leader election</strong></p>
+<p>The election is triggered by a timeout. If a server failed to detect heartbeats from the current leader, it start a new <em>term</em> of election. During the term, it broadcast requests to collect votes from other servers. If equal or more than majority of servers reply with a vote, the server becomes the leader of this term. The “term” here is a monotonically increasing logic time. From the perspective of a server receiving the vote request, it decides whether to give the vote based on a few considerations. First of all, if the sender even falls behind the receiver in terms of log index, the receiver should not vote for it. Also, if the receiver can still hear the heartbeats from current leader, it should not vote too. In this case, the requester might be a <em>disruptive server</em>. In other cases, the receiver should vote for the sender. </p>
+<p><img src="/blog/assets/leader election.png" width="800"></p>
+<p><strong>Log replication</strong></p>
+<p>Once a server becomes the leader, it’s mission is simply replicate it’s log to every other follower. The replication means make the log of a follower <em>exactly</em> the same as the leader. For each pair of leader and follower, the leader first identify the highest index where they reach an agreement. Starting from there, the leader overwrite its log to the follower. The leader handles all requests from clients. Once it receives a new request, it first put the request into its own log. Then, it replicate the request to all followers. If equal or more than majority followers (including the leader itself) answer the replication request with success, the leader apply the request into its state machine (this is called commit). The leader put the new log index into its heartbeats, so followers know if the request has been committed, after which each follower commit the request too.</p>
+<p><img src="/blog/assets/log replication.png" width="800"></p>
+<p>More formal introduction of the core Raft could be found in Fig. 3.1 in the thesis paper. There are also a few extensions to make the algorithm practical to be used in production systems, such as the group management. I also found Fig. 10.1 a very good reference of architecture. </p>
+<p>There are quite a lot of implementations of Raft, which could be found <a href="https://raft.github.io/" target="_blank" rel="noopener">here</a>. I also find a project named Copycat, with code <a href="https://github.com/atomix/copycat" target="_blank" rel="noopener">here</a> and document <a href="http://atomix.io/copycat/" target="_blank" rel="noopener">here</a>. Copycat is a full featured implementation of Raft in java. Building your own application based on Copycat shouldn’t be too difficult. They provide an example of implementing a KV store based on Copycat in their source code <a href="https://github.com/atomix/copycat/tree/master/examples" target="_blank" rel="noopener">here</a>, which is used as the “<a href="http://atomix.io/copycat/docs/getting-started/" target="_blank" rel="noopener">Get Started</a>“ tutorial. Another very important reason, why I think Copycat a good reference, is that it emphases the abstraction of state machine, client, server, and operations. Therefore, going through it’s document enhanced my understanding of Raft. </p>
+<p>If you don’t want to build your own Raft, may be Copycat is worthwhile a try, though I haven’t any real experience beyond a toy project.</p>
+<p>The annotated thesis could be found <a href="/blog/assets/raft-thesis.pdf">here</a>.</p>
+<p><strong>A go-through case for understanding</strong></p>
+<p>A typical request handling process is as follows:</p>
+<ol>
+<li>The client sends a request to the cluster;</li>
+<li>The leader handles the request by putting it to a WAL;</li>
+<li>The leader sends the request to all followers;</li>
+<li>Each follower puts the received request to its WAL, and responds to the leader;</li>
+<li>Once the leader has heard a majority number of responses from its followers, the leader commit the request by applying the WAL to its state machine;</li>
+<li>The leader inform the client that the request has been handled properly, and then, put the index of the request into its heartbeat to let all followers know the status of each request;</li>
+<li>Once the follower knows that the request has been committed by the leader, the follower commit the request too by applying it to its own state machine. </li>
+</ol>
+<p>There are a few key points to understand in the process above:</p>
+<p>1.Does the client always know if its request has been handled properly?</p>
+<p>No. If the leader commits the request and then crashes, the client will not know if the request has been actually successfully handled. In some cases, the client will resend the request which may lead to duplicated data. It leaves for the client to avoid such kind of duplication. </p>
+<p>2.How about the leader crashes before inform its followers that the request has been committed?</p>
+<p>If the leader crashes, a follower will be elected to be the next leader. The follower must have the latest state according to the mechanism of Raft. Therefore, the next leader definitely has the WAL for the request, and the request has definitely been replicated across a majority number of hosts. Therefore, it is safe to replicate its state to all followers. </p>
+<p>3.Key feature of a consensus algorithm (or strong consistency)?</p>
+<p>Under normal situations, if there’s a state change, the key step changing the state should be always handled by a certain node. The state changing should be replicated to a majority number of followers before informing the requester a success. Each read request goes to that certain node as well. Once there’s node failures or networking partitions, the service stop working until returning to the normal situation again.</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Consensus/">Consensus</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Copycat/">Copycat</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-using-select-for-update-for-uniqueness-in-mysql"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/using-select-for-update-for-uniqueness-in-mysql/">Notes on Using &#34;Select ... For Update&#34; for Uniqueness in Mysql</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/using-select-for-update-for-uniqueness-in-mysql/" class="article-date">
+	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I encountered a deadlock recently. Similar questions have been asked on StackOverflow, e.g., <a href="http://stackoverflow.com/questions/21851119/deadlock-using-select-for-update-in-mysql" target="_blank" rel="noopener">this</a> and <a href="http://stackoverflow.com/questions/43251975/mysql-select-for-update-blocks-1st-insert-if-using-non-primary-key-in-where-clau" target="_blank" rel="noopener">this</a>. But the answers didn’t really explain why this happens. </p>
+<p>The situation is quite easy to reproduce @ Mysql 5.7.17 (also tested on other versions in 5.5 or 5.6):</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`val`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`search`</span> (<span class="string">`val`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">4</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'pre-lock'</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>session1</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>session2</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>session1</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'/a/b/c'</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>session2</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1213 (40001): Deadlock found when trying to get <span class="keyword">lock</span>; try restarting transaction</span><br></pre></td></tr></table></figure></p>
+<p>The result of show engine innodb status:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">LATEST DETECTED DEADLOCK</span><br><span class="line"><span class="comment">------------------------</span></span><br><span class="line">2017-04-06 23:54:03 0x7000057db000</span><br><span class="line">*** (1) TRANSACTION:</span><br><span class="line">TRANSACTION 1333, ACTIVE 18 sec starting index read</span><br><span class="line">mysql tables in <span class="keyword">use</span> <span class="number">1</span>, <span class="keyword">locked</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">LOCK</span> <span class="keyword">WAIT</span> <span class="number">2</span> <span class="keyword">lock</span> <span class="keyword">struct</span>(s), <span class="keyword">heap</span> <span class="keyword">size</span> <span class="number">1136</span>, <span class="number">1</span> <span class="keyword">row</span> <span class="keyword">lock</span>(s)</span><br><span class="line">MySQL <span class="keyword">thread</span> <span class="keyword">id</span> <span class="number">5</span>, OS <span class="keyword">thread</span> handle <span class="number">123145394155520</span>, <span class="keyword">query</span> <span class="keyword">id</span> <span class="number">62</span> localhost root Sending <span class="keyword">data</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span></span><br><span class="line">*** (<span class="number">1</span>) WAITING <span class="keyword">FOR</span> THIS <span class="keyword">LOCK</span> <span class="keyword">TO</span> BE GRANTED:</span><br><span class="line"><span class="built_in">RECORD</span> LOCKS <span class="keyword">space</span> <span class="keyword">id</span> <span class="number">24</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">72</span> <span class="keyword">index</span> <span class="keyword">search</span> <span class="keyword">of</span> <span class="keyword">table</span> <span class="string">`test_tnx`</span>.<span class="string">`test`</span> trx <span class="keyword">id</span> <span class="number">1333</span> lock_mode X waiting</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** (2) TRANSACTION:</span><br><span class="line">TRANSACTION 1332, ACTIVE 29 sec inserting</span><br><span class="line">mysql tables in <span class="keyword">use</span> <span class="number">1</span>, <span class="keyword">locked</span> <span class="number">1</span></span><br><span class="line"><span class="number">4</span> <span class="keyword">lock</span> <span class="keyword">struct</span>(s), <span class="keyword">heap</span> <span class="keyword">size</span> <span class="number">1136</span>, <span class="number">4</span> <span class="keyword">row</span> <span class="keyword">lock</span>(s), <span class="keyword">undo</span> <span class="keyword">log</span> entries <span class="number">1</span></span><br><span class="line">MySQL <span class="keyword">thread</span> <span class="keyword">id</span> <span class="number">62</span>, OS <span class="keyword">thread</span> handle <span class="number">123145394434048</span>, <span class="keyword">query</span> <span class="keyword">id</span> <span class="number">63</span> localhost root <span class="keyword">update</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'/a/b/c'</span></span><br><span class="line">*** (<span class="number">2</span>) HOLDS THE <span class="keyword">LOCK</span>(S):</span><br><span class="line"><span class="built_in">RECORD</span> LOCKS <span class="keyword">space</span> <span class="keyword">id</span> <span class="number">24</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">72</span> <span class="keyword">index</span> <span class="keyword">search</span> <span class="keyword">of</span> <span class="keyword">table</span> <span class="string">`test_tnx`</span>.<span class="string">`test`</span> trx <span class="keyword">id</span> <span class="number">1332</span> lock_mode X</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">1</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">1</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 73757072656d756d; asc supremum;;</span><br><span class="line"></span><br><span class="line">Record <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 24 page no 4 n bits 72 index search of table `test_tnx`.`test` trx id 1332 lock_mode X locks gap before rec <span class="keyword">insert</span> intention waiting</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** WE ROLL BACK TRANSACTION (1)</span><br></pre></td></tr></table></figure>
+<p>My objective is to use <code>select ... for update</code> as a uniqueness check for a following sequence of insertions. I expected that Tnx 2 would wait until Tnx 1 released the lock, and then continue its own business. However, Tnx 2 is rolled back due to deadlock. The innodb status looks quite confusing. Tnx 1 is holding and waiting for the same lock. </p>
+<p>After some research, though I still cannot figure out the root cause, my perception is that the insertion in Tnx 1 acquires a gap lock which is somehow overlapping with the gap lock by the <code>select ... for update</code>. And therefore, this create a deadlock where Tnx 1 waits for Tnx 2 and Tnx 2 waits for Tnx 1. </p>
+<p>During my research, I found that the right <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="noopener">use case</a> for <code>select ... for update</code> is as follows:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [condition] <span class="keyword">for</span> <span class="keyword">update</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> [<span class="keyword">table</span>] <span class="keyword">values</span> [belongs <span class="keyword">to</span> condition];</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [belongs <span class="keyword">to</span> condition];</span><br></pre></td></tr></table></figure>
+<p>The rows being mutated should be explicitly locked by the <code>select ... for update</code>. Also, the condition should be as clear as possible. For example, put only an unique key in the condition. This is to make the gap lock with a simple and clear range, in order not to cause deadlocks.</p>
+<p>Generally, using <code>select ... for update</code> is non-trivial since the underlying locking mechanism seems quite complicated. For my scenario, I got two workarounds:</p>
+<ol>
+<li>Disable gap locks by setting the <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html" target="_blank" rel="noopener">isolation level</a> to <code>READ COMMITTED</code>.</li>
+<li>Apply <code>select ... for update</code> on a row from another table, which avoid possible lock overlap.</li>
+</ol>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Deadlock/">Deadlock</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Mysql/">Mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Uniqueness/">Uniqueness</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
 
       
     </footer>

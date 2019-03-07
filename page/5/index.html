@@ -699,6 +699,67 @@ mysqladmin -u root -h host_name password newpassword
 <!-- Table of Contents -->
 
   
+    <article id="post-rabbitmq-memory-management"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/rabbitmq-memory-management/">RabbitMQ内存管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/rabbitmq-memory-management/" class="article-date">
+	  <time datetime="2015-08-15T10:52:21.000Z" itemprop="datePublished">August 15, 2015</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前一直有个疑问：如果一个exchange关联n个queue，那么一份消息会不会需要拷贝n份呢？这个问题十分关键。如果真的会有n个拷贝，那么queue的数量就必须严格限制了。庆幸的是RabbitMQ官方文档的确完整，于是看摘抄如下（<a href="https://www.rabbitmq.com/blog/2014/10/30/understanding-memory-use-with-rabbitmq-3-4/" target="_blank" rel="noopener">完整文章在此</a>）：<br><!--break--></p>
+<blockquote>
+<p><strong>A bit of background</strong><br>First of all we need to understand how Erlang manages memory. Erlang is a bit different from most garbage-collected languages in that it does not have a global heap. Instead, each process has a separate heap that’s private to it. In RabbitMQ terms process might be queues, channels, connections and so on. This means that the entire system does not have to come to a halt every time garbage collection needs to happen; instead each process collects garbage on its own schedule.</p>
+</blockquote>
+<blockquote>
+<p>That’s fine, but as a message passes through RabbitMQ, it will pass through several different processes. We’d like to avoid doing too much copying as this happens. Therefore Erlang gives us a different memory management scheme for binaries, which are used for a number of things inside RabbitMQ, of which the most interesting is message bodies. Binaries are shared between processes and reference-counted (with references being held by processes and garbage-collected along with everything else).</p>
+</blockquote>
+<blockquote>
+<p>How this applies to RabbitMQ<br>This means that memory used by message bodies is shared among processes in RabbitMQ. And this sharing also happens between queues too: <ins datetime="2015-08-13T14:22:21+00:00">if an exchange routes a message to many queues, the message body is only stored in memory once</ins>.</p>
+</blockquote>
+<p>由此可见，RabbitMQ在内存处理上还是考虑周到的，每个消息无论在内存还是disk都只会保留一个拷贝，队列里只保存对消息的引用。因此，在设计系统时，队列数量可以作为一个相对比较廉价的开销。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/rabbitmq/">rabbitmq</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
     <article id="post-rabbitmq-load-balancing"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -743,67 +804,6 @@ registration-email-queue        &lt;rabbit@mq01.2.1076.0&gt;       [&lt;rabbit@m
 registration-sms-queue  &lt;rabbit@mq01.2.1067.0&gt;       [&lt;rabbit@mq00.1.281.0&gt;]</pre> 
 
 <p>可以看到pid和slave_pids分别对应主队列所在的服务器和从服务器（可能有多个）。利用这个命令就可以了解每个队列所在的主服务器了。</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/rabbitmq/">rabbitmq</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-rabbitmq-memory-management"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/rabbitmq-memory-management/">RabbitMQ内存管理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/rabbitmq-memory-management/" class="article-date">
-	  <time datetime="2015-08-15T10:52:21.000Z" itemprop="datePublished">August 15, 2015</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>之前一直有个疑问：如果一个exchange关联n个queue，那么一份消息会不会需要拷贝n份呢？这个问题十分关键。如果真的会有n个拷贝，那么queue的数量就必须严格限制了。庆幸的是RabbitMQ官方文档的确完整，于是看摘抄如下（<a href="https://www.rabbitmq.com/blog/2014/10/30/understanding-memory-use-with-rabbitmq-3-4/" target="_blank" rel="noopener">完整文章在此</a>）：<br><!--break--></p>
-<blockquote>
-<p><strong>A bit of background</strong><br>First of all we need to understand how Erlang manages memory. Erlang is a bit different from most garbage-collected languages in that it does not have a global heap. Instead, each process has a separate heap that’s private to it. In RabbitMQ terms process might be queues, channels, connections and so on. This means that the entire system does not have to come to a halt every time garbage collection needs to happen; instead each process collects garbage on its own schedule.</p>
-</blockquote>
-<blockquote>
-<p>That’s fine, but as a message passes through RabbitMQ, it will pass through several different processes. We’d like to avoid doing too much copying as this happens. Therefore Erlang gives us a different memory management scheme for binaries, which are used for a number of things inside RabbitMQ, of which the most interesting is message bodies. Binaries are shared between processes and reference-counted (with references being held by processes and garbage-collected along with everything else).</p>
-</blockquote>
-<blockquote>
-<p>How this applies to RabbitMQ<br>This means that memory used by message bodies is shared among processes in RabbitMQ. And this sharing also happens between queues too: <ins datetime="2015-08-13T14:22:21+00:00">if an exchange routes a message to many queues, the message body is only stored in memory once</ins>.</p>
-</blockquote>
-<p>由此可见，RabbitMQ在内存处理上还是考虑周到的，每个消息无论在内存还是disk都只会保留一个拷贝，队列里只保存对消息的引用。因此，在设计系统时，队列数量可以作为一个相对比较廉价的开销。</p>
 
       
     </div>
