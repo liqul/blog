@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 3 | Bucket &amp; Hammer</title>
+  <title>Home | Bucket &amp; Hammer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="Knowlege, Knowlege, Knowlege" />
@@ -103,6 +103,131 @@
       <div id="content" class="outer">
         
           <section id="main">
+  
+    <article id="post-new_apache_hbase_mob_compaction_policy"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/new_apache_hbase_mob_compaction_policy/">Reading the New Apache HBase MOB Compaction Policy</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/new_apache_hbase_mob_compaction_policy/" class="article-date">
+	  <time datetime="2017-08-29T02:19:09.000Z" itemprop="datePublished">August 29, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          In case you want to understand more on MOB (Moderate Object Storage), you may refer to this issue. Basically, hbase was first introduced with capability of storing mainly small objects (&lt;100k). Moderate objects stand for files from 100k to 10m. 
+Recently, there is a blog introducing the new compaction policy for MOB files. The problem with the initial approach is multiple compaction. For instance, the goal is to compact the objects created in one calendar day into one big file. The compaction process starts after the first hour. The objects created in the first hour are compacted into a temporal file. Then, the objects created in the second hour, and the temporal file created for the first hour are compacted into a new temporal file…
+
+        
+          <p class="article-more-link">
+            <a href="/blog/new_apache_hbase_mob_compaction_policy/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/compaction/">compaction</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/hbase/">hbase</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-notes-chain-replication"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/notes-chain-replication/">Understanding Chain Replication</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/notes-chain-replication/" class="article-date">
+	  <time datetime="2017-07-28T10:05:39.000Z" itemprop="datePublished">July 28, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          
+I learned the idea of chain replication from hibari,
+
+Hibari is a production-ready, distributed, ordered key-value, big data store. Hibari uses chain replication for strong consistency, high-availability, and durability. Hibari has excellent performance especially for read and large value operations.
+
+
+        
+          <p class="article-more-link">
+            <a href="/blog/notes-chain-replication/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/distributed/">distributed</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/replication/">replication</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
   
     <article id="post-notes-learning-spark"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
@@ -383,6 +508,75 @@ Scala的一种入门方式是：
 <!-- Table of Contents -->
 
   
+    <article id="post-using-select-for-update-for-uniqueness-in-mysql"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/using-select-for-update-for-uniqueness-in-mysql/">Notes on Using &#34;Select ... For Update&#34; for Uniqueness in Mysql</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/using-select-for-update-for-uniqueness-in-mysql/" class="article-date">
+	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I encountered a deadlock recently. Similar questions have been asked on StackOverflow, e.g., <a href="http://stackoverflow.com/questions/21851119/deadlock-using-select-for-update-in-mysql" target="_blank" rel="noopener">this</a> and <a href="http://stackoverflow.com/questions/43251975/mysql-select-for-update-blocks-1st-insert-if-using-non-primary-key-in-where-clau" target="_blank" rel="noopener">this</a>. But the answers didn’t really explain why this happens. </p>
+<p>The situation is quite easy to reproduce @ Mysql 5.7.17 (also tested on other versions in 5.5 or 5.6):</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`val`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`search`</span> (<span class="string">`val`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">4</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'pre-lock'</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>session1</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>session2</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>session1</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'/a/b/c'</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>session2</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1213 (40001): Deadlock found when trying to get <span class="keyword">lock</span>; try restarting transaction</span><br></pre></td></tr></table></figure></p>
+<p>The result of show engine innodb status:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">LATEST DETECTED DEADLOCK</span><br><span class="line"><span class="comment">------------------------</span></span><br><span class="line">2017-04-06 23:54:03 0x7000057db000</span><br><span class="line">*** (1) TRANSACTION:</span><br><span class="line">TRANSACTION 1333, ACTIVE 18 sec starting index read</span><br><span class="line">mysql tables in <span class="keyword">use</span> <span class="number">1</span>, <span class="keyword">locked</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">LOCK</span> <span class="keyword">WAIT</span> <span class="number">2</span> <span class="keyword">lock</span> <span class="keyword">struct</span>(s), <span class="keyword">heap</span> <span class="keyword">size</span> <span class="number">1136</span>, <span class="number">1</span> <span class="keyword">row</span> <span class="keyword">lock</span>(s)</span><br><span class="line">MySQL <span class="keyword">thread</span> <span class="keyword">id</span> <span class="number">5</span>, OS <span class="keyword">thread</span> handle <span class="number">123145394155520</span>, <span class="keyword">query</span> <span class="keyword">id</span> <span class="number">62</span> localhost root Sending <span class="keyword">data</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span></span><br><span class="line">*** (<span class="number">1</span>) WAITING <span class="keyword">FOR</span> THIS <span class="keyword">LOCK</span> <span class="keyword">TO</span> BE GRANTED:</span><br><span class="line"><span class="built_in">RECORD</span> LOCKS <span class="keyword">space</span> <span class="keyword">id</span> <span class="number">24</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">72</span> <span class="keyword">index</span> <span class="keyword">search</span> <span class="keyword">of</span> <span class="keyword">table</span> <span class="string">`test_tnx`</span>.<span class="string">`test`</span> trx <span class="keyword">id</span> <span class="number">1333</span> lock_mode X waiting</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** (2) TRANSACTION:</span><br><span class="line">TRANSACTION 1332, ACTIVE 29 sec inserting</span><br><span class="line">mysql tables in <span class="keyword">use</span> <span class="number">1</span>, <span class="keyword">locked</span> <span class="number">1</span></span><br><span class="line"><span class="number">4</span> <span class="keyword">lock</span> <span class="keyword">struct</span>(s), <span class="keyword">heap</span> <span class="keyword">size</span> <span class="number">1136</span>, <span class="number">4</span> <span class="keyword">row</span> <span class="keyword">lock</span>(s), <span class="keyword">undo</span> <span class="keyword">log</span> entries <span class="number">1</span></span><br><span class="line">MySQL <span class="keyword">thread</span> <span class="keyword">id</span> <span class="number">62</span>, OS <span class="keyword">thread</span> handle <span class="number">123145394434048</span>, <span class="keyword">query</span> <span class="keyword">id</span> <span class="number">63</span> localhost root <span class="keyword">update</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'/a/b/c'</span></span><br><span class="line">*** (<span class="number">2</span>) HOLDS THE <span class="keyword">LOCK</span>(S):</span><br><span class="line"><span class="built_in">RECORD</span> LOCKS <span class="keyword">space</span> <span class="keyword">id</span> <span class="number">24</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">72</span> <span class="keyword">index</span> <span class="keyword">search</span> <span class="keyword">of</span> <span class="keyword">table</span> <span class="string">`test_tnx`</span>.<span class="string">`test`</span> trx <span class="keyword">id</span> <span class="number">1332</span> lock_mode X</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">1</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">1</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 73757072656d756d; asc supremum;;</span><br><span class="line"></span><br><span class="line">Record <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 24 page no 4 n bits 72 index search of table `test_tnx`.`test` trx id 1332 lock_mode X locks gap before rec <span class="keyword">insert</span> intention waiting</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** WE ROLL BACK TRANSACTION (1)</span><br></pre></td></tr></table></figure>
+<p>My objective is to use <code>select ... for update</code> as a uniqueness check for a following sequence of insertions. I expected that Tnx 2 would wait until Tnx 1 released the lock, and then continue its own business. However, Tnx 2 is rolled back due to deadlock. The innodb status looks quite confusing. Tnx 1 is holding and waiting for the same lock. </p>
+<p>After some research, though I still cannot figure out the root cause, my perception is that the insertion in Tnx 1 acquires a gap lock which is somehow overlapping with the gap lock by the <code>select ... for update</code>. And therefore, this create a deadlock where Tnx 1 waits for Tnx 2 and Tnx 2 waits for Tnx 1. </p>
+<p>During my research, I found that the right <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="noopener">use case</a> for <code>select ... for update</code> is as follows:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [condition] <span class="keyword">for</span> <span class="keyword">update</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> [<span class="keyword">table</span>] <span class="keyword">values</span> [belongs <span class="keyword">to</span> condition];</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [belongs <span class="keyword">to</span> condition];</span><br></pre></td></tr></table></figure>
+<p>The rows being mutated should be explicitly locked by the <code>select ... for update</code>. Also, the condition should be as clear as possible. For example, put only an unique key in the condition. This is to make the gap lock with a simple and clear range, in order not to cause deadlocks.</p>
+<p>Generally, using <code>select ... for update</code> is non-trivial since the underlying locking mechanism seems quite complicated. For my scenario, I got two workarounds:</p>
+<ol>
+<li>Disable gap locks by setting the <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html" target="_blank" rel="noopener">isolation level</a> to <code>READ COMMITTED</code>.</li>
+<li>Apply <code>select ... for update</code> on a row from another table, which avoid possible lock overlap.</li>
+</ol>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Deadlock/">Deadlock</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Mysql/">Mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Uniqueness/">Uniqueness</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
     <article id="post-implementing-a-lock-system"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -629,204 +823,11 @@ Scala的一种入门方式是：
 <!-- Table of Contents -->
 
   
-    <article id="post-using-select-for-update-for-uniqueness-in-mysql"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/using-select-for-update-for-uniqueness-in-mysql/">Notes on Using &#34;Select ... For Update&#34; for Uniqueness in Mysql</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/using-select-for-update-for-uniqueness-in-mysql/" class="article-date">
-	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>I encountered a deadlock recently. Similar questions have been asked on StackOverflow, e.g., <a href="http://stackoverflow.com/questions/21851119/deadlock-using-select-for-update-in-mysql" target="_blank" rel="noopener">this</a> and <a href="http://stackoverflow.com/questions/43251975/mysql-select-for-update-blocks-1st-insert-if-using-non-primary-key-in-where-clau" target="_blank" rel="noopener">this</a>. But the answers didn’t really explain why this happens. </p>
-<p>The situation is quite easy to reproduce @ Mysql 5.7.17 (also tested on other versions in 5.5 or 5.6):</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`val`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`search`</span> (<span class="string">`val`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">4</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'pre-lock'</span>;</span><br></pre></td></tr></table></figure>
-<p><strong>session1</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
-<p><strong>session2</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure></p>
-<p><strong>session1</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'/a/b/c'</span>;</span><br></pre></td></tr></table></figure></p>
-<p><strong>session2</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1213 (40001): Deadlock found when trying to get <span class="keyword">lock</span>; try restarting transaction</span><br></pre></td></tr></table></figure></p>
-<p>The result of show engine innodb status:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">LATEST DETECTED DEADLOCK</span><br><span class="line"><span class="comment">------------------------</span></span><br><span class="line">2017-04-06 23:54:03 0x7000057db000</span><br><span class="line">*** (1) TRANSACTION:</span><br><span class="line">TRANSACTION 1333, ACTIVE 18 sec starting index read</span><br><span class="line">mysql tables in <span class="keyword">use</span> <span class="number">1</span>, <span class="keyword">locked</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">LOCK</span> <span class="keyword">WAIT</span> <span class="number">2</span> <span class="keyword">lock</span> <span class="keyword">struct</span>(s), <span class="keyword">heap</span> <span class="keyword">size</span> <span class="number">1136</span>, <span class="number">1</span> <span class="keyword">row</span> <span class="keyword">lock</span>(s)</span><br><span class="line">MySQL <span class="keyword">thread</span> <span class="keyword">id</span> <span class="number">5</span>, OS <span class="keyword">thread</span> handle <span class="number">123145394155520</span>, <span class="keyword">query</span> <span class="keyword">id</span> <span class="number">62</span> localhost root Sending <span class="keyword">data</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">where</span> val=<span class="string">'pre-lock'</span> <span class="keyword">for</span> <span class="keyword">update</span></span><br><span class="line">*** (<span class="number">1</span>) WAITING <span class="keyword">FOR</span> THIS <span class="keyword">LOCK</span> <span class="keyword">TO</span> BE GRANTED:</span><br><span class="line"><span class="built_in">RECORD</span> LOCKS <span class="keyword">space</span> <span class="keyword">id</span> <span class="number">24</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">72</span> <span class="keyword">index</span> <span class="keyword">search</span> <span class="keyword">of</span> <span class="keyword">table</span> <span class="string">`test_tnx`</span>.<span class="string">`test`</span> trx <span class="keyword">id</span> <span class="number">1333</span> lock_mode X waiting</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** (2) TRANSACTION:</span><br><span class="line">TRANSACTION 1332, ACTIVE 29 sec inserting</span><br><span class="line">mysql tables in <span class="keyword">use</span> <span class="number">1</span>, <span class="keyword">locked</span> <span class="number">1</span></span><br><span class="line"><span class="number">4</span> <span class="keyword">lock</span> <span class="keyword">struct</span>(s), <span class="keyword">heap</span> <span class="keyword">size</span> <span class="number">1136</span>, <span class="number">4</span> <span class="keyword">row</span> <span class="keyword">lock</span>(s), <span class="keyword">undo</span> <span class="keyword">log</span> entries <span class="number">1</span></span><br><span class="line">MySQL <span class="keyword">thread</span> <span class="keyword">id</span> <span class="number">62</span>, OS <span class="keyword">thread</span> handle <span class="number">123145394434048</span>, <span class="keyword">query</span> <span class="keyword">id</span> <span class="number">63</span> localhost root <span class="keyword">update</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">set</span> val=<span class="string">'/a/b/c'</span></span><br><span class="line">*** (<span class="number">2</span>) HOLDS THE <span class="keyword">LOCK</span>(S):</span><br><span class="line"><span class="built_in">RECORD</span> LOCKS <span class="keyword">space</span> <span class="keyword">id</span> <span class="number">24</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">72</span> <span class="keyword">index</span> <span class="keyword">search</span> <span class="keyword">of</span> <span class="keyword">table</span> <span class="string">`test_tnx`</span>.<span class="string">`test`</span> trx <span class="keyword">id</span> <span class="number">1332</span> lock_mode X</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">1</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">1</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 73757072656d756d; asc supremum;;</span><br><span class="line"></span><br><span class="line">Record <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 24 page no 4 n bits 72 index search of table `test_tnx`.`test` trx id 1332 lock_mode X locks gap before rec <span class="keyword">insert</span> intention waiting</span><br><span class="line"><span class="built_in">Record</span> <span class="keyword">lock</span>, <span class="keyword">heap</span> <span class="keyword">no</span> <span class="number">2</span> <span class="keyword">PHYSICAL</span> <span class="built_in">RECORD</span>: n_fields <span class="number">2</span>; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 7072652d6c6f636b; asc pre-<span class="keyword">lock</span>;;</span><br><span class="line"> 1: len 8; hex 8000000000000001; asc         ;;</span><br><span class="line"></span><br><span class="line">*** WE ROLL BACK TRANSACTION (1)</span><br></pre></td></tr></table></figure>
-<p>My objective is to use <code>select ... for update</code> as a uniqueness check for a following sequence of insertions. I expected that Tnx 2 would wait until Tnx 1 released the lock, and then continue its own business. However, Tnx 2 is rolled back due to deadlock. The innodb status looks quite confusing. Tnx 1 is holding and waiting for the same lock. </p>
-<p>After some research, though I still cannot figure out the root cause, my perception is that the insertion in Tnx 1 acquires a gap lock which is somehow overlapping with the gap lock by the <code>select ... for update</code>. And therefore, this create a deadlock where Tnx 1 waits for Tnx 2 and Tnx 2 waits for Tnx 1. </p>
-<p>During my research, I found that the right <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="noopener">use case</a> for <code>select ... for update</code> is as follows:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> <span class="keyword">transaction</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [condition] <span class="keyword">for</span> <span class="keyword">update</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> [<span class="keyword">table</span>] <span class="keyword">values</span> [belongs <span class="keyword">to</span> condition];</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [belongs <span class="keyword">to</span> condition];</span><br></pre></td></tr></table></figure>
-<p>The rows being mutated should be explicitly locked by the <code>select ... for update</code>. Also, the condition should be as clear as possible. For example, put only an unique key in the condition. This is to make the gap lock with a simple and clear range, in order not to cause deadlocks.</p>
-<p>Generally, using <code>select ... for update</code> is non-trivial since the underlying locking mechanism seems quite complicated. For my scenario, I got two workarounds:</p>
-<ol>
-<li>Disable gap locks by setting the <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html" target="_blank" rel="noopener">isolation level</a> to <code>READ COMMITTED</code>.</li>
-<li>Apply <code>select ... for update</code> on a row from another table, which avoid possible lock overlap.</li>
-</ol>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Deadlock/">Deadlock</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Mysql/">Mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Uniqueness/">Uniqueness</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-an-algorithm-deduplicate-file-locks"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/an-algorithm-deduplicate-file-locks/">An Algorithm Deduplicating File Locks</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/an-algorithm-deduplicate-file-locks/" class="article-date">
-	  <time datetime="2017-03-26T13:02:44.000Z" itemprop="datePublished">March 26, 2017</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>In one of my recent project, I need to implement a lock service for files. It is quite similar to the lock service of existing file systems. I need to support two modes: write (exclusive) and read (shard). For instance, “R/a/b/c” means a read lock for the file with path “/a/b/c”. Likewise, “W/a/b/c” stands for a write lock. </p>
-<p>The interface is pretty straightforward. The user provide a set of locks, e.g., {R/a/b/c, R/a/b/d}, to be locked by our service. One challenge we face is to deduplicate the locks given by the user. For instance, the user may provide a set of locks {R/a/b/c, W/a/b/c}. In this example, we know the write lock is stronger than the read lock, and therefore, the set is equivalent to {W/a/b/c}. We tend to reduce the number of locks, since it is beneficial for checking less conflicts in the steps afterwards. </p>
-<p>So far, the deduplication problem sounds quite simple, since we only need to consider locks with exactly the same path. However, we also need to support a wildcard notation, because we have a large number of files under one directory. If we want to lock all files in this directory, we need to generate a huge list of locks, each for a file. With a wildcard, we lock all files under “/a/b/“ with “R/a/b/*”. The wildcard makes the deduplication problem much more complicated. </p>
-<p>We first clarify the coverage of locks by a concrete example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">W/a/b/* &gt; W/a/b/c &gt; R/a/b/c</span><br></pre></td></tr></table></figure>
-<p>Given a large set of locks, a very simple algorithm is that we compare each pair of locks. If one is stronger than the other, the weaker one is throw away. The result set contains only locks where no one is stronger than other locks. This algorithm’s complexity is O(n*n) which is slow if the given set is large. So, I try to find a faster algorithm. </p>
-<p>After some thoughts, I developed an algorithm with complexity O(n), which constructs a tree on the set of locks. Each tree node has the following attributes:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Node &#123;</span><br><span class="line">    String name; //the name of the node</span><br><span class="line">    String mode; //&quot;W&quot; or &quot;R&quot;</span><br><span class="line">    Node parent; //the parent of the node</span><br><span class="line">    boolean mark = false; //mark=true if there&apos;s at least one W node in its subtree</span><br><span class="line">    Map&lt;String, Node&gt; children = new HashMap&lt;&gt;(); //the children of this node</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>We now explain how to construct a lock tree with a concrete example.</p>
-<p><img src="/blog/assets/algorithm.png"></p>
-<p>In the figure above, we show inserting a set of locks into an empty lock tree. Each node is represented with a string “mode:name:mark”. </p>
-<p><em>Step 1~3</em>: Inserting the first three locks {R/a/b/c, R/a/b/d, R/a/e/f} is straightforward.<br><em>Step 4:</em> Then, inserting the 4th lock, i.e., “W/a/b/c”, has two effects: (1) upgrade the original “R” lock of /a/b/c to “W” mode; (2) mark the path of “/a/b/c” from 0 to 1.<br><em>Step 5:</em> The 5th lock “R/a/b/e” is the same with the first three.<br><em>Step 6~7:</em> Then, the 6th lock “R/a/b/*“ contains a wildcard. Having a “R” wildcard means replacing all unmarked nodes (“R:e:0” and “R:d:0”) with a “R:*:0” node, in its parent’s subtree (the parent is “R:b:1” in this case). Similarly, inserting “R/a/*/*“ first removes all unmarked nodes in “R:a:1”‘s subtree, i.e., “R:e:0”, “R:*:0”, and “R:f:0”, and then insert new nodes with wildcard.<br><em>Step 8:</em> Finally, inserting a “W” mode lock with wildcard means deleting all nodes in the subtree of “R:a:1” (the wildcard node’s parent) and then insert the new nodes. </p>
-<p>After constructing the lock tree, each path from root to leaf is a lock in our deduplicated result set. In practice, a hashmap may already solve most duplicated cases. We rarely encounter extreme cases as shown in the example above. The algorithm briefly described above is only for fun :). I didn’t mention paths with different lengths since they could be put into different trees, which is therefore not a real problem. </p>
-<p>I didn’t elaborate all cases in the example above, which is more complicated. A sample implementation of the algorithm could be find <a href="/blog/assets/LockTree.java">here</a>. The output is as follows:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">R/a/b/c</span><br><span class="line">ROOT: abc[R]</span><br><span class="line">R/a/b/d</span><br><span class="line">ROOT: abc[R]</span><br><span class="line">ROOT: abd[R]</span><br><span class="line">R/a/e/f</span><br><span class="line">ROOT: abc[R]</span><br><span class="line">ROOT: abd[R]</span><br><span class="line">ROOT: aef[R]</span><br><span class="line">W/a/b/c</span><br><span class="line">ROOT: abc[W]</span><br><span class="line">ROOT: abd[R]</span><br><span class="line">ROOT: aef[R]</span><br><span class="line">R/a/b/e</span><br><span class="line">ROOT: abc[W]</span><br><span class="line">ROOT: abd[R]</span><br><span class="line">ROOT: abe[R]</span><br><span class="line">ROOT: aef[R]</span><br><span class="line">R/a/b/*</span><br><span class="line">ROOT: abc[W]</span><br><span class="line">ROOT: ab*[R]</span><br><span class="line">ROOT: aef[R]</span><br><span class="line">R/a/*/*</span><br><span class="line">ROOT: abc[W]</span><br><span class="line">ROOT: a**[R]</span><br><span class="line">W/a/*/*</span><br><span class="line">ROOT: a**[W]</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-a-role-based-admission-control-system"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/a-role-based-admission-control-system/">Notes on Designing an Admission Control System</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/a-role-based-admission-control-system/" class="article-date">
-	  <time datetime="2017-03-07T07:50:03.000Z" itemprop="datePublished">March 7, 2017</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>An admission control system takes care of two parts: <em>action</em> and <em>resource</em>. As a concrete example, let’s assume you are a sales manager. A typical business is viewing the orders made by all sales man in your group. Here, viewing the orders is the “action” part, while the orders made by your group is the “resource” part.</p>
-<p>Given a user account, an admission control system tells which actions the user could take on which resources. For a website, the action is usually represented with a URI. For instance, </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;/orders/view&quot; -&gt; view the orders</span><br><span class="line">&quot;/user/delete&quot; -&gt; delete a user</span><br><span class="line">&quot;/user/update&quot; -&gt; update a user&apos;s profile</span><br></pre></td></tr></table></figure>
-<p>A typical way of managing the actions is through a layered representation of users, roles, and permissions. A user belongs to a role, and a role is composed of a set of permissions. Each permission is linked to a URI for instance. For convenience reasons, people usually add additional layers to the three-layer structure. For example, a “permission group” layer makes it easier for the manager to assign permissions when the number of permissions is too large. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user -&gt; role -&gt; permission</span><br></pre></td></tr></table></figure>
-<p>Representing the resource is nontrivial. Before that, you need domain knowledge to understand the structure of the resource. In our example of sales manager, the resource are orders which could be managed in a tree. The manager can see all orders within her subtree, while a sales man cannot see orders from her siblings. In this case, the resource is put into a tree as follows.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">manager -- sales man 1</span><br><span class="line">        |</span><br><span class="line">        -- sales man 2</span><br><span class="line">        |</span><br><span class="line">        -- sales man 3 -- agent 1</span><br><span class="line">                       |</span><br><span class="line">                       -- agent 2</span><br></pre></td></tr></table></figure>
-<p>You may maintain multiple trees, each for a logic organization. For instance, one tree for sales and another for operators. Each order is linked to a node on the tree. When a action arrives, e.g., “/orders/view/1” where “1” is the order id, we check if the linked node of this order entry in DB. If the node is within the user’s subtree, the admission is granted, otherwise denied. </p>
-<p>Last but not least, be sure to use a white list for the super user. In other words, the super user should <em>not</em> go through the admission control system. Otherwise, when the admission control system is down, you can do nothing at all without permission.</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/admission-control/">admission control</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
 
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/blog/page/2/">Prev</a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><a class="page-number" href="/blog/page/5/">5</a><a class="extend next" rel="next" href="/blog/page/4/">Next</a>
+    <a class="extend prev" rel="prev" href="/blog/page/2/">Prev</a><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><a class="page-number" href="/blog/page/5/">5</a><a class="page-number" href="/blog/page/6/">6</a><a class="extend next" rel="next" href="/blog/page/4/">Next</a>
   </nav>
 
 </section>
@@ -923,6 +924,30 @@ Scala的一种入门方式是：
               <div class="widget-entry-summary" style="margin: 0;">
             
 
+              <h6 style="margin: 0;"><a href="/blog/currency-depreciation/">金融概念整理——货币贬值</a></h6>
+              <span>March 8, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/blog/linux-delete-file/">Linux下文件删除的规则</a></h6>
+              <span>March 8, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
               <h6 style="margin: 0;"><a href="/blog/housing-price-as-indicator/">金融概念整理——房价指标</a></h6>
               <span>March 7, 2019</span>
             </div>
@@ -965,30 +990,6 @@ Scala的一种入门方式是：
 
           </li>
         
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/blog/multiraft/">从Raft到MultiRaft</a></h6>
-              <span>November 1, 2018</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/blog/banks/">《人为制造的脆弱性》--读后感</a></h6>
-              <span>September 20, 2018</span>
-            </div>
-
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -998,7 +999,7 @@ Scala的一种入门方式是：
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Book-Reading/">Book Reading</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Finance/">Finance</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Photography/">Photography</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Reading/">Reading</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Tech/">Tech</a><span class="category-list-count">38</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Thinking/">Thinking</a><span class="category-list-count">3</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Book-Reading/">Book Reading</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Finance/">Finance</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Photography/">Photography</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Reading/">Reading</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Tech/">Tech</a><span class="category-list-count">39</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Thinking/">Thinking</a><span class="category-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -1008,7 +1009,7 @@ Scala的一种入门方式是：
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/Finance/" style="font-size: 10px;">Finance</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/Housing/" style="font-size: 10px;">Housing</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 10px;">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 10px;">credit spread</a> <a href="/blog/tags/distributed/" style="font-size: 12px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 12px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a>
+      <a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/Finance/" style="font-size: 10px;">Finance</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/Housing/" style="font-size: 10px;">Housing</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 10px;">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 10px;">credit spread</a> <a href="/blog/tags/currency/" style="font-size: 10px;">currency</a> <a href="/blog/tags/distributed/" style="font-size: 12px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 12px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a>
     </div>
   </div>
 
@@ -1018,7 +1019,7 @@ Scala的一种入门方式是：
     <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">March 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">September 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">March 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">March 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">February 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/12/">December 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/01/">January 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/08/">August 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">September 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">March 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">March 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">February 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/12/">December 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/01/">January 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/08/">August 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
