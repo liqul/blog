@@ -104,6 +104,92 @@
         
           <section id="main">
   
+    <article id="post-the-raft-consensus-algorithm"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/the-raft-consensus-algorithm/">Notes on The Raft Consensus Algorithm</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/the-raft-consensus-algorithm/" class="article-date">
+	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>What’s consensus?</p>
+<blockquote>
+<p>It allows a collection of machines to work as a coherent group that can survive the failures of some of its members.</p>
+</blockquote>
+<p>It means not only a group of machines reach a final decision for a request, but also the state machine is replicated across these machines, so that some failures do not affect the functioning. Raft is a consensus algorithm seeking to be correct, implementable, and understandable. </p>
+<p>The <a href="https://ramcloud.stanford.edu/~ongaro/thesis.pdf" target="_blank" rel="noopener">thesis</a> is very well written. It is much more comprehensive compared to the NSDI paper. Implementing Raft based on the thesis shouldn’t be too difficult (of course, also not trivial). The author also built a <a href="https://raft.github.io/" target="_blank" rel="noopener">website</a> putting all kinds of helping things there. I read the paper and decide to take some notes here.</p>
+<p><img src="/blog/assets/state.png" width="800"></p>
+<p>There are two key parts sitting in the core of the algorithm:</p>
+<p><strong>Leader election</strong></p>
+<p>The election is triggered by a timeout. If a server failed to detect heartbeats from the current leader, it start a new <em>term</em> of election. During the term, it broadcast requests to collect votes from other servers. If equal or more than majority of servers reply with a vote, the server becomes the leader of this term. The “term” here is a monotonically increasing logic time. From the perspective of a server receiving the vote request, it decides whether to give the vote based on a few considerations. First of all, if the sender even falls behind the receiver in terms of log index, the receiver should not vote for it. Also, if the receiver can still hear the heartbeats from current leader, it should not vote too. In this case, the requester might be a <em>disruptive server</em>. In other cases, the receiver should vote for the sender. </p>
+<p><img src="/blog/assets/leader election.png" width="800"></p>
+<p><strong>Log replication</strong></p>
+<p>Once a server becomes the leader, it’s mission is simply replicate it’s log to every other follower. The replication means make the log of a follower <em>exactly</em> the same as the leader. For each pair of leader and follower, the leader first identify the highest index where they reach an agreement. Starting from there, the leader overwrite its log to the follower. The leader handles all requests from clients. Once it receives a new request, it first put the request into its own log. Then, it replicate the request to all followers. If equal or more than majority followers (including the leader itself) answer the replication request with success, the leader apply the request into its state machine (this is called commit). The leader put the new log index into its heartbeats, so followers know if the request has been committed, after which each follower commit the request too.</p>
+<p><img src="/blog/assets/log replication.png" width="800"></p>
+<p>More formal introduction of the core Raft could be found in Fig. 3.1 in the thesis paper. There are also a few extensions to make the algorithm practical to be used in production systems, such as the group management. I also found Fig. 10.1 a very good reference of architecture. </p>
+<p>There are quite a lot of implementations of Raft, which could be found <a href="https://raft.github.io/" target="_blank" rel="noopener">here</a>. I also find a project named Copycat, with code <a href="https://github.com/atomix/copycat" target="_blank" rel="noopener">here</a> and document <a href="http://atomix.io/copycat/" target="_blank" rel="noopener">here</a>. Copycat is a full featured implementation of Raft in java. Building your own application based on Copycat shouldn’t be too difficult. They provide an example of implementing a KV store based on Copycat in their source code <a href="https://github.com/atomix/copycat/tree/master/examples" target="_blank" rel="noopener">here</a>, which is used as the “<a href="http://atomix.io/copycat/docs/getting-started/" target="_blank" rel="noopener">Get Started</a>“ tutorial. Another very important reason, why I think Copycat a good reference, is that it emphases the abstraction of state machine, client, server, and operations. Therefore, going through it’s document enhanced my understanding of Raft. </p>
+<p>If you don’t want to build your own Raft, may be Copycat is worthwhile a try, though I haven’t any real experience beyond a toy project.</p>
+<p>The annotated thesis could be found <a href="/blog/assets/raft-thesis.pdf">here</a>.</p>
+<p><strong>A go-through case for understanding</strong></p>
+<p>A typical request handling process is as follows:</p>
+<ol>
+<li>The client sends a request to the cluster;</li>
+<li>The leader handles the request by putting it to a WAL;</li>
+<li>The leader sends the request to all followers;</li>
+<li>Each follower puts the received request to its WAL, and responds to the leader;</li>
+<li>Once the leader has heard a majority number of responses from its followers, the leader commit the request by applying the WAL to its state machine;</li>
+<li>The leader inform the client that the request has been handled properly, and then, put the index of the request into its heartbeat to let all followers know the status of each request;</li>
+<li>Once the follower knows that the request has been committed by the leader, the follower commit the request too by applying it to its own state machine. </li>
+</ol>
+<p>There are a few key points to understand in the process above:</p>
+<p>1.Does the client always know if its request has been handled properly?</p>
+<p>No. If the leader commits the request and then crashes, the client will not know if the request has been actually successfully handled. In some cases, the client will resend the request which may lead to duplicated data. It leaves for the client to avoid such kind of duplication. </p>
+<p>2.How about the leader crashes before inform its followers that the request has been committed?</p>
+<p>If the leader crashes, a follower will be elected to be the next leader. The follower must have the latest state according to the mechanism of Raft. Therefore, the next leader definitely has the WAL for the request, and the request has definitely been replicated across a majority number of hosts. Therefore, it is safe to replicate its state to all followers. </p>
+<p>3.Key feature of a consensus algorithm (or strong consistency)?</p>
+<p>Under normal situations, if there’s a state change, the key step changing the state should be always handled by a certain node. The state changing should be replicated to a majority number of followers before informing the requester a success. Each read request goes to that certain node as well. Once there’s node failures or networking partitions, the service stop working until returning to the normal situation again.</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Consensus/">Consensus</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Copycat/">Copycat</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
     <article id="post-an-algorithm-deduplicate-file-locks"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -554,7 +640,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Thinking/">Thinking</a>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
  
       
     </div>
@@ -575,7 +661,7 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Thinking/">Thinking</a>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
 
       
   <span class="ico-tags"></span>
@@ -658,65 +744,6 @@
 <!-- Table of Contents -->
 
   
-    <article id="post-cycling"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/cycling/">认知螺旋</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/cycling/" class="article-date">
-	  <time datetime="2016-12-02T16:00:00.000Z" itemprop="datePublished">December 3, 2016</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Thinking/">Thinking</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在认知事物的过程中，一个人的外在表现通常是循环往复的。最常见的情况是，起初对某个领域知之甚少，感觉到自己的无知；随着不断学习，又会在某一阶段认为自己已经掌握了大部分知识；而更进一步的深入，又会觉得在许多地方理解不到位，无知感又随之而来。这种现象，可以用螺旋式台阶来比喻，正如下图的上面部分。</p>
-<p><img src="/blog/assets/luoxuan.png" alt="螺旋上升"></p>
-<p>这会产生一个有趣的问题，虽然认识在逐步加深，也就好比沿着台阶不断上升，但将这些台阶投影到一个平面（如图下半部分）会发现不同高度的台阶会投影到同一个区域里，而这意味着什么呢？从内在看，这意味着某些观念或感觉的往复，正如开头的例子里无知感会反复出现；而从外在来看，则是人对外的表现形式有一定的类似。理解了这一点有两方面的好处：首先，在认知事物的过程中，不要因为出现往复感而焦虑，因为这是深入的必经之路，如果没有这种感觉反倒是有问题的；另外，更重要的是我们能够更加理性地观察和分析他人所处的状态。</p>
-<p>如果不理解这种螺旋上升和投影的关系，当我们观察到某人的外在表现时，很容易把他们定位在错误的认知程度上。比如在学术上，大师往往能把非常复杂的问题用浅显的语言描述清楚，而一些只知道浅显原理的人也能说出类似的段子，如果不能理性观察，就容易把“浮于表面”错误看成“深入浅出”。再比如在当前的互联网公司里存在许多杂家，他们表面上什么都懂，却无一精通，其理解事物的深度有限，从而对整体的把握也是畸形的，这跟许多从业多年的人比起来，乍一眼看上去是类似的，需要多了解一点才能真正分辨出来。</p>
-<p>看《国史大纲》里对战国时期的一系列的描述，包括废井田开阡陌、军人和商人替代贵族等等，总感觉能看到欧洲文艺复兴时期的味道，两者都是封建社会崩溃的过程。但是，为何欧洲随后横扫全球而当年“中国”只是实现了秦朝的大一统？两者类似螺旋上升的不同层次。从战国到文艺复兴，两者相隔千年，生产力在逐渐进步，因此放在战国时期，各国只能对内扩张对外兼并；放在欧洲，则各国有更强的实力去对外扩展和兼并欧洲以外更广大的世界。</p>
-<h2><span id="2017-04-15更新">2017-04-15更新</span></h2><p>近年来中国的互联网行业大都沿袭野蛮生长的模式，其中以华为、阿里为成功的典型。虽然大家习惯认为BAT是一个梯队，但BT和A并非同一时代的企业，与那俩相比A要晚的多。野蛮生长的最大特点是少量精英+大量的廉价劳动力（即“铁打的营盘流水的兵”），最大的特点在工资低、无偿加班、强调狼性文化和价值观。原本奉行精英文化的公司（比如外企、百度），掉头学习这种野蛮模式以自救。</p>
-<p>从时间轴上看，这只是生产力发展到一定阶段，为了迎合这种生产力而诞生的一种生产关系。随着各种技术的成熟，不再需要精英阶层从事一线生产活动，这些精英转而成为领导层去带领一些廉价劳动力完成过去看似无法完成的生产活动。然而，社会仍旧向前发展，将会进入下一阶段，而这个阶段又与上上个阶段表现出的现象类似。</p>
-<p>简而言之，社会发展的方向是不断加深协作的深度，这将无法依赖现在的野蛮生长模式完成进化。在短期的将来，更合理的模式将是中等规模的精英间的协作。在人力资源受限的情况下，必然依赖全球的人才聚集，突破这种限制，一些高质量的开源项目正是在这种背景下完成的。适应这种状态的公司的模式不再大，依赖少量的精英人才分布式自由组合。为什么是少量呢？因为生产力的发展，已经不再需要那么多人了；为什么是分布式自由组合？因为这样的组织效率是最高的。</p>
-<p>截止今天，仍然能看到市面上各种沿袭野蛮生长模式的公司，其中很多已经死掉了，或者在苟延残喘依赖风投的钱续命。另一些看似成功的公司，比如滴滴、膜拜、ofo等等等等，它们的命运让人拭目以待。那些近年来靠野蛮生长走向巅峰的公司，它们必将进入一轮刮骨疗毒般的清理门户。在将来的几年里，这些都值得期待~</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Thinking/">Thinking</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/认知/">认知</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
     <article id="post-yangming"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -777,7 +804,7 @@
 <!-- Table of Contents -->
 
   
-    <article id="post-install-octave-on-osx-ei-capitan-10113"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-guoshidagang"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -785,7 +812,7 @@
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/install-octave-on-osx-ei-capitan-10113/">Install Octave on OSX EI Capitan 10.11.3</a>
+      <a class="article-title" href="/blog/guoshidagang/">《国史大纲》读书笔记</a>
     </h1>
   
 
@@ -793,56 +820,573 @@
     
     <div class="article-meta">
       
-	<a href="/blog/install-octave-on-osx-ei-capitan-10113/" class="article-date">
+	<a href="/blog/guoshidagang/" class="article-date">
 	  <time datetime="2016-12-02T16:00:00.000Z" itemprop="datePublished">December 3, 2016</time>
 	</a>
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+    <a class="article-category-link" href="/blog/categories/Book-Reading/">Book Reading</a>
  
       
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Installing Octave on the latest OSX can be error prone. One may download the Octave-Forge bundle from sourceforge <a href="https://sourceforge.net/projects/octave/files/Octave%20MacOSX%20Binary/2013-12-30%20binary%20installer%20of%20Octave%203.8.0%20for%20OSX%2010.9.1%20%28beta%29/" target="_blank" rel="noopener">here</a> which however is large and also a bit out of date. </p>
-<!--break-->
-<p>Alternatively, if you use homebrew to do this, please be ware of<br>a few traps. Here are the steps I adopted to successfully install Octave.<br>If you do not have Xcode or Homebrew installed yet, please refer to Google<br>to get them installed properly.</p>
-<h3><span id="1-preliminaries">1. Preliminaries</span></h3><ul>
-<li>Install XQuartz from <a href="http://www.xquartz.org/" target="_blank" rel="noopener">here</a>.</li>
-<li>Install gcc with (this is for gfortran).</li>
+        <!-- toc -->
+<ul>
+<li><a href="#第四章霸政时期">第四章”霸政时期”</a><ul>
+<li><a href="#第三节齐桓晋文之霸业">第三节：“齐桓晋文之霸业”</a></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install gcc</span><br></pre></td></tr></table></figure>
-<p>It may take quite some time to install gcc from source. If you cannot wait, do xcode-select –install before install gcc. This will have mac install a pre-compiled version which is very fast.</p>
-<h3><span id="2-import-the-scientific-computing-packages-with">2. Import the scientific computing packages with</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew update &amp;&amp; brew upgrade</span><br><span class="line">$ brew tap homebrew/science</span><br></pre></td></tr></table></figure>
-<p>If you see any warnings, run</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew doctor</span><br></pre></td></tr></table></figure>
-<p>and follow any suggestions to fix the problem. And then re-import the packages as follows</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew untap homebrew/science</span><br><span class="line">$ brew tap homebrew/science</span><br></pre></td></tr></table></figure>
-<h3><span id="3-install-octave">3. Install Octave</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install octave --without-docs</span><br></pre></td></tr></table></figure>
-<p>The option <em>–without-docs</em> above is to suppress errors due to missing Tex installation. </p>
-<h3><span id="4-install-gnuplot">4. Install gnuplot</span></h3><p>As gnuplot will automatically be installed with octave, but without support for X11. So we need to reinstall it properly.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew uninstall gnuplot</span><br><span class="line">$ brew install gnuplot --with-x</span><br></pre></td></tr></table></figure>
-<p>To me, I still got the following warnings after the steps above.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">warning: ft_render: unable to load appropriate font</span><br><span class="line">warning: could not match any font: *-normal-normal-10</span><br></pre></td></tr></table></figure>
-<p>It can be fixed by following this stack overflow <a href="http://stackoverflow.com/questions/35249881/octave-fontconfig-error" target="_blank" rel="noopener">post</a>. Simply put it here where you should add this line into your ~/.bash_profile.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export FONTCONFIG_PATH=/opt/X11/lib/X11/fontconfig</span><br></pre></td></tr></table></figure>
-<p>And run</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ source ~/.bash_profile</span><br></pre></td></tr></table></figure>
-<p>to reload the config within your terminal. Alternatively, you could restart your teminal.</p>
-<h3><span id="5-configurations">5. Configurations</span></h3><p>Put the following configurations into <em>~/.octaverc</em>. If there’s no such file, just create one yourself.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setenv (&quot;GNUTERM&quot;, &quot;X11&quot;)</span><br><span class="line"></span><br><span class="line"># optional if you are in favor of a more elegant prompt.</span><br><span class="line">PS1(&apos;❯❯ &apos;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><a href="#第五章军国斗争之新局面">第五章“军国斗争之新局面”</a><ul>
+<li><a href="#第二节从宗法封建到新军国之种种变迁">第二节：“从宗法封建到新军国之种种变迁”</a></li>
+</ul>
+</li>
+<li><a href="#第六章民间自由学术之兴起">第六章“民间自由学术之兴起”</a><ul>
+<li><a href="#第二节儒墨两家之兴起">第二节：“儒墨两家之兴起”</a></li>
+<li><a href="#第五节贵族养贤">第五节：“贵族养贤”</a></li>
+<li><a href="#第六节平民学者间之反动思想">第六节：“平民学者间之反动思想”</a></li>
+</ul>
+</li>
+<li><a href="#第七章大一统政府之创建">第七章“大一统政府之创建”</a><ul>
+<li><a href="#第二节国家民族之传成">第二节：“国家民族之传成”</a></li>
+<li><a href="#第三节第一次统一征服之出现及其覆灭">第三节：“第一次统一征服之出现及其覆灭”</a></li>
+<li><a href="#第四节平民政府之产生">第四节：“平民政府之产生”</a></li>
+</ul>
+</li>
+<li><a href="#第八章统一政府文治之演进">第八章“统一政府文治之演进”</a><ul>
+<li><a href="#第二节西汉初年之政府">第二节：“西汉初年之政府”</a></li>
+<li><a href="#第三节西汉初年的士人与学术">第三节：“西汉初年的士人与学术”</a></li>
+<li><a href="#第四节中央政府文治思想之开始">第四节：“中央政府文治思想之开始”</a></li>
+<li><a href="#第八节王莽受禅与变法">第八节：“王莽受禅与变法”</a></li>
+</ul>
+</li>
+<li><a href="#第九章统一政府之堕落">第九章“统一政府之堕落”</a><ul>
+<li><a href="#第四节外戚参加王室的由来">第四节：“外戚参加王室的由来”</a></li>
+<li><a href="#第五节宦官参加王室之由来">第五节：“宦官参加王室之由来”</a></li>
+</ul>
+</li>
+<li><a href="#第十章士族之新地位">第十章“士族之新地位”</a><ul>
+<li><a href="#第一节士族政治势力之逐步膨胀">第一节：“士族政治势力之逐步膨胀”</a></li>
+<li><a href="#第三节太学清议">第三节：“太学清议”</a></li>
+<li><a href="#第四节党锢之狱">第四节：“党锢之狱”</a></li>
+<li><a href="#第五节门第之造成">第五节：“门第之造成”</a></li>
+<li><a href="#第六节东汉士族之风尚">第六节：“东汉士族之风尚”</a></li>
+</ul>
+</li>
+<li><a href="#第十一章统一政府之对外">第十一章“统一政府之对外”</a><ul>
+<li><a href="#第一节两汉之国力比较">第一节：“两汉之国力比较”</a></li>
+<li><a href="#第二节西汉与匈奴">第二节：“西汉与匈奴”</a></li>
+<li><a href="#第三节东汉与西羌">第三节：“东汉与西羌”</a></li>
+</ul>
+</li>
+<li><a href="#第十二章长期分裂之开始">第十二章“长期分裂之开始”</a><ul>
+<li><a href="#第二节旧政权之没落">第二节：“旧政权之没落”</a></li>
+<li><a href="#第四节新政权之黑暗">第四节：“新政权之黑暗”</a></li>
+<li><a href="#第五节思想界之无出路">第五节：“思想界之无出路”</a></li>
+</ul>
+</li>
+<li><a href="#第十三章统一政府之回光返照">第十三章“统一政府之回光返照”</a><ul>
+<li><a href="#第二节西晋王室之弱点">第二节：“西晋王室之弱点”</a></li>
+<li><a href="#第四节怀慜被掳与人心之反映">第四节：“怀慜被掳与人心之反映”</a></li>
+</ul>
+</li>
+<li><a href="#第十五章北方之长期纷乱">第十五章“北方之长期纷乱”</a><ul>
+<li><a href="#第三节五胡十六国大事简表">第三节：“五胡十六国大事简表”</a></li>
+</ul>
+</li>
+<li><a href="#第十六章南方王朝之消沉">第十六章“南方王朝之消沉”</a><ul>
+<li><a href="#第二节南朝王室之恶化">第二节：“南朝王室之恶化”</a></li>
+</ul>
+</li>
+<li><a href="#第十七章北方政权之新生命">第十七章“北方政权之新生命”</a><ul>
+<li><a href="#第三节魏孝文迁都及北魏之覆灭">第三节：“魏孝文迁都及北魏之覆灭”</a></li>
+<li><a href="#第四节北齐北周文治势力之演进">第四节：“北齐北周文治势力之演进”</a></li>
+</ul>
+</li>
+<li><a href="#第十八章变相的封建势力">第十八章“变相的封建势力”</a><ul>
+<li><a href="#第一节九品中正制与门阀">第一节：“九品中正制与门阀”</a></li>
+<li><a href="#第二节学校与考试制度之颓废">第二节：“学校与考试制度之颓废”</a></li>
+<li><a href="#第五节北方的门第">第五节：“北方的门第”</a></li>
+</ul>
+</li>
+<li><a href="#第十九章变相的封建势力之下之社会形态上">第十九章“变相的封建势力之下之社会形态（上）”</a><ul>
+<li><a href="#第二节农民身份之转变">第二节：“农民身份之转变”</a></li>
+<li><a href="#第三节西晋之户调制度与官品占田制">第三节：“西晋之户调制度与官品占田制”</a></li>
+<li><a href="#第五节兵士的身份及待遇">第五节：“兵士的身份及待遇”</a></li>
+</ul>
+</li>
+<li><a href="#第二十章变相的封建势力之下之社会形态下">第二十章“变相的封建势力之下之社会形态（下）”</a><ul>
+<li><a href="#第二节北魏均田制">第二节：“北魏均田制”</a></li>
+<li><a href="#第三节西魏的府兵制">第三节：“西魏的府兵制”</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+<blockquote>
+<p>一、当信任何一国之国民，尤其是自称知识在水平线以上之国民，对其本国已往历史，应该略有所知。<br> (否则最多只算一有知识的人，不能算一有知识的国民。) </p>
+</blockquote>
+<blockquote>
+<p>二、所谓对其本国已往历史略有所知者，尤必附随一种对其本国已往历史之温情与敬意。<br> (否则只算知道了一些外国史，不得云对本国史有知识。) </p>
+</blockquote>
+<blockquote>
+<p>三、所谓对其本国已往历史有一种温情与敬意者，至少不会对其本国以往历史抱一种偏激的虚无主义，<br>  (即视本国已往历史为无一点有价值，亦无一处足以使彼满意。)<br> 亦至少不会感到现在我们是站在已往历史最高之顶点，<br> (此乃一种浅薄狂妄的进化观。)<br> 而将我们当身种种罪恶与弱点，一切诿卸于古人。<br> (此乃一种似是而非之文化自谴。) </p>
+</blockquote>
+<blockquote>
+<p>四、当信每一国家必待其国民具备上列诸条件者比数渐多，其国家乃再有向前发展之希望。<br> (否则其所改进，等于一个被征服国或次殖民地之改进，对其国家自身不发生关系。换言之，此种改进，无异是一种变相的文化征服，乃其文化自身之萎缩与消灭，并非其文化自身之转变与发皇。) </p>
+</blockquote>
+<!--break-->
+<p>前三章包括序言没有写笔记，一来当时没做，二来其中大量远古事件只有梗概。但并非不重要，也无谓追求完美。</p>
+<h2><span id="第四章霸政时期">第四章”霸政时期”</span></h2><h3><span id="第三节齐桓晋文之霸业">第三节：“齐桓晋文之霸业”</span></h3><blockquote>
+<p>总观当时霸业，有二大要义：一则为诸夏耕稼民族之城市联盟，以抵抗北方游牧部落之侵略，因此得保持城市文化，使不致沦亡于游牧之蛮族。二则诸夏和平联合以抵御南方的楚国帝国主义之武力兼并，因此得保持封建文化，使不致即进为郡县的国家。</p>
+</blockquote>
+<blockquote>
+<p>其大势为文化先进诸国逐次结合，而为文化后进诸国逐次征服。同时文化后进诸国，虽逐次征服先进诸国，而亦逐次为先进诸国所同化。其文化落伍诸部族，则逐次消灭，或逐次驱斥。</p>
+</blockquote>
+<p>原来历史书上所说的“春秋五霸”，实际上主要是由于外力作用下，诸国之间形成的，替代没落的周天子的抱团方式。随着所谓戎狄蛮夷的逐渐同化和被驱逐，这种外在的压力最终不复存在，国与国之间就逐渐开始兼并了。</p>
+<p>文化是个很有意思的东西，往往先进的文化会被落后的文化征服，似乎越是有文化，就越是骄奢淫逸…而最终实际上要么征服者被先进文化同化，要么由于处理不好这个问题短短数年就被推翻，历史上这样的例子太多太多了。秦国能统一，大概只是因为他地处边缘，最后被中原文化同化，所以在前辈们已经趴在沙滩上动不了的时候上去补了个刀。</p>
+<h2><span id="第五章军国斗争之新局面">第五章“军国斗争之新局面”</span></h2><h3><span id="第二节从宗法封建到新军国之种种变迁">第二节：“从宗法封建到新军国之种种变迁”</span></h3><p>书里总结了几个变化：</p>
+<ol>
+<li>郡县制替代了贵族世袭的采地，食禄制度兴起和养贤</li>
+<li>战争由贵族之间的“游戏”变成残酷杀戮</li>
+<li>军民渐趋分治，商业和货币兴起，军人和商人兴起而替换了传统的贵族</li>
+<li>废井田开阡陌和税收制度改革</li>
+</ol>
+<p>这些变化存在内在的逻辑关联。周代礼崩乐坏，贵族之间为争夺有限的资源而产生激烈竞争，从而类似中世纪骑士们”过家家“似得战车战转变为步卒肉搏战。为了战胜对方，不再依赖养尊处优的贵族阶级，而必须产生专业的杀戮工具———军队，而为了鼓励底层士卒又产生了军功系统。军人有了晋升阶梯，成为新贵族，而他们需要得到土地奖励，导致了废除与传统贵族分封制对应的井田制，进一步产生了新土地制度下的税收体系。贵族的没落，商人从贵族的附属流入民间，进入自由商业时代，从而引发了货币的兴起。</p>
+<p>看这一系列的描述，总感觉能看到欧洲文艺复兴时期的味道，两者都是封建社会崩溃的过程。但是，为何欧洲随后横扫全球而当年“中国”只是实现了秦朝的大一统？两者类似螺旋上升的不同层次。从战国到文艺复兴，两者相隔千年，生产力在逐渐进步，因此类似战国时期各国对内的扩展和对外的兼并，欧洲各国有更强的实力去扩展和兼并，因此不仅在欧洲，它们有能力去兼并更广大的世界。</p>
+<p>另外，以前从历史课本里知道的秦朝大一统后的政策，实际上只是战国的延续，并非秦朝创立的新制度。</p>
+<h2><span id="第六章民间自由学术之兴起">第六章“民间自由学术之兴起”</span></h2><h3><span id="第二节儒墨两家之兴起">第二节：“儒墨两家之兴起”</span></h3><blockquote>
+<p>“兼爱”与“仁”不同。仁非不爱人，特有亲疏等差，故说“孝悌为仁之本”。人决无不能爱其父母而能爱别人者。“兼爱”异于“别爱”，乃一种无分别之爱，亦可说是一种大同之爱，抹杀个人，只就大群着眼。</p>
+</blockquote>
+<blockquote>
+<p>但是儒、墨两派，有他们共同的精神，他们全是站在全人类的立场，来批评和反对当时的贵族生活。儒家精神比较温和，可说是反对贵族立场的右派；墨家较激烈，可说是左派。以下战国学派，全逃不出儒、墨两家之范围。</p>
+</blockquote>
+<p>正因为孔子、墨子身处不同环境，所以产生的思想也就有差别。孔子认为孝是爱的本源，通过推己及人来把这种爱由自己父母推及其他人。这应该是家族观念的一种延续。而墨子出身寒苦，则没有深刻的家族意识，有的是抱团取暖的底层人民，所以更强调一种类似共产主义的东西。</p>
+<p>这里出现了“右派”和“左派”，对应保守和激进。在改革的时候，保守派更加容易容于当时环境，虽然存在一些不彻底的地方，但温和的演变带来的破坏力也就比较小。激进常常伴随着不懂得妥协，一旦成功，其破坏力通常将不好的和好的一并带走。</p>
+<h3><span id="第五节贵族养贤">第五节：“贵族养贤”</span></h3><blockquote>
+<p>唯四公子门下，真士少，伪士多。只见游士气焰之高涨，而不见他们的真贡献。</p>
+</blockquote>
+<blockquote>
+<p>此非当时之无士，四公子争以养士为名高，动称“门下食客三千人”，何来有如许士？伪滥杂进，则真士不致。</p>
+</blockquote>
+<p>物以类聚、人以群分，这个道理无论在那时还是今天都是成立的。一旦群体里滋生了争名夺利的氛围，有识之士也就只能敬而远之或沉默不语了。</p>
+<h3><span id="第六节平民学者间之反动思想">第六节：“平民学者间之反动思想”</span></h3><blockquote>
+<p>老子的理论，其要者，反尚智，反好动，反游士食客，皆针对当时的现象。注：此种现象，皆春秋时代所无。</p>
+</blockquote>
+<p>由此可知老子主要生活在战国时期。</p>
+<h2><span id="第七章大一统政府之创建">第七章“大一统政府之创建”</span></h2><h3><span id="第二节国家民族之传成">第二节：“国家民族之传成”</span></h3><blockquote>
+<p>秦以下，虽封建遗形尚未全绝，然终不能再兴。</p>
+</blockquote>
+<blockquote>
+<p>自此景、武下逮东汉，封建名存实亡，寸土一民，皆统于中央，诸封王唯食邑而已。</p>
+</blockquote>
+<blockquote>
+<p>唯明初封诸王，欲以封建、郡县相杂，然一、再传即废。</p>
+</blockquote>
+<blockquote>
+<p>以唐太宗之英武，唐初文、武诸功臣之出众，诚使君臣割地，各自专制一方，…，。所以不能尔者，由国人对于政治意义之认识，久已不许复有贵族世袭封建制度之存在。</p>
+</blockquote>
+<p>观念最难形成，也最难改变。《乌合之众》里说，一个民族有其固有的基因；《晚晴七十年》里说一种制度代替另一种制度要二三百年时间。辛亥革命把民主思想带入人心后，复辟就变得不可能了。可笑明初居然想复古，结果落下一朝的各种残疾，可笑。</p>
+<blockquote>
+<p>战国之秦乃如春秋之楚，不得即此谓秦果夷瞿秋。</p>
+</blockquote>
+<p>中华民族本是各民族融合而成。若怀着无比狭义的民族主义，哪里还有所谓“中华民族”？</p>
+<h3><span id="第三节第一次统一征服之出现及其覆灭">第三节：“第一次统一征服之出现及其覆灭”</span></h3><blockquote>
+<p>始皇曰：“天下共苦战阀不休，以有侯王。天下初定，又复立国，是树兵也”。</p>
+</blockquote>
+<blockquote>
+<p>秦君臣此番建树，于中国史上政体之促进有大功绩。后人空以专制讥秦，疏欠平允。</p>
+</blockquote>
+<p>“罗辑思维”介绍《秦迷》一书，讲到秦始皇为统一六国的一系列政治手段，不知道是真是假。但如果上面所言不虚，则在那时候始皇果然十分先进。</p>
+<blockquote>
+<p>秦代政治的失败，最主要的在其役使民力之逾量。</p>
+</blockquote>
+<p>创业中都难免犯各种错误，何况第一次形成一个统一的国家。后世不应该以现在的思想去评议古人的决定。</p>
+<h3><span id="第四节平民政府之产生">第四节：“平民政府之产生”</span></h3><blockquote>
+<p>项羽、田横之徒皆贵族，而皆不能成事，此可以观世变。</p>
+</blockquote>
+<p>以前没有从这个方面想过。</p>
+<blockquote>
+<p>当时平民政府的第二个反动思想则为“无为而治”。</p>
+</blockquote>
+<blockquote>
+<p>即如萧何定律，而夷三族、妖言令、携书律等皆存在。至孝惠、高后、文帝时逐渐废除。唯精神上汉则恭俭，秦则骄奢，此其异。</p>
+</blockquote>
+<p>汉初政治并不比秦国来得先进，相似的政治制度，在不同的掌权人手里，也会出现不同的结果。但这种人治的成分必须减弱才是系统能长期良性运行的保证。可惜后代还是有不明白这个道理的浑人当道。</p>
+<blockquote>
+<p>平民政府有其必须完成之两大任务，首先要完成统一，其次为完成文治。</p>
+</blockquote>
+<p>平民政府只能通过暴力革命夺取政权，然后自然对军人要论功行赏，过渡到文治需要相当漫长的时间。</p>
+<h2><span id="第八章统一政府文治之演进">第八章“统一政府文治之演进”</span></h2><h3><span id="第二节西汉初年之政府">第二节：“西汉初年之政府”</span></h3><blockquote>
+<p>如是则当时的政治组成，第一层是宗室，第二层是武人，第三层是富人，第四层是杂途。注：…。文学、儒术亦杂途之一。</p>
+</blockquote>
+<p>这个政治结构或许后代会有所演进，但基本面还是差不多的。这也就算是平民学术兴起带来的结果吧。</p>
+<h3><span id="第三节西汉初年的士人与学术">第三节：“西汉初年的士人与学术”</span></h3><blockquote>
+<p>秦代焚书，最主要者为六国史记，其次为诗、书古文，而百家言非其所重。</p>
+</blockquote>
+<blockquote>
+<p>焚书本起于议政冲突，博士淳于越称说诗、书，引据古典，主复封建，李斯极斥之，遂牵连而请焚书。</p>
+</blockquote>
+<p>焚书缘起于朝堂上的政治冲突，但领土统一后消灭人民对故国的怀念，最好的方法似乎也是消灭故国的历史。但任何激进的做法其效果都难以理想，尤其是针对人们心理上的问题。秦刚刚灭六国，六国虽然被灭但人还在，除非政权稳固到反对的声音都安静下来，而这需要非常长的时间，否则只能招致报复和反叛。</p>
+<h3><span id="第四节中央政府文治思想之开始">第四节：“中央政府文治思想之开始”</span></h3><blockquote>
+<p>注：农民政府之好处在真朴，坏处在无礼貌；可爱初在皇帝、宰相如家人，其弊处则皇帝待宰相如奴仆。</p>
+</blockquote>
+<p>淳朴通常意味着价值观混乱、多重标准。</p>
+<blockquote>
+<p>汉初政治，往往有较秦为后退者，注：此因平民政府缺少学术意味之故。</p>
+</blockquote>
+<p>回想中国历代，每每政治清明国力强盛的时候，其学术活动也是极其活跃的，或体现为诗、辞、歌、赋；每每政治昏暗的时候，其学术活动也陷入低潮，内容晦涩黯淡。虽然这只是一个侧面，但仔细想想也不无道理。</p>
+<h3><span id="第八节王莽受禅与变法">第八节：“王莽受禅与变法”</span></h3><blockquote>
+<p>王莽的政治，完全是一种书生的政治。</p>
+</blockquote>
+<blockquote>
+<p>王莽的失败，变法让贤的政治理论，从此消失，渐变为帝王万世一统的思想。政治只求保王室之安全，亦绝少注意到一般平民的生活。这不是王莽个人的失败，是中国史演进过程中的一个大失败。</p>
+</blockquote>
+<p>《国史大纲》的论述里谈到，王莽篡位不是一件单纯的个人行为，否则不至于能坚持长达18年的时间。这实际上承袭了儒家一直以来的轮换让贤思想，是一种政治结构的实践。与之对比民国初年张勋复辟正是由于是一种反先进思想的闹剧，所以不能真正在历史上留下什么。从现在来看，似乎觉得那必然是失败的，或许只是因为接受了“万世一统”的观念太深了。这真的是必然吗？当然不是，只是在合适的时机做一件合适的事情会得到好的效果；反过来，哪怕出发点和事情本身是好的，时机不对，得到的效果可能是相反的，而且在人们心理上造成的负面影响可能很久都无法消失。Sigh，这次失败实际上意味着后世再不会有人尝试这种“脑残”的想法了。</p>
+<h2><span id="第九章统一政府之堕落">第九章“统一政府之堕落”</span></h2><h3><span id="第四节外戚参加王室的由来">第四节：“外戚参加王室的由来”</span></h3><blockquote>
+<p>西汉初年，宗室、功臣、外戚，为朝廷之三大系。</p>
+</blockquote>
+<p>随着王朝的演进，由功臣而来的荫功集体首先变得越来越弱。政府渐渐独立于王室，而王室则需要外戚来牵制政府的权利。只是宗室逐渐堕落，而导致外戚实力增大而已。不过，只要外戚不至于改朝换代，则没有大碍，因为外戚是不世袭的。</p>
+<h3><span id="第五节宦官参加王室之由来">第五节：“宦官参加王室之由来”</span></h3><p>所谓九卿，是指</p>
+<ul>
+<li>太常：掌宗庙礼仪</li>
+<li>光禄勋：掌宫殿门户文官</li>
+<li>卫尉：掌宫殿门户武官</li>
+<li>太仆：掌车马</li>
+<li>廷尉：掌刑辟</li>
+<li>大鸿胪：掌蛮夷归化</li>
+<li>宗正：掌宗属</li>
+<li>大司农：掌农货</li>
+<li>少府：掌山货</li>
+</ul>
+<p>不得不说，虽然名字听起来都很文雅，实际上都是些帝王身边的贴身侍从或“家务官”。只是帝王身边的侍从，后来都演变成其它更实际职能的官员，至古至今都一样的道理。</p>
+<blockquote>
+<p>宦本宦学、仕宦，非恶称也。</p>
+</blockquote>
+<p>宦本是做官与做学问，“本无恶称”，奈何历史上留下骂名的比较多，再加上身体残疾，所以成了一种恶称。比起外戚，宦官的可传递性更弱，所以会被选择成为王室集团的一员，与外朝争夺权力。其实，从宦官当权的本质上来讲，也只是帝王堕落而导致的。</p>
+<h2><span id="第十章士族之新地位">第十章“士族之新地位”</span></h2><h3><span id="第一节士族政治势力之逐步膨胀">第一节：“士族政治势力之逐步膨胀”</span></h3><blockquote>
+<p>博士弟子额之日益增添。</p>
+</blockquote>
+<p>须知要扩大一组织的影响力，并不是要层层设卡减少参加的人数，美其名曰提高质量。当然也不能鱼龙混杂，否则会造成前面提到过的“真士不至”的问题。两者之间要求得一个平衡。</p>
+<blockquote>
+<p>全国各郡县常得平均参加中央政局，对大一统政府之维系，尤为有效。</p>
+</blockquote>
+<p><em>参与感</em>总是凝聚组织结构的最重要手段。</p>
+<h3><span id="第三节太学清议">第三节：“太学清议”</span></h3><blockquote>
+<p>士人在政治、社会上势力之表现，最先则为一种“清议”。</p>
+</blockquote>
+<blockquote>
+<p>东汉自光武、明、章，虽云崇奖儒业，…，清议为转移，直至东汉末叶，此风弗衰。</p>
+</blockquote>
+<p>这段文字读起来非常不容易懂，尤其是其中一些句子如：</p>
+<blockquote>
+<p>国家喜文法廉吏，以为足以止佞，然文吏习为欺谩，廉吏清在一己，无益百姓流亡，盗贼为害也。</p>
+</blockquote>
+<blockquote>
+<p>承王莽后，加严猛为政，因以成俗，是以郡国所举，多办职俗吏，不应宽博之选。</p>
+</blockquote>
+<blockquote>
+<p>王充论衡亦极辩世俗常高“文吏”，贱下“儒生”之非。</p>
+</blockquote>
+<p>这里面提到的“文法廉吏”、“文吏”、“廉吏”、“俗吏”之类的实际上指代一类人，他们有一定学问，被地方长官选为辅助的官吏，处理一些复杂的政务；而对应的“儒生”则对应那些有学问但不是官吏的人。文吏由于长期处理事务，有一定的执政经验，所以在社会上的地位比儒生要高；相对的儒生没有行政经验，所以被认为不能承担责任，遇到事情战战兢兢不知道如何处理。</p>
+<p>文吏可以由儒生转变过来，而长期处理杂务会导致忠诚正直方面欠缺。一些儒生因为看到文吏的腐败行为而拒绝加入其行列。这些儒生看到其它儒生为了当官而放弃自身在正直方面的追求而责骂他们，这导致了社会上更加轻谩儒生。针对这种现象，《论衡》里的<a href="http://so.gushiwen.org/guwen/bfanyi_4792.aspx" target="_blank" rel="noopener">“程材篇”</a>有很多讨论。</p>
+<p>正因为东汉初年这些议论，导致了</p>
+<blockquote>
+<p>稍后郡国查举，渐移趋向。言事者谓郡国查举不以功次，养虚名者累进，故守职者益懈，而吏事陵迟。</p>
+</blockquote>
+<p>既然推荐制度不考虑完成的功绩，而重点看个人的品行和社会上的名望，所以渐渐人们开始只注重名声，因此从政者为保持高尚的名节，很多实际事务便无法处理。从政者注意民间舆论是一种进步，然而过于影响政治推移就不好了。</p>
+<p>矫枉过正，这也是一种必然的结局。</p>
+<h3><span id="第四节党锢之狱">第四节：“党锢之狱”</span></h3><blockquote>
+<p>因此宦官之势，乃非外朝士人之力所能摧陷廓清，名士不得不内结外戚，而外戚到底是一种腐败的因袭体，名士遂终与之两败。</p>
+</blockquote>
+<p>国家虽有法度，而有些群体不在约束范围内，或其行为不为外人知晓而实际上无法执行，则法度是不会起作用的。前者可以通过立法来弥补，或者则需打破一些根深蒂固的东西，实际上比立法更难。</p>
+<p>依靠一种污浊的势力去打击另一种污浊的势力，此消彼长，最终只能变成一种“循环发生”的现象了，而国家在这个过程中</p>
+<blockquote>
+<p>“人之云亡，邦国殄瘁”。</p>
+</blockquote>
+<p>即身系国家安危的贤人都死了，离亡国就不远了。</p>
+<blockquote>
+<p>黑暗腐败的汉王室，终于倾覆，依附于王室的外戚与宦官，亦同归于尽。</p>
+</blockquote>
+<p>外戚与宦官实际上寄生于王室，皮之不存毛将焉附？</p>
+<h3><span id="第五节门第之造成">第五节：“门第之造成”</span></h3><blockquote>
+<p>“累世经学”与“累世公卿”，便造成士族传袭的势力，积久遂成门第。</p>
+</blockquote>
+<p>做学问在当时是少数家族专有的权益，而经学又是仕途的入门手段，所以传袭成门第。另一方面，上升途径若只掌握在少数群体手中，则长期以往，那些无法上升群体的矛盾将逐步激化。</p>
+<blockquote>
+<p>自东汉统一政府的倾覆，遂变成变相之封建。长期的分崩离析，而中国史开始走上衰运。</p>
+</blockquote>
+<p>钱老的观点一直是：中国政治体制需在平静中不断演进，而长久的战争只会造成倒退。回顾古代、近代一些运动，无不印证这个观点。钱老亲历一段岁月，作为那个时代的知识分子，身系中华民族文化是否能传承下去，书写《国史大纲》来从中国历史的发展来解答和对抗一系列的“新思想”，不可不称作一位斗士。这个线索不妨听听梁文道在其<em>一千零一夜</em>里对这部书的讨论。</p>
+<h3><span id="第六节东汉士族之风尚">第六节：“东汉士族之风尚”</span></h3><blockquote>
+<p>古者刑不上大夫，故贵族阶级相互有隙，不得直于法庭，则以私斗决之。</p>
+</blockquote>
+<p>大概决斗也是贵族特有的一种形式吧，无论在东方还是西方。</p>
+<blockquote>
+<p>礼有之：“父母存，不许友以死”</p>
+</blockquote>
+<p>大意是指父母在的时候，不能为朋友赴死。如《史记》刺客列传里聂政说：“臣所以降志辱身居市井屠者，徒幸以养老母；老母在，政身未敢许人也”。</p>
+<p>可见士族风尚学古。</p>
+<blockquote>
+<p>道德自为人生不可缺少之要素，然亦只是人生中一端。</p>
+</blockquote>
+<p>文章指出太过注重道德则会导致两个方面弊端：其一，人们争相以道德来分高下，如苏轼所说</p>
+<blockquote>
+<p>“上以孝取人，则勇者割股，怯者庐墓；上以廉取人,则弊车羸马,恶衣菲食。”</p>
+</blockquote>
+<p>这句来自苏轼的《<a href="http://www.laomu.cn/wxzp/xiaoshuo/china/Ts8/html04/mydoc04052.htm" target="_blank" rel="noopener">议学校贡举状</a>》，又读到其中有以下议论</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">凡可以中上意，无所不至矣。德行之弊，一至于此乎！自文章而言之，则策论为有用，诗赋为无益；自政事言之，则诗赋、策论均为无用矣。虽知其无用，然自祖宗以来莫之废者，以为设法取士，不过如此也。岂独吾祖宗，自古尧舜亦然。《书》曰：“敷奏以言，明试以功。”自古尧舜以来，进人何尝不以言，试人何尝不以功乎？议者必欲以策论定贤愚、决能否，臣请有以质之。近世士大夫文章华靡者，莫如杨亿。使杨亿尚在，则忠清鲠亮之士也，岂得以华靡少之。通经学古者，莫如孙复、石介，使孙复、石介尚在，则迂阔矫诞之士也，又可施之于政事之间乎？自唐至今，以诗赋为名臣者，不可胜数，何负于天下，而必欲废之！近世士人纂类经史，缀缉时务，谓之策括。待问条目，搜抉略尽，临时剽窃，窜易首尾，以眩有司，有司莫能辨也。且其为文也，无规矩准绳，故学之易成；无声病对偶，故考之难精。以易学之士，付难考之吏，其弊有甚于诗赋者矣。</span><br></pre></td></tr></table></figure>
+<p>“古文运动”本在祛除读书人只注重华美的文体而忽略文章的内容的毛病。出发点是好的，但却也容易走向另一个极端，即上面所说的“无规矩准绳”和“无声病对偶”。表面上看这些文章讨论时政，似乎更切合实际，但“易学”、“难精”，没有统一的衡量标准也导致“难考”。正如今天所说的素质教育，较之过去统一的高考，实则有更大弊端。</p>
+<p>另一方面，正如苏轼所说，那些文采华美的文章流传自今，有多少出自贤人的手笔？又有多少出自愚者的手笔？两相比较不难看出其正面远大于负面。王国维《人间词话》的论述，诗词更多的是反映作者胸中的大气象，如无大气象又怎能写出这样的文章？正如前文提到中国国运常常跟文化繁荣的程度相呼应，这应该就是内在的一点原因吧。</p>
+<p><em>注：上面提到的唐代的”通榜“是一种不糊名的人才选拔机制。</em></p>
+<p>太过注重道德的另一个弊端则是</p>
+<blockquote>
+<p>若做事太看重道德，便流于重形式而忽略了内容的实际。</p>
+</blockquote>
+<p>文中提到将军在尚未败北时已自杀殉国，只图自己留个好名。又想起所谓“天子守国门”和崇祯煤山自裁（虽然这并非完全归于道德），是不是有点内在联系呢？至少，这在当时直接导致的后果是</p>
+<blockquote>
+<p>所以名士势力日大，而终不能铲除宦官的恶势力。因东汉人只看重私人和家庭的道德，故王室倾覆后，再不能重建一共戴的中央，而走入魏晋以下之衰运。</p>
+</blockquote>
+<p>实际上在帝制的作用下，士人已渐渐由国家的创业者变成临时工，所以缺乏积极性也是难免的了。而随着帝制的不断推演，这种现象愈演愈烈，近代乃至当代的一些现象就不难理解了。</p>
+<h2><span id="第十一章统一政府之对外">第十一章“统一政府之对外”</span></h2><blockquote>
+<p>因此中国史上对外之胜负、强弱，几乎完全视国内政治为转移。</p>
+</blockquote>
+<p>自秦朝统一到近代以前，这的确是个事实，无怪国人应对列强手足无措了。</p>
+<h3><span id="第一节两汉之国力比较">第一节：“两汉之国力比较”</span></h3><blockquote>
+<p>西汉的立国姿态，常是协调的、动的、进取的。</p>
+</blockquote>
+<blockquote>
+<p>东汉的立国姿态，可以说常是偏枯的、静的、退守的。</p>
+</blockquote>
+<p>这是由建都的位置引出的。早先听说过一个观点，即定都在西边的国家常常是强大的，如西汉、唐；定都在东边的常常是羸弱的，如东汉、宋、明。只觉得这里隐隐有一种内在原因，不甚清楚，而这里给出的讨论让人深思。</p>
+<p>自古以来，中国东部土地肥沃、气候适宜，因而经济文化要比西部发达；西部生存环境相对恶劣，所以人民尚武而民风彪悍。定都在西部时，由于政治力量推动（这种力量当容易理解），东部繁华的经济文化向西部侵染，而西部磅礴气象也向东部扩散，实际上对双方都是有大好处的。文化离开大气象便成为靡靡之音，而彪悍的民风如没有文化的熏陶也会逐步走向失控和野蛮。这种东西方循环恰如人体的循环系统，隐隐维持和促进着社会经济文化发展。在这种循环过程中，人为因素便是其中的政治力量。定都在东部时，这种政治力量就不再推动大循环，而转为一种单一的、小规模的、不健康的循环。在缺乏政治力量推动的情况下，人民自身不会去弥补这种缺失。</p>
+<p>文中列举</p>
+<blockquote>
+<p>汉诸帝并有陵寝徙民的制度。</p>
+</blockquote>
+<p>西汉实行将东部人民迁移到西部，这即政治力量的推动。如果没有则</p>
+<blockquote>
+<p>人情安土重迁，宁就饥饿，犹群羊聚畜，须主者牧养处置。</p>
+</blockquote>
+<p>东汉在这种维持稳定力量的缺失下，最终</p>
+<blockquote>
+<p>东方食少而有黄巾，西边多事而又董卓，此诚两汉兴亡一大关键也。</p>
+</blockquote>
+<p>联想到美国选州府，常常会在一个没听说过的小城市，其目的也是希望能凭借政治力量逐步平衡各地的差距，最终达到稳定国家的目的。虽然一段时间可能会造成一些效率降低，但长远来看正面作用更可观，不得不佩服这种高明的选择。</p>
+<p>另一方面，西汉</p>
+<blockquote>
+<p>大抵是一个杂色的局面。东汉则渐渐从杂色的转变成一色，…</p>
+</blockquote>
+<p>又联想到一些企业招聘员工的时候常注重一个dynamics，即吸纳不同国家、文化背景下的人群。其基本原理在于不同人对事物的观点常常是不同的，这样的环境更加容易产生优秀的思想。又如美国高校有毕业生不能留在本校任教职。这种种做法都是为了避免一种“近亲繁殖”的问题。</p>
+<p>东汉这种按照某种规则给不同人群划分品节的陋习也就随着历史流传给了后面的朝代。</p>
+<blockquote>
+<p>太宗置官品令，谓房玄龄曰：“朕设此官员，以待贤士。工商杂色之流，假令术逾侪类，止可厚 给财物，必不可超授官秩。</p>
+</blockquote>
+<p>可见唐朝也袭此流弊。</p>
+<h3><span id="第二节西汉与匈奴">第二节：“西汉与匈奴”</span></h3><blockquote>
+<p>观去病之将兵，较之项王未多逊。…</p>
+</blockquote>
+<p>一段注释解释了一个以前困扰我的问题，即为何在《史记》中卫青霍去病合为一列传（111），而独为李将军一列传（109）。原因在于卫青和霍去病同为亲贵，所以与底层豪杰李广恰似两个相对的党派。</p>
+<h3><span id="第三节东汉与西羌">第三节：“东汉与西羌”</span></h3><blockquote>
+<p>当时士大夫见朝事无可为，唯有拥兵以戮力边檄，尚足为功名一径…</p>
+</blockquote>
+<p>这也导致了后来三国各地割据的局面。</p>
+<h2><span id="第十二章长期分裂之开始">第十二章“长期分裂之开始”</span></h2><h3><span id="第二节旧政权之没落">第二节：“旧政权之没落”</span></h3><blockquote>
+<p>散漫的农民在饥饿线上临时结合起来，其力量不够得推翻他。</p>
+</blockquote>
+<blockquote>
+<p>且以中国疆域之展布，纵使大饥荒，亦必夹有丰收的地带，要一般农民一致奋起，事亦不易。于是无可团结的社会，乃借助于“宗教”与“迷信”。农民结合于宗教与迷信的传播之下，而一致奋起，成为东汉末年之黄巾。</p>
+</blockquote>
+<blockquote>
+<p>国家本是精神的产物，把握时代力量的名士大族，他们不忠心要一个统一的国家，试问统一国家何从成立？</p>
+</blockquote>
+<p>历史上成功的农民起义，往往不真的是农民群体在起决定性作用，而是附庸在这个群体上真正起到决策作用的精英。正如作者所说，农民不具备团结一致的奋斗精神，往往会被一些近期的利益所诱惑，从而从内部分崩离析。看黄巾之乱、太平天国、李自成，再对比刘邦、朱元璋，就能发现其中的区别。精英阶级一旦无法通过合法的晋升阶梯入仕，那么积累的力量就会从别处发泄出来。</p>
+<h3><span id="第四节新政权之黑暗">第四节：“新政权之黑暗”</span></h3><blockquote>
+<p>自古受命及中兴之君，易尝不得贤人君子与之共治天下者乎？及其得贤也，曾不出阎巷，岂幸相遇哉？上之人不求之耳。今天下尚未定，此特求贤之急时也。“孟公绰为赵、魏老则优，不可以为膝、薛大夫”。若必廉士而后可用，则齐桓其何以霸世！今天下得无有被褐怀玉而钓于渭滨者乎？又得无盗嫂受金而未遇无知者乎？二三子其佐我明扬仄陋，唯才是举，吾得而用之。</p>
+</blockquote>
+<blockquote>
+<p>夫有行之士未必能进取，进取之士未必能有行也。陈平岂笃行，苏秦岂守信邪？而陈平定汉业，苏秦济弱燕。由此观之，士有偏短，庸可废乎！有司明恩此义，则士无遗滞，官无废业矣。</p>
+</blockquote>
+<blockquote>
+<p>昔伊挚、傅说出于贱人，管仲，桓公贼也，皆用之以兴。萧何、曹参，县吏也，韩信、陈平负汗辱之名，有见笑之耻，卒能成就王业，声著千载。吴起贪将，杀妻自信，散金求官，母死不归，然在魏，秦人不敢东向；在楚，则三晋不敢南谋。今天下得无有至德之人，放在民间，及果勇不顾，临敌力战：若文俗之吏，高才异质，或堪为将守；负汗辱之名，见笑之行；或不仁不孝，而有治国用兵之术。其各举所知，勿有所疑。</p>
+</blockquote>
+<p>魏武三诏令，真前无古人后无来者，霸气侧漏。</p>
+<blockquote>
+<p>“天下无有孤，不知几人称王，几人称帝？”，此不足为篡窃之正大理由。</p>
+</blockquote>
+<blockquote>
+<p>阴谋不足以镇压反动，必然继之以惨毒的淫威。</p>
+</blockquote>
+<p>人心是奇怪的东西，一个正大光明的理由能让它平静下来，反之，如果一开始的理由就是不对的，将来总有一天要还清当年欠下的债务。再强大的武力，也只是在一段时间内能镇压，不是长久之计。</p>
+<p>正是这种不够光明正大的理由，奠定了魏晋这一历史上较黑暗混乱的时代。</p>
+<h3><span id="第五节思想界之无出路">第五节：“思想界之无出路”</span></h3><blockquote>
+<p>但要提倡法治，起码的先决条件，在上应有一个较稳定的政权。【注：政权不稳定，法治精神无所倚依而生根。】政权之稳定，亦应依附于此政权者先有一番较正义，至少较不背乎人情的理想或事实。</p>
+</blockquote>
+<p>人们往往只注意到法治的好处，却忽略这一基本的前提。在政权不稳定的状态下提倡法治，只会使政权更加动荡，导致更糟糕的结果。作者在文字上总有一个“较”字修饰，读起来不禁觉得实在精辟。</p>
+<h2><span id="第十三章统一政府之回光返照">第十三章“统一政府之回光返照”</span></h2><h3><span id="第二节西晋王室之弱点">第二节：“西晋王室之弱点”</span></h3><blockquote>
+<p>一、没有光明的理想为之指导。<br>二、贵族家庭之腐化。</p>
+</blockquote>
+<p>西晋处在历史这样一个节点上，贵族尚没有意识到理想、教育的重要性，所以有乘“羊车”、食“肉糜”的奇葩出现，而当代的“新贵族”较以往已经进步很多了。</p>
+<h3><span id="第四节怀慜被掳与人心之反映">第四节：“怀慜被掳与人心之反映”</span></h3><p>作者从帝王、皇后、大臣、将军、士族几个方面的讨论，给人一个直观的印象：西晋是一个彻头彻尾无廉耻气节的政权。</p>
+<h2><span id="第十五章北方之长期纷乱">第十五章“北方之长期纷乱”</span></h2><h3><span id="第三节五胡十六国大事简表">第三节：“五胡十六国大事简表”</span></h3><blockquote>
+<p>盖浅化之民，性情暴戾，处粗野之生活中，尚堪放纵自适。一旦处繁杂之人事，当柔靡之奉养，转使野性无所发抒，冲荡溃决，如得狂疾。</p>
+</blockquote>
+<p>可笑一些“精英”附庸在这样“粗野”的人身边，以为可以依仗成就一番事业，往往最终难逃悲催的下场，正是由于不懂这样的道理呀！</p>
+<h2><span id="第十六章南方王朝之消沉">第十六章“南方王朝之消沉”</span></h2><h3><span id="第二节南朝王室之恶化">第二节：“南朝王室之恶化”</span></h3><blockquote>
+<p>南朝的王室，在富贵家庭里成长起来，他们只稍微熏陶到了一些名士派放情恣志的风尚，而没有浸沉到名士们的家教与门风，又没有领略得名士们所研讨的玄言与远致。</p>
+</blockquote>
+<p>只注意到外在表现而不理解内在机理，今天这样的情况不也大有人在么？一本本成功学书籍畅销，一篇篇心灵鸡汤文在朋友圈流传，一条条形而上的不知所云的分享大都是类似的情况吧。多少人不去多读几本书，多做些思考和研究，不在实践中总结反思，而是随手捡起几个普适的概念大肆宣扬，真是误人误己。</p>
+<blockquote>
+<p>由名士为之则为雪夜访友，无知识，无修养，则变为达旦捕鼠。由名士为之则为排门看竹，无知识，无修养，则变为往寺庙偷狗吃。</p>
+</blockquote>
+<p>名士的风尚虽只能独善其身，但总算雅致；皇室以此为精神寄托本就不对，何况画虎类犬，就只能贻笑大方了。后人看着当然觉得好笑，在当时却是整个社会一片黑暗没有出路了。</p>
+<h2><span id="第十七章北方政权之新生命">第十七章“北方政权之新生命”</span></h2><h3><span id="第三节魏孝文迁都及北魏之覆灭">第三节：“魏孝文迁都及北魏之覆灭”</span></h3><blockquote>
+<p>塞北荒寒，不配做新政治的中心。</p>
+</blockquote>
+<p>地理决定论自有其内在道理。</p>
+<blockquote>
+<p>惜乎孝文南迁五年即死。</p>
+</blockquote>
+<p>历史从来不以人的意志为转移，而这正是所谓的气数已尽吧。</p>
+<blockquote>
+<p>文治基础尚未稳固，而武臣出路却已断塞。</p>
+</blockquote>
+<p>改革最忌讳建设尚未完成而已经将原有的关系彻底打破。这样的改革如果顺利则只能说是运气好，否则造成的反弹可能完全推翻改革本来已经带来的正面的效果。</p>
+<blockquote>
+<p>一个国家，同时摆出两个绝不相同的社会，势必酿乱。</p>
+</blockquote>
+<p>然而一个国家又非常容易酿成两个绝不相同的社会。比如前面讨论东西汉差异的时候提到的，定都的位置不同，在长安则由政治力量引导产生国内东西大循环；在洛阳则东部南北小循环，使得东西隔绝。如果政治力量无法处理好这种地区间的均衡，则必然酿成祸乱。</p>
+<blockquote>
+<p>凡历史上有一番改进，往往有一度反动，不能因反动而归咎改进之本身；然亦须在改进中能善处反动方妙。魏孝文卒后，鲜卑并不能继续改进，并急速腐化，岂得以将来之反动，追难孝文！</p>
+</blockquote>
+<p>鲜卑本北方稍欠文化的部落，一旦处于温柔繁华的环境，腐化堕落的速度更是迅速，这与人成长的环境是紧密相关的。想起游戏《十字军之王2》里的设定：部落虽有较强武力，但在政治落后，容易招致内乱，而战斗士气随战争结束时间增长会迅速下降。这样的设定更加符合真实的情况，对比《三国志》系列喜欢把蛮族势力的武将个个设置成武力一般头脑简单的弱智要高明好多。</p>
+<h3><span id="第四节北齐北周文治势力之演进">第四节：“北齐北周文治势力之演进”</span></h3><blockquote>
+<p>齐律尤为隋、唐所本。</p>
+</blockquote>
+<blockquote>
+<p>由唐至清，皆本隋律，隋律则本于齐。</p>
+</blockquote>
+<p>从这种意义上讲，这似乎是上一个时代的终结与下一个时代的开始。高晓松所说中国古代的时代划分，好像也是以这里为分界的。</p>
+<blockquote>
+<p>治民之本，莫若宰守。治民之体，先当治心。</p>
+</blockquote>
+<p>这句话的大意是，“地方行政长官是治理人民的根本。要想治理人民，先要治理他们的内心”。这与阳明先生的心学似乎是呼应的。</p>
+<blockquote>
+<p>于是以前的官吏，为门资所应得；而此后的官吏，则将为民众负责任。</p>
+</blockquote>
+<p>这样的设定，在建设的同时不至于彻底废除历史的旧习，是一种政治上的妥协，于进步实有利。</p>
+<blockquote>
+<p>僚吏俊彦，旦理公务，晚就讲习。</p>
+</blockquote>
+<blockquote>
+<p>从学术影响到政治，回头再走上一条合理的路，努力造出一个合理的政府来。</p>
+</blockquote>
+<p>“从学术影响政治”是钱老支持的主张，从前面的一些讨论中早有明示。衷心希望将来能真的有这么一天。</p>
+<h2><span id="第十八章变相的封建势力">第十八章“变相的封建势力”</span></h2><h3><span id="第一节九品中正制与门阀">第一节：“九品中正制与门阀”</span></h3><blockquote>
+<p>三国丧乱之际…，一时逆转，而倒退为秦、汉初年之军功得官。</p>
+</blockquote>
+<p>越是乱世，越崇尚军功，越是崇尚结果导向而不计后果。此消彼长，意味着与军功相对的，较斯文的方式在社会上无法晋升。想到当今各互联网公司提倡的狼性文化、军功导向，不禁觉得离文化真正兴盛还有很远的路要走。</p>
+<blockquote>
+<p>于是有魏尚书陈群之“九品官人法”。</p>
+</blockquote>
+<p>九品官人法于州设置大中正，于郡设置小中正，中正负责本地贤良的举荐。中正并非真正的官职，而是由中央官员兼职，因当时处乱世而人才集聚于中央。</p>
+<p>与汉代查举相比，九品中正制有两个最大不同：</p>
+<ol>
+<li>查举人才归地方而中正制归中央；</li>
+<li>查举只涉及入仕而中正制是一套完整的官员入仕、考察机制。</li>
+</ol>
+<p>处于乱世，中央往往急需各地人才，所以这样的设定无可厚非。待乱世已平，人才的流动仍然遵循从地方到中央就不合时宜了。这直接导致了地方人才凋零，而汇聚中央的人才又无处施展自己的能力。</p>
+<p>所以当时已有人察觉这样的状态，而有</p>
+<blockquote>
+<p>今天下复归一统，自当仍将查举权付之地方长官，不必再要一个中正。</p>
+</blockquote>
+<p>九品中正制还注重一个“品”字。</p>
+<blockquote>
+<p>“品”者履行，“状”者才能、绩效。</p>
+</blockquote>
+<p>处乱世时，由于只重视军功，导致为官者品行良莠不齐。而九品中正制正为校正这种过失，而重新强调品的重要性。官员品行好则升迁，品行不好则降级，于是造成一些高品低能的状况。</p>
+<p>一种制度往往因当时的社会状态产生。一旦社会状态发生变化，制度需要做相应调整，否则就会不合时宜。但制度形成容易，变化则难，因制度而产生的利益阶层总不会轻易放弃自己的利益。然而，有制度总比没有制度要好。回想起多年前，从小学时候我就有个不解的问题：比如我所居住的县城里，县长这样的官员是如何成长起来的？这个问题实际上我现在也不清楚，仿佛没有固定的方法和评价标准，既不看是否学识出众，也不看是否有良好的品行。想到此，再与上面的状态比较，不难发现现在的政治制度仍然在乱世走向治世的初级阶段而已。</p>
+<h3><span id="第二节学校与考试制度之颓废">第二节：“学校与考试制度之颓废”</span></h3><blockquote>
+<p>东汉的累世经学，即为造成门阀之一因。但到门阀势力一旦长成，学校与考试制度即不见重要，难于存在。</p>
+</blockquote>
+<p>联想到今天的两个现象，即所谓素质教育和出国热。这些现象的本质是什么呢？是希望打破以往国家制定的高考制度，而独立出另外的标准。这些标准跟高考制度最大的差别在哪呢？更加考察出身而已。农村的孩子没有机会学习钢琴、舞蹈，没有钱送到国外镀金。想想这些城里的家长，有相当部分实际上是高考制度的受益者。这与书中讨论的问题难道不是一个么？历史总是惊人的相似。</p>
+<h3><span id="第五节北方的门第">第五节：“北方的门第”</span></h3><blockquote>
+<p>故南士借上以凌下，北族则附下以抗上。</p>
+</blockquote>
+<p>真正的利害在于存在的合法性。南方士族与皇族是相互依存的，故南士的合法性在于皇族而不在民众；北方士族与异族皇族始终不是一路的，所以其合法性在于能组织民众。联想到军阀的合法性不在自身而在于能否为依附于军阀的下属们谋求利益。在真正的利害关系之前，其它因素如民族大义等，只能是少数人的追求，而从大势上讲是不足道的。</p>
+<h2><span id="第十九章变相的封建势力之下之社会形态上">第十九章“变相的封建势力之下之社会形态（上）”</span></h2><h3><span id="第二节农民身份之转变">第二节：“农民身份之转变”</span></h3><blockquote>
+<p>李典之众自有武装，故称“部曲”</p>
+</blockquote>
+<p>部曲在这里指私兵，即归附之前就已经拥有一定武装力量。</p>
+<blockquote>
+<p>局势逐渐澄清，各地的强宗豪族，逐渐消并其势力于几个大势力之下，再建政府，这便是三国。</p>
+</blockquote>
+<p>于东汉末年的乱世，由于中央集权的瓦解，地方只能自建势力以在乱世图存，而待大势力兴起则各择归附，于是有所谓“三国”。</p>
+<blockquote>
+<p>两汉以来的农民，以公民资格自耕其地，而向政府纳租。现在是政府将无主荒田指派兵队耕种，无形中，农田的所有权，又从农民手里转移到政府去。</p>
+</blockquote>
+<p>读各种历史，容易受到情感影响而迷失本质，往往纠结于正义和邪恶。实际上，真正应该关注的是内里本质的东西，只有拨开表面上的掩饰才能看到事情的真相。土地的所有权在谁手里，谁的社会地位才能有一定保障，否则无论以任何借口，都无法掩盖其暴乱的事实。</p>
+<p>无论何种正义的理由，都不能剥夺私有财产。</p>
+<h3><span id="第三节西晋之户调制度与官品占田制">第三节：“西晋之户调制度与官品占田制”</span></h3><blockquote>
+<p>这一个制度的用意，并不是授予强宗豪族以私占的特权，乃是要把当时强宗豪族先已私占的户口及田亩括归公有，而许他们一个最高限度的私占权。</p>
+</blockquote>
+<p>政治的艺术在于和平演变。在当时的政治环境下，从强宗豪族手里拿回户口和土地的确难以办到，但其中的政治智慧却不容忽视。在实力欠缺的情况下，勉强坚持一些不切实际却看似政治正确的主张是没有意义的，反而容易招到反噬的效果。所以不如以量化的方式先妥协，待实力发生变化后再逐步达到目的。历史上因为校真一两个口号或主义，没有推动历史进步，反而造成短暂倒退的例子比比皆是。而那些明知这样的后果，仍然煽动无知人群的背后的人，实际唯恐天下不乱而无法造就个人英雄，其心可诛。</p>
+<h3><span id="第五节兵士的身份及待遇">第五节：“兵士的身份及待遇”</span></h3><blockquote>
+<p>其先入士籍者得优廪，又可免役，其时则兵胜于民。渐次军旅之事，不为时重，则士伍唯以供役，又廪给日薄，其时则农胜于兵。</p>
+</blockquote>
+<p>识时务者为俊杰。</p>
+<blockquote>
+<p>要为军人谋出身，势必与贵族特权实力相冲突，如战国吴起在楚、商鞅在秦之事。</p>
+</blockquote>
+<blockquote>
+<p>军人的地位，只与奴隶、罪犯相等，从军只是当苦役。</p>
+</blockquote>
+<p>战国为用兵之际，所以自然有人站出来提高军人的社会地位，而在相对和平的时代，不会有这样的事情。此外，看既得利益集团的人在什么行业就能看出利益分配的大头所在。</p>
+<blockquote>
+<p>军人的地位如此，如何可以为国宣劳，担负光复中原的重任？</p>
+</blockquote>
+<p>实则社会利益之分配必须与目标一致，否则要么无法达成目标，要么演变成无法控制的结果。</p>
+<h2><span id="第二十章变相的封建势力之下之社会形态下">第二十章“变相的封建势力之下之社会形态（下）”</span></h2><h3><span id="第二节北魏均田制">第二节：“北魏均田制”</span></h3><blockquote>
+<p>此制用意并不在求田亩之绝对均给，只求富贵者稍有一限度，贫者亦有一最低之水平。</p>
+</blockquote>
+<blockquote>
+<p>…然此等皆不足为此制深病，治史者当就大体着眼也。</p>
+</blockquote>
+<p>仍然体现着政治之循序渐进的思想。</p>
+<blockquote>
+<p>尤要者则在绝其荫冒，使租收尽归公上。</p>
+</blockquote>
+<p>“荫”则为逃避劳役而多户假作一户，“冒”则为丧乱中无主的土地被冒领。实际上，这两者都是针对豪强而言，普通人没有能力去荫冒。均田制使得“多户多得”，所以没有人再愿意附属在豪强上，从而独立出来。</p>
+<blockquote>
+<p>正租入中央国库，义租纳郡县，备水旱灾。</p>
+</blockquote>
+<p>那时已经有建立地方粮食储备以应对水旱灾害，实历史进步也。</p>
+<blockquote>
+<p>不教民战，是谓弃之。临时抽丁，皆弃之也。</p>
+</blockquote>
+<p>临时抓壮丁，又没有经过军事训练，实际上就是放弃他们呀！这样的情况下，军队又怎么能有战斗力呢？</p>
+<h3><span id="第三节西魏的府兵制">第三节：“西魏的府兵制”</span></h3><blockquote>
+<p>府兵制长处，只在有挑选、有教训；而更重要的，在对兵士有善意，有较优的待遇。将此等兵队与临时的发奴为兵、谪役为兵，以及抽丁为兵相敌，自然可得胜利。</p>
+</blockquote>
+<p>“仁者无敌”。</p>
+<blockquote>
+<p>所以自行“均田”，而经济上贵族与庶民的不平等取消；自行”府兵“，而种族上胡人与汉人的隔阂取消。</p>
+</blockquote>
+<p>能看到社会上的主要矛盾，而实施缓和的政治手段逐步消除这种矛盾，才是为政者需要不断思考的问题。</p>
+<blockquote>
+<p>古之帝王所以建诸侯、立百官，非欲富贵其身而尊荣之，盖以天下至广，非一人所能独治，是以博访贤才，助己为治。若知其贤，则以礼命之。其人闻命之日，则惨然曰：“凡受人之事，任人之劳，何舍己而从人？”又自勉曰：“天生儁士，所以利时。彼人主欲与我共为治，安可苟辞？”于是降心受命。其居官也，不惶恤其私而忧其家。故妻子或有饥寒之弊而不顾。于是人主赐以俸禄、尊以轩冕而不以为患，贤臣受之亦不以为德。为君者诚能以此道授官，为臣者诚能以此情受位，则天下之大，可不言而治。后世衰微，以官职为私恩，爵禄为荣惠。君之命官，亲则授之，爱则任之。臣之受位，可以尊身而润屋者，则迂道而求之。至公之道没，而奸诈之萌生。天下不治，正为此矣。<br>今圣上中兴，思去浇伪．在朝之士，当念战事之艰难。才堪者审己而当，不堪者收短而避。使天官不妄加，王爵不虚受，则淳素之风庶几可返。</p>
+</blockquote>
+<p>这段话源于《周书·文帝纪下》，虽过于理想，没有真正给出实现的步骤，但仍然值得称赞。常常见到今天的创业者，仅有一点点成绩便招聘大量的员工，动则以手下的人数作为人生成功的衡量，实在好笑。</p>
 
       
     </div>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+    <a class="article-category-link" href="/blog/categories/Book-Reading/">Book Reading</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/octave/">octave</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/国史大纲/">国史大纲</a></li></ul>
 
       
     </footer>
@@ -955,6 +1499,18 @@
               <div class="widget-entry-summary" style="margin: 0;">
             
 
+              <h6 style="margin: 0;"><a href="/blog/news-2019/">新闻记录-2019</a></h6>
+              <span>March 10, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
               <h6 style="margin: 0;"><a href="/blog/currency-depreciation/">金融概念整理——货币贬值</a></h6>
               <span>March 8, 2019</span>
             </div>
@@ -1003,20 +1559,8 @@
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/blog/news/">新闻纪录</a></h6>
+              <h6 style="margin: 0;"><a href="/blog/news/">新闻纪录-2018</a></h6>
               <span>January 3, 2019</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/blog/etcd_raft_4/">Raft协议实现学习之—写入过程</a></h6>
-              <span>November 23, 2018</span>
             </div>
 
           </li>
@@ -1030,7 +1574,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Book-Reading/">Book Reading</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Finance/">Finance</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Photography/">Photography</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Reading/">Reading</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Tech/">Tech</a><span class="category-list-count">39</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Thinking/">Thinking</a><span class="category-list-count">3</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Book-Reading/">Book Reading</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Finance/">Finance</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/News/">News</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Photography/">Photography</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Reading/">Reading</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Tech/">Tech</a><span class="category-list-count">40</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Thinking/">Thinking</a><span class="category-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -1040,20 +1584,9 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/Finance/" style="font-size: 10px;">Finance</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/Housing/" style="font-size: 10px;">Housing</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 10px;">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 10px;">credit spread</a> <a href="/blog/tags/currency/" style="font-size: 10px;">currency</a> <a href="/blog/tags/distributed/" style="font-size: 12px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 12px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a>
+      <a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/Finance/" style="font-size: 10px;">Finance</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/Housing/" style="font-size: 10px;">Housing</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/aurora/" style="font-size: 10px;">aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 10px;">credit spread</a> <a href="/blog/tags/currency/" style="font-size: 10px;">currency</a> <a href="/blog/tags/distributed/" style="font-size: 10px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 10px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a>
     </div>
   </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">September 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">March 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">March 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">February 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/12/">December 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/01/">January 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/08/">August 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
 
   
 </aside>

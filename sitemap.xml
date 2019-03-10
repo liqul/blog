@@ -2,6 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>liqul.github.io/blog/news-2019/</loc>
+    
+    <lastmod>2019-03-10T04:03:32.226Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/quorum_in_amazon_aurora/</loc>
+    
+    <lastmod>2019-03-10T03:57:52.774Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/questions-applying-ai/</loc>
+    
+    <lastmod>2019-03-10T03:57:36.557Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/notes-learning-spark/</loc>
+    
+    <lastmod>2019-03-10T03:57:01.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/notes-chain-replication/</loc>
+    
+    <lastmod>2019-03-10T03:56:51.575Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>liqul.github.io/blog/news/</loc>
+    
+    <lastmod>2019-03-10T03:09:13.798Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>liqul.github.io/blog/currency-depreciation/</loc>
     
     <lastmod>2019-03-08T13:48:15.274Z</lastmod>
@@ -79,13 +121,6 @@
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/news/</loc>
-    
-    <lastmod>2019-01-05T14:06:44.450Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>liqul.github.io/blog/ming_lessons/</loc>
     
     <lastmod>2018-11-01T10:32:55.000Z</lastmod>
@@ -135,30 +170,9 @@
   </url>
   
   <url>
-    <loc>liqul.github.io/blog/notes-learning-spark/</loc>
-    
-    <lastmod>2018-04-12T13:41:00.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/notes-chain-replication/</loc>
-    
-    <lastmod>2018-04-12T13:40:43.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>liqul.github.io/blog/new_apache_hbase_mob_compaction_policy/</loc>
     
     <lastmod>2018-04-12T13:40:03.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/quorum_in_amazon_aurora/</loc>
-    
-    <lastmod>2018-04-12T13:39:31.000Z</lastmod>
     
   </url>
   
@@ -376,13 +390,6 @@
     <loc>liqul.github.io/blog/dependency-injection/</loc>
     
     <lastmod>2018-03-06T10:46:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/questions-applying-ai/</loc>
-    
-    <lastmod>2017-07-28T08:30:38.000Z</lastmod>
     
   </url>
   

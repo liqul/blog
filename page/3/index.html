@@ -104,6 +104,71 @@
         
           <section id="main">
   
+    <article id="post-quorum_in_amazon_aurora"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/quorum_in_amazon_aurora/">Quorum in Amazon Aurora</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/quorum_in_amazon_aurora/" class="article-date">
+	  <time datetime="2017-10-27T08:12:09.000Z" itemprop="datePublished">October 27, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          I recently read a serial of posts about the quorum mechanism in Amazon Aurora, which is a distributed relational database. These posts are: 
+
+post1: quorums and correlated failure.
+post2: quorum reads and mutating state.
+post3: reducing costs using quorum sets.
+post4: quorum membership.
+
+        
+          <p class="article-more-link">
+            <a href="/blog/quorum_in_amazon_aurora/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/aurora/">aurora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/quorum/">quorum</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
     <article id="post-new_apache_hbase_mob_compaction_policy"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -217,7 +282,7 @@ Hibari is a production-ready, distributed, ordered key-value, big data store. Hi
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/distributed/">distributed</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/replication/">replication</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/replication/">replication</a></li></ul>
 
       
     </footer>
@@ -283,7 +348,7 @@ Scala的一种入门方式是：
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/spark/">spark</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/spark/">spark</a></li></ul>
 
       
     </footer>
@@ -508,6 +573,106 @@ Scala的一种入门方式是：
 <!-- Table of Contents -->
 
   
+    <article id="post-non-blocking-read"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/non-blocking-read/">Notes on Multi-versioned Storage</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/non-blocking-read/" class="article-date">
+	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I recently read the <a href="https://research.google.com/archive/spanner.html" target="_blank" rel="noopener">Spanner</a> paper. I realized that I cannot understand the idea of TrueTime and Non-blocking read well. Therefore, I did some research by googling the concept of non-blocking read, and came across this mysql <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-consistent-read.html" target="_blank" rel="noopener">document</a>. After reading it, I realized that my understanding of multi-versioned storage is incorrect. So I decide to put some notes here.</p>
+<p>The key points of multi-versioned storage are:  </p>
+<ol>
+<li>version -&gt; the creation wall clock time of the object (or a vector time)</li>
+<li>timestamp -&gt; the query time of the object</li>
+<li>the association between the metadata and content should never be changed</li>
+</ol>
+<p>Each object is associated with a set of metadata. The metadata contains a timestamp field indicating the version of this object. For a concrete example, let’s define a storage model as follows:</p>
+<p><img src="/blog/assets/objstore1.png" width="500"></p>
+<p>Each metadata contains three fields</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td style="text-align:center">name of the object. objects with the same name are deem to be the same object</td>
+</tr>
+<tr>
+<td>ctime</td>
+<td style="text-align:center">creation time</td>
+</tr>
+<tr>
+<td>deleted</td>
+<td style="text-align:center">1 means a tombstone</td>
+</tr>
+<tr>
+<td>extra</td>
+<td style="text-align:center">some extra metadata for this object</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s use typical operations to clarify the usage of this data model. </p>
+<p><strong>Put</strong><br>Put is adding a new versioned object into the storage. In the figure above, the first “obj1” is inserted at 2017-04-01 11:30:12. Inserting another object with the same name is simply adding a new entry to the table pointing to the new content. When an object is requested from client, only the one with the latest timestamp is returned. Therefore, from 2017-04-01 11:30:12 to 2017-04-02 11:31:25, the first obj1 is visible. After 2017-04-02 11:31:25, the client see only the second obj1. With this data model, there is no need to block writes during reading this object, since each operation is based solely on its timestamp. </p>
+<p><strong>Delete</strong><br>Delete is simply by putting a tombstone for a certain object. Like the third obj1 in the example. No content is presented for this entry. The objects with a tombstone as the latest entry will be filtered out if requested from clients.</p>
+<p><strong>Update</strong><br>In this context, update is different from putting new contents into the object, but altering the object’s metadata (e.g., the extra field in the table). Updating the fields beyond the unique key is less a problem. If we need to update even the name of the object, we need to perform two steps: (1) delete the original object; (2) put a new object with the new metadata. One need to keep these two steps in an atomic transaction.</p>
+<p><strong>Search</strong><br>Search is usually based on metadata to find a set of objects. The difference with multi-versioned storage is that we only return an object with the latest timestamp. This could be achieved with a select clause like </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT t.* FROM (SELECT * FROM table WHERE xxx AND ctime &lt; NOW() ORDER BY ctime DESC) t GROUP BY t.name</span><br></pre></td></tr></table></figure>
+<p>We then filter out tombstones reside in the result set.</p>
+<p><strong>Get</strong><br>Get is first searching for the latest object before the operation time. Then, the pointer of content is handed over to the client. The client should read the content as soon as possible. Otherwise, the content may be deleted due to recycling.  </p>
+<p><strong>Compact</strong><br>Compact refers to merge a set of contents into a big one. This is useful for example for HDFS to relief the name node’s burden of storing a large number of small files. The implementation of compaction is a bit tricky. One first merge the target set of contents into a big file. Then, insert a new entry for each  related object within an atomic transaction. For clarification, let’s suppose we need to compact obj2 and obj3 in our example. We first create a new content with both contents from the original obj2 and obj3. Then, we add new entries for obj2 and obj3, respectively. The tricky part is that the ctime for these two entries are just 1 second larger than the original two. </p>
+<p><img src="/blog/assets/objstore2.png" width="600"></p>
+<p>This may sounds weired at first. But think about the situation that a new entry for obj2 is put after we started but not finished compaction. In this case, the new content could be covered by the compaction if the ctime is larger than the new entry. We add 1 to the ctime. So, the new entry will either be later, or conflict with the compaction, leading to a failure. Upon such failure, the client simply retry to submit the new content. This should not be a real problem since compaction is a rare operation. </p>
+<p>One may wonder why not simply updating the pointers in the original entries for obj2 and obj3. This actually breaks the third key points we mentioned at the beginning. It is important not changing the association. For example, if we want to get an object during compaction, reading may fail since the old contents may be deleted. Also, stale contents may be produced. More importantly, we may need very complicated transaction controls. </p>
+<p><strong>Recycle</strong><br>Recycle is used to delete all deleted objects. The deleted objects could be find by searching for tombstones in the table. If a tombstone is detected, all entries before that can be deleted physically, including the tombstone itself. Delete a single content is straightforward. However, if a content is merged into a big file, we can carry out a similar process like compaction to delete the content physically. Old-versioned entries can also be recycled. Both recycling for deleted and old-versioned entries follows a certain policy. We can delete an entry once it has been out dated for a few days. This duration shouldn’t be too soon. Otherwise, we may recycle content being or to be read. </p>
+<p>One can see that, with this multi-versioned storage model, all operations are much simpler without dependency to a locking system. We even do not rely on transaction, if compaction is not necessary. Let’s return to the three key parts at the beginning of this note. With a timestamp field, we already get the sense of version. As discussed above, the operation timestamp is critical as we need it to determine which object should be put into the result set. If data is stored across multiple machines, we need to synchronize their clock precisely. TrueTime is a API expose the uncertainty of time among different machines, and thus is critical for such large scale storage implementation. Finally, the association should not be broken, otherwise, we need complicated mechanisms to fix the issues it incurs.</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/non-blocking/">non-blocking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/storage/">storage</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
     <article id="post-using-select-for-update-for-uniqueness-in-mysql"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -637,192 +802,6 @@ Scala的一种入门方式是：
 <!-- Table of Contents -->
 
   
-    <article id="post-non-blocking-read"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/non-blocking-read/">Notes on Multi-versioned Storage</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/non-blocking-read/" class="article-date">
-	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>I recently read the <a href="https://research.google.com/archive/spanner.html" target="_blank" rel="noopener">Spanner</a> paper. I realized that I cannot understand the idea of TrueTime and Non-blocking read well. Therefore, I did some research by googling the concept of non-blocking read, and came across this mysql <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-consistent-read.html" target="_blank" rel="noopener">document</a>. After reading it, I realized that my understanding of multi-versioned storage is incorrect. So I decide to put some notes here.</p>
-<p>The key points of multi-versioned storage are:  </p>
-<ol>
-<li>version -&gt; the creation wall clock time of the object (or a vector time)</li>
-<li>timestamp -&gt; the query time of the object</li>
-<li>the association between the metadata and content should never be changed</li>
-</ol>
-<p>Each object is associated with a set of metadata. The metadata contains a timestamp field indicating the version of this object. For a concrete example, let’s define a storage model as follows:</p>
-<p><img src="/blog/assets/objstore1.png" width="500"></p>
-<p>Each metadata contains three fields</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th style="text-align:center">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>name</td>
-<td style="text-align:center">name of the object. objects with the same name are deem to be the same object</td>
-</tr>
-<tr>
-<td>ctime</td>
-<td style="text-align:center">creation time</td>
-</tr>
-<tr>
-<td>deleted</td>
-<td style="text-align:center">1 means a tombstone</td>
-</tr>
-<tr>
-<td>extra</td>
-<td style="text-align:center">some extra metadata for this object</td>
-</tr>
-</tbody>
-</table>
-<p>Let’s use typical operations to clarify the usage of this data model. </p>
-<p><strong>Put</strong><br>Put is adding a new versioned object into the storage. In the figure above, the first “obj1” is inserted at 2017-04-01 11:30:12. Inserting another object with the same name is simply adding a new entry to the table pointing to the new content. When an object is requested from client, only the one with the latest timestamp is returned. Therefore, from 2017-04-01 11:30:12 to 2017-04-02 11:31:25, the first obj1 is visible. After 2017-04-02 11:31:25, the client see only the second obj1. With this data model, there is no need to block writes during reading this object, since each operation is based solely on its timestamp. </p>
-<p><strong>Delete</strong><br>Delete is simply by putting a tombstone for a certain object. Like the third obj1 in the example. No content is presented for this entry. The objects with a tombstone as the latest entry will be filtered out if requested from clients.</p>
-<p><strong>Update</strong><br>In this context, update is different from putting new contents into the object, but altering the object’s metadata (e.g., the extra field in the table). Updating the fields beyond the unique key is less a problem. If we need to update even the name of the object, we need to perform two steps: (1) delete the original object; (2) put a new object with the new metadata. One need to keep these two steps in an atomic transaction.</p>
-<p><strong>Search</strong><br>Search is usually based on metadata to find a set of objects. The difference with multi-versioned storage is that we only return an object with the latest timestamp. This could be achieved with a select clause like </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT t.* FROM (SELECT * FROM table WHERE xxx AND ctime &lt; NOW() ORDER BY ctime DESC) t GROUP BY t.name</span><br></pre></td></tr></table></figure>
-<p>We then filter out tombstones reside in the result set.</p>
-<p><strong>Get</strong><br>Get is first searching for the latest object before the operation time. Then, the pointer of content is handed over to the client. The client should read the content as soon as possible. Otherwise, the content may be deleted due to recycling.  </p>
-<p><strong>Compact</strong><br>Compact refers to merge a set of contents into a big one. This is useful for example for HDFS to relief the name node’s burden of storing a large number of small files. The implementation of compaction is a bit tricky. One first merge the target set of contents into a big file. Then, insert a new entry for each  related object within an atomic transaction. For clarification, let’s suppose we need to compact obj2 and obj3 in our example. We first create a new content with both contents from the original obj2 and obj3. Then, we add new entries for obj2 and obj3, respectively. The tricky part is that the ctime for these two entries are just 1 second larger than the original two. </p>
-<p><img src="/blog/assets/objstore2.png" width="600"></p>
-<p>This may sounds weired at first. But think about the situation that a new entry for obj2 is put after we started but not finished compaction. In this case, the new content could be covered by the compaction if the ctime is larger than the new entry. We add 1 to the ctime. So, the new entry will either be later, or conflict with the compaction, leading to a failure. Upon such failure, the client simply retry to submit the new content. This should not be a real problem since compaction is a rare operation. </p>
-<p>One may wonder why not simply updating the pointers in the original entries for obj2 and obj3. This actually breaks the third key points we mentioned at the beginning. It is important not changing the association. For example, if we want to get an object during compaction, reading may fail since the old contents may be deleted. Also, stale contents may be produced. More importantly, we may need very complicated transaction controls. </p>
-<p><strong>Recycle</strong><br>Recycle is used to delete all deleted objects. The deleted objects could be find by searching for tombstones in the table. If a tombstone is detected, all entries before that can be deleted physically, including the tombstone itself. Delete a single content is straightforward. However, if a content is merged into a big file, we can carry out a similar process like compaction to delete the content physically. Old-versioned entries can also be recycled. Both recycling for deleted and old-versioned entries follows a certain policy. We can delete an entry once it has been out dated for a few days. This duration shouldn’t be too soon. Otherwise, we may recycle content being or to be read. </p>
-<p>One can see that, with this multi-versioned storage model, all operations are much simpler without dependency to a locking system. We even do not rely on transaction, if compaction is not necessary. Let’s return to the three key parts at the beginning of this note. With a timestamp field, we already get the sense of version. As discussed above, the operation timestamp is critical as we need it to determine which object should be put into the result set. If data is stored across multiple machines, we need to synchronize their clock precisely. TrueTime is a API expose the uncertainty of time among different machines, and thus is critical for such large scale storage implementation. Finally, the association should not be broken, otherwise, we need complicated mechanisms to fix the issues it incurs.</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/non-blocking/">non-blocking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/storage/">storage</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-the-raft-consensus-algorithm"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/the-raft-consensus-algorithm/">Notes on The Raft Consensus Algorithm</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/the-raft-consensus-algorithm/" class="article-date">
-	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>What’s consensus?</p>
-<blockquote>
-<p>It allows a collection of machines to work as a coherent group that can survive the failures of some of its members.</p>
-</blockquote>
-<p>It means not only a group of machines reach a final decision for a request, but also the state machine is replicated across these machines, so that some failures do not affect the functioning. Raft is a consensus algorithm seeking to be correct, implementable, and understandable. </p>
-<p>The <a href="https://ramcloud.stanford.edu/~ongaro/thesis.pdf" target="_blank" rel="noopener">thesis</a> is very well written. It is much more comprehensive compared to the NSDI paper. Implementing Raft based on the thesis shouldn’t be too difficult (of course, also not trivial). The author also built a <a href="https://raft.github.io/" target="_blank" rel="noopener">website</a> putting all kinds of helping things there. I read the paper and decide to take some notes here.</p>
-<p><img src="/blog/assets/state.png" width="800"></p>
-<p>There are two key parts sitting in the core of the algorithm:</p>
-<p><strong>Leader election</strong></p>
-<p>The election is triggered by a timeout. If a server failed to detect heartbeats from the current leader, it start a new <em>term</em> of election. During the term, it broadcast requests to collect votes from other servers. If equal or more than majority of servers reply with a vote, the server becomes the leader of this term. The “term” here is a monotonically increasing logic time. From the perspective of a server receiving the vote request, it decides whether to give the vote based on a few considerations. First of all, if the sender even falls behind the receiver in terms of log index, the receiver should not vote for it. Also, if the receiver can still hear the heartbeats from current leader, it should not vote too. In this case, the requester might be a <em>disruptive server</em>. In other cases, the receiver should vote for the sender. </p>
-<p><img src="/blog/assets/leader election.png" width="800"></p>
-<p><strong>Log replication</strong></p>
-<p>Once a server becomes the leader, it’s mission is simply replicate it’s log to every other follower. The replication means make the log of a follower <em>exactly</em> the same as the leader. For each pair of leader and follower, the leader first identify the highest index where they reach an agreement. Starting from there, the leader overwrite its log to the follower. The leader handles all requests from clients. Once it receives a new request, it first put the request into its own log. Then, it replicate the request to all followers. If equal or more than majority followers (including the leader itself) answer the replication request with success, the leader apply the request into its state machine (this is called commit). The leader put the new log index into its heartbeats, so followers know if the request has been committed, after which each follower commit the request too.</p>
-<p><img src="/blog/assets/log replication.png" width="800"></p>
-<p>More formal introduction of the core Raft could be found in Fig. 3.1 in the thesis paper. There are also a few extensions to make the algorithm practical to be used in production systems, such as the group management. I also found Fig. 10.1 a very good reference of architecture. </p>
-<p>There are quite a lot of implementations of Raft, which could be found <a href="https://raft.github.io/" target="_blank" rel="noopener">here</a>. I also find a project named Copycat, with code <a href="https://github.com/atomix/copycat" target="_blank" rel="noopener">here</a> and document <a href="http://atomix.io/copycat/" target="_blank" rel="noopener">here</a>. Copycat is a full featured implementation of Raft in java. Building your own application based on Copycat shouldn’t be too difficult. They provide an example of implementing a KV store based on Copycat in their source code <a href="https://github.com/atomix/copycat/tree/master/examples" target="_blank" rel="noopener">here</a>, which is used as the “<a href="http://atomix.io/copycat/docs/getting-started/" target="_blank" rel="noopener">Get Started</a>“ tutorial. Another very important reason, why I think Copycat a good reference, is that it emphases the abstraction of state machine, client, server, and operations. Therefore, going through it’s document enhanced my understanding of Raft. </p>
-<p>If you don’t want to build your own Raft, may be Copycat is worthwhile a try, though I haven’t any real experience beyond a toy project.</p>
-<p>The annotated thesis could be found <a href="/blog/assets/raft-thesis.pdf">here</a>.</p>
-<p><strong>A go-through case for understanding</strong></p>
-<p>A typical request handling process is as follows:</p>
-<ol>
-<li>The client sends a request to the cluster;</li>
-<li>The leader handles the request by putting it to a WAL;</li>
-<li>The leader sends the request to all followers;</li>
-<li>Each follower puts the received request to its WAL, and responds to the leader;</li>
-<li>Once the leader has heard a majority number of responses from its followers, the leader commit the request by applying the WAL to its state machine;</li>
-<li>The leader inform the client that the request has been handled properly, and then, put the index of the request into its heartbeat to let all followers know the status of each request;</li>
-<li>Once the follower knows that the request has been committed by the leader, the follower commit the request too by applying it to its own state machine. </li>
-</ol>
-<p>There are a few key points to understand in the process above:</p>
-<p>1.Does the client always know if its request has been handled properly?</p>
-<p>No. If the leader commits the request and then crashes, the client will not know if the request has been actually successfully handled. In some cases, the client will resend the request which may lead to duplicated data. It leaves for the client to avoid such kind of duplication. </p>
-<p>2.How about the leader crashes before inform its followers that the request has been committed?</p>
-<p>If the leader crashes, a follower will be elected to be the next leader. The follower must have the latest state according to the mechanism of Raft. Therefore, the next leader definitely has the WAL for the request, and the request has definitely been replicated across a majority number of hosts. Therefore, it is safe to replicate its state to all followers. </p>
-<p>3.Key feature of a consensus algorithm (or strong consistency)?</p>
-<p>Under normal situations, if there’s a state change, the key step changing the state should be always handled by a certain node. The state changing should be replicated to a majority number of followers before informing the requester a success. Each read request goes to that certain node as well. Once there’s node failures or networking partitions, the service stop working until returning to the normal situation again.</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Consensus/">Consensus</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Copycat/">Copycat</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
 
 
   <nav id="page-nav">
@@ -924,6 +903,18 @@ Scala的一种入门方式是：
               <div class="widget-entry-summary" style="margin: 0;">
             
 
+              <h6 style="margin: 0;"><a href="/blog/news-2019/">新闻记录-2019</a></h6>
+              <span>March 10, 2019</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
               <h6 style="margin: 0;"><a href="/blog/currency-depreciation/">金融概念整理——货币贬值</a></h6>
               <span>March 8, 2019</span>
             </div>
@@ -972,20 +963,8 @@ Scala的一种入门方式是：
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/blog/news/">新闻纪录</a></h6>
+              <h6 style="margin: 0;"><a href="/blog/news/">新闻纪录-2018</a></h6>
               <span>January 3, 2019</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/blog/etcd_raft_4/">Raft协议实现学习之—写入过程</a></h6>
-              <span>November 23, 2018</span>
             </div>
 
           </li>
@@ -999,7 +978,7 @@ Scala的一种入门方式是：
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Book-Reading/">Book Reading</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Finance/">Finance</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Photography/">Photography</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Reading/">Reading</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Tech/">Tech</a><span class="category-list-count">39</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Thinking/">Thinking</a><span class="category-list-count">3</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Book-Reading/">Book Reading</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Finance/">Finance</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/News/">News</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Photography/">Photography</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Reading/">Reading</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Tech/">Tech</a><span class="category-list-count">40</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Thinking/">Thinking</a><span class="category-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -1009,20 +988,9 @@ Scala的一种入门方式是：
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/Finance/" style="font-size: 10px;">Finance</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/Housing/" style="font-size: 10px;">Housing</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/amazon-aurora/" style="font-size: 10px;">amazon aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 10px;">credit spread</a> <a href="/blog/tags/currency/" style="font-size: 10px;">currency</a> <a href="/blog/tags/distributed/" style="font-size: 12px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 12px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a>
+      <a href="/blog/tags/AI/" style="font-size: 10px;">AI</a> <a href="/blog/tags/Consensus/" style="font-size: 10px;">Consensus</a> <a href="/blog/tags/Copycat/" style="font-size: 10px;">Copycat</a> <a href="/blog/tags/Deadlock/" style="font-size: 10px;">Deadlock</a> <a href="/blog/tags/Finance/" style="font-size: 10px;">Finance</a> <a href="/blog/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/blog/tags/Housing/" style="font-size: 10px;">Housing</a> <a href="/blog/tags/IMU/" style="font-size: 10px;">IMU</a> <a href="/blog/tags/Learning/" style="font-size: 10px;">Learning</a> <a href="/blog/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/blog/tags/MVCC/" style="font-size: 10px;">MVCC</a> <a href="/blog/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/blog/tags/Mysql/" style="font-size: 10px;">Mysql</a> <a href="/blog/tags/OOM/" style="font-size: 10px;">OOM</a> <a href="/blog/tags/Raft/" style="font-size: 18px;">Raft</a> <a href="/blog/tags/Uniqueness/" style="font-size: 10px;">Uniqueness</a> <a href="/blog/tags/accelerometer/" style="font-size: 10px;">accelerometer</a> <a href="/blog/tags/admission-control/" style="font-size: 10px;">admission control</a> <a href="/blog/tags/aurora/" style="font-size: 10px;">aurora</a> <a href="/blog/tags/big-data/" style="font-size: 20px;">big data</a> <a href="/blog/tags/compaction/" style="font-size: 10px;">compaction</a> <a href="/blog/tags/compass/" style="font-size: 10px;">compass</a> <a href="/blog/tags/consistency/" style="font-size: 12px;">consistency</a> <a href="/blog/tags/credit-spread/" style="font-size: 10px;">credit spread</a> <a href="/blog/tags/currency/" style="font-size: 10px;">currency</a> <a href="/blog/tags/distributed/" style="font-size: 10px;">distributed</a> <a href="/blog/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/blog/tags/flink/" style="font-size: 10px;">flink</a> <a href="/blog/tags/git/" style="font-size: 12px;">git</a> <a href="/blog/tags/gyroscope/" style="font-size: 10px;">gyroscope</a> <a href="/blog/tags/hbase/" style="font-size: 10px;">hbase</a> <a href="/blog/tags/investment/" style="font-size: 10px;">investment</a> <a href="/blog/tags/links/" style="font-size: 10px;">links</a> <a href="/blog/tags/lock/" style="font-size: 14px;">lock</a> <a href="/blog/tags/mapreduce/" style="font-size: 12px;">mapreduce</a> <a href="/blog/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/blog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/blog/tags/non-blocking/" style="font-size: 10px;">non-blocking</a> <a href="/blog/tags/octave/" style="font-size: 10px;">octave</a> <a href="/blog/tags/openstack/" style="font-size: 10px;">openstack</a> <a href="/blog/tags/photography/" style="font-size: 10px;">photography</a> <a href="/blog/tags/php/" style="font-size: 12px;">php</a> <a href="/blog/tags/quorum/" style="font-size: 10px;">quorum</a> <a href="/blog/tags/rabbitmq/" style="font-size: 16px;">rabbitmq</a> <a href="/blog/tags/replication/" style="font-size: 10px;">replication</a> <a href="/blog/tags/sbt/" style="font-size: 10px;">sbt</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spark/" style="font-size: 10px;">spark</a> <a href="/blog/tags/ssd/" style="font-size: 10px;">ssd</a> <a href="/blog/tags/storage/" style="font-size: 10px;">storage</a> <a href="/blog/tags/swift/" style="font-size: 10px;">swift</a> <a href="/blog/tags/tool-collection/" style="font-size: 10px;">tool collection</a> <a href="/blog/tags/transaction/" style="font-size: 10px;">transaction</a> <a href="/blog/tags/国史大纲/" style="font-size: 10px;">国史大纲</a> <a href="/blog/tags/洪业/" style="font-size: 10px;">洪业</a> <a href="/blog/tags/认知/" style="font-size: 10px;">认知</a>
     </div>
   </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">March 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">September 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">March 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">March 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">February 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/12/">December 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/01/">January 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/08/">August 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
 
   
 </aside>
