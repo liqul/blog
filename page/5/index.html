@@ -163,7 +163,7 @@
 <!-- Table of Contents -->
 
   
-    <article id="post-install-octave-on-osx-ei-capitan-10113"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-guoshidagang"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -171,7 +171,7 @@
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/install-octave-on-osx-ei-capitan-10113/">Install Octave on OSX EI Capitan 10.11.3</a>
+      <a class="article-title" href="/blog/guoshidagang/">《国史大纲》读书笔记</a>
     </h1>
   
 
@@ -179,56 +179,50 @@
     
     <div class="article-meta">
       
-	<a href="/blog/install-octave-on-osx-ei-capitan-10113/" class="article-date">
+	<a href="/blog/guoshidagang/" class="article-date">
 	  <time datetime="2016-12-02T16:00:00.000Z" itemprop="datePublished">December 3, 2016</time>
 	</a>
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+    <a class="article-category-link" href="/blog/categories/Book-Reading/">Book Reading</a>
  
       
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Installing Octave on the latest OSX can be error prone. One may download the Octave-Forge bundle from sourceforge <a href="https://sourceforge.net/projects/octave/files/Octave%20MacOSX%20Binary/2013-12-30%20binary%20installer%20of%20Octave%203.8.0%20for%20OSX%2010.9.1%20%28beta%29/" target="_blank" rel="noopener">here</a> which however is large and also a bit out of date. </p>
-<!--break-->
-<p>Alternatively, if you use homebrew to do this, please be ware of<br>a few traps. Here are the steps I adopted to successfully install Octave.<br>If you do not have Xcode or Homebrew installed yet, please refer to Google<br>to get them installed properly.</p>
-<h3><span id="1-preliminaries">1. Preliminaries</span></h3><ul>
-<li>Install XQuartz from <a href="http://www.xquartz.org/" target="_blank" rel="noopener">here</a>.</li>
-<li>Install gcc with (this is for gfortran).</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install gcc</span><br></pre></td></tr></table></figure>
-<p>It may take quite some time to install gcc from source. If you cannot wait, do xcode-select –install before install gcc. This will have mac install a pre-compiled version which is very fast.</p>
-<h3><span id="2-import-the-scientific-computing-packages-with">2. Import the scientific computing packages with</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew update &amp;&amp; brew upgrade</span><br><span class="line">$ brew tap homebrew/science</span><br></pre></td></tr></table></figure>
-<p>If you see any warnings, run</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew doctor</span><br></pre></td></tr></table></figure>
-<p>and follow any suggestions to fix the problem. And then re-import the packages as follows</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew untap homebrew/science</span><br><span class="line">$ brew tap homebrew/science</span><br></pre></td></tr></table></figure>
-<h3><span id="3-install-octave">3. Install Octave</span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install octave --without-docs</span><br></pre></td></tr></table></figure>
-<p>The option <em>–without-docs</em> above is to suppress errors due to missing Tex installation. </p>
-<h3><span id="4-install-gnuplot">4. Install gnuplot</span></h3><p>As gnuplot will automatically be installed with octave, but without support for X11. So we need to reinstall it properly.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew uninstall gnuplot</span><br><span class="line">$ brew install gnuplot --with-x</span><br></pre></td></tr></table></figure>
-<p>To me, I still got the following warnings after the steps above.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">warning: ft_render: unable to load appropriate font</span><br><span class="line">warning: could not match any font: *-normal-normal-10</span><br></pre></td></tr></table></figure>
-<p>It can be fixed by following this stack overflow <a href="http://stackoverflow.com/questions/35249881/octave-fontconfig-error" target="_blank" rel="noopener">post</a>. Simply put it here where you should add this line into your ~/.bash_profile.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export FONTCONFIG_PATH=/opt/X11/lib/X11/fontconfig</span><br></pre></td></tr></table></figure>
-<p>And run</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ source ~/.bash_profile</span><br></pre></td></tr></table></figure>
-<p>to reload the config within your terminal. Alternatively, you could restart your teminal.</p>
-<h3><span id="5-configurations">5. Configurations</span></h3><p>Put the following configurations into <em>~/.octaverc</em>. If there’s no such file, just create one yourself.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setenv (&quot;GNUTERM&quot;, &quot;X11&quot;)</span><br><span class="line"></span><br><span class="line"># optional if you are in favor of a more elegant prompt.</span><br><span class="line">PS1(&apos;❯❯ &apos;)</span><br></pre></td></tr></table></figure>
+        
 
+          
+          <div class="entry-summary">
+          
+一、当信任何一国之国民，尤其是自称知识在水平线以上之国民，对其本国已往历史，应该略有所知。 (否则最多只算一有知识的人，不能算一有知识的国民。) 
+
+
+二、所谓对其本国已往历史略有所知者，尤必附随一种对其本国已往历史之温情与敬意。 (否则只算知道了一些外国史，不得云对本国史有知识。) 
+
+
+三、所谓对其本国已往历史有一种温情与敬意者，至少不会对其本国以往历史抱一种偏激的虚无主义，  (即视本国已往历史为无一点有价值，亦无一处足以使彼满意。) 亦至少不会感到现在我们是站在已往历史最高之顶点， (此乃一种浅薄狂妄的进化观。) 而将我们当身种种罪恶与弱点，一切诿卸于古人。 (此乃一种似是而非之文化自谴。) 
+
+
+四、当信每一国家必待其国民具备上列诸条件者比数渐多，其国家乃再有向前发展之希望。 (否则其所改进，等于一个被征服国或次殖民地之改进，对其国家自身不发生关系。换言之，此种改进，无异是一种变相的文化征服，乃其文化自身之萎缩与消灭，并非其文化自身之转变与发皇。) 
+
+
+        
+          <p class="article-more-link">
+            <a href="/blog/guoshidagang/#more">Continue Reading →</a>
+          </p>
+        </div>
       
     </div>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+    <a class="article-category-link" href="/blog/categories/Book-Reading/">Book Reading</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/octave/">octave</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/国史大纲/">国史大纲</a></li></ul>
 
       
     </footer>

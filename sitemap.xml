@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>liqul.github.io/blog/guoshidagang/</loc>
+    
+    <lastmod>2019-03-14T13:57:44.533Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>liqul.github.io/blog/news-2019/</loc>
     
-    <lastmod>2019-03-10T04:03:32.226Z</lastmod>
+    <lastmod>2019-03-10T14:00:28.003Z</lastmod>
     
   </url>
   
@@ -194,13 +201,6 @@
     <loc>liqul.github.io/blog/consistency_model/</loc>
     
     <lastmod>2018-04-12T13:33:38.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>liqul.github.io/blog/guoshidagang/</loc>
-    
-    <lastmod>2018-04-11T00:13:26.000Z</lastmod>
     
   </url>
   

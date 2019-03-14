@@ -673,6 +673,66 @@ Scala的一种入门方式是：
 <!-- Table of Contents -->
 
   
+    <article id="post-implementing-a-lock-system"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/implementing-a-lock-system/">Notes on Implementing A Lock System</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/implementing-a-lock-system/" class="article-date">
+	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Recently, I got the job of building a locking utility. I started by learning from existing locking services, i.e., zookeeper and mysql, since they already have been widely accepted. Zookeeper has this <a href="https://zookeeper.apache.org/doc/r3.1.2/recipes.html" target="_blank" rel="noopener">page</a> introducing how to build locks. I also find this <a href="https://blogs.oracle.com/mysqlinnodb/entry/introduction_to_transaction_locks_in" target="_blank" rel="noopener">page</a> details how lock implemented for mysql innodb table rows. After reading these materials, as well as some others. I found a locking utility could be simple, and also could be quite complicated. So I decided to make a note here to summarize my understandings. </p>
+<p>A lock is essentially a flag claiming the right of a deterministic resource. In mysql, the locking of a range is mapped to a set of data pages, which is thus deterministic as well. The simplest form of lock is a single write lock of one resource, e.g., a file. One could implement this based on zookeeper by creating a node with a certain name. For example, if I want to lock the file “/home/liqul/file1”, I’d put a node with the same name of the file into zookeeper. If the creation returns with success, I got the lock for the file. In contrast, if I failed in creating the node, it means the lock of the file is already held by someone else. If I cannot obtain the lock, I may backoff for a while and retry afterwards. The one holding the lock should release it explicitly. Otherwise, the file can never be used by others any more. </p>
+<p>I note that this is much simpler compared with the lock recipe in this <a href="https://zookeeper.apache.org/doc/r3.1.2/recipes.html" target="_blank" rel="noopener">page</a>. The zookeeper lock recipe brings two useful features: blocking and session-aware. Blocking means that if I failed to obtain the lock now, I will wait until the lock being released by all peers queuing before me. Session-aware means that if I crash, my application for the lock also disappears. The latter is useful to avoid forgetting to release the lock as discussed in the previous paragraph. To implement these two features, one should setup a client-server architecture. Also, to achieve blocking lock, one need a queue for each resource. Sometimes, we however prefer non-blocking locks, which is not discussed in the zookeeper recipe. </p>
+<p>Read-write lock is an extension of the write-only lock. Zookeeper also has a dedicated recipe for it <a href="https://zookeeper.apache.org/doc/r3.1.2/recipes.html" target="_blank" rel="noopener">here</a>. Implementing a read-write lock is non-trivial. Let’s explain this problem with a concrete example. Suppose <em>A</em> wants to acquire a read lock of a file <em>F</em>, while <em>B</em> wants a write lock to <em>F</em> too. A naive implementation may be as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1 *A* checks if there&apos;s any write locks to *F*</span><br><span class="line">2 *B* checks if there&apos;s any read locks to *F*</span><br><span class="line">3 *A* finds no write locks to *F*</span><br><span class="line">4 *B* finds no read locks to *F*</span><br><span class="line">5 *A* put a read lock of *F*</span><br><span class="line">6 *B* put a write lock of *F*</span><br></pre></td></tr></table></figure>
+<p>The “check and then lock” pattern simply doesn’t work correctly. In zookeeper, they rely on sequential nodes and watcher to work around this problem, where each peer always first inserts a node and then check if itself obtains the lock. If not, the peer put a watcher onto the current holder of the lock. Another workaround is to first obtain a global write pre-lock before any operation. With a pre-lock the above procedure becomes:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1 *A* acquires the pre-lock</span><br><span class="line">2 *A* obtains the pre-lock</span><br><span class="line">3 *A* checks if there&apos;s any write locks to *F*</span><br><span class="line">4 *B* acquires the pre-lock</span><br><span class="line">5 *B* failed to obtain the pre-lock</span><br><span class="line">6 *A* finds no write locks to *F*</span><br><span class="line">7 *A* put a read lock of *F*</span><br><span class="line">8 *A* release the pre-lock</span><br></pre></td></tr></table></figure>
+<p>One obvious drawback of the second workaround is that even two locks have no conflict, they still need to perform one after another. To avoid this problem, the lock utility need to maintain a conflict matrix for each pair of locks being processed or pending (should be marked separately). If a pending lock is not conflicting with any lock processed, it obtains the pre-lock right away. Otherwise, it is put into a queue waiting for all conflicting locks being clear. A short version is to only consider read and write locks separately. </p>
+<p>Another extension is to achieve atomicity for a set of locks. For this purpose, one need to treat the whole set as “one” lock. And the handling of it is quite similar with what we have discussed above. For instance, if you want to implement with zookeeper, you may need to insert all the locks and then set watchers for a set of conflicting locks. Only after all conflicting locks being clear, you obtain the locks. Without zookeeper, one can also use the pre-lock solution as described above. A conflict matrix is necessary to avoid deadlock if you want to process the sets of locks in parallel.</p>
+<p>In general, zookeeper is quite ready for customizing into your own locking service. However, it does has its own drawbacks. For example, it is not clear how to implement non-blocking read-write locks. If you have metadata for your locks, and you want to search in the metadata, zookeeper may be painful. At this time, using a mysql database may be a good choice, though you need to avoid some pitfalls discussed in this article.</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
     <article id="post-using-select-for-update-for-uniqueness-in-mysql"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -731,66 +791,6 @@ Scala的一种入门方式是：
       
   <span class="ico-tags"></span>
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Deadlock/">Deadlock</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Mysql/">Mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Uniqueness/">Uniqueness</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-implementing-a-lock-system"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/implementing-a-lock-system/">Notes on Implementing A Lock System</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/implementing-a-lock-system/" class="article-date">
-	  <time datetime="2017-03-31T06:25:39.000Z" itemprop="datePublished">March 31, 2017</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Recently, I got the job of building a locking utility. I started by learning from existing locking services, i.e., zookeeper and mysql, since they already have been widely accepted. Zookeeper has this <a href="https://zookeeper.apache.org/doc/r3.1.2/recipes.html" target="_blank" rel="noopener">page</a> introducing how to build locks. I also find this <a href="https://blogs.oracle.com/mysqlinnodb/entry/introduction_to_transaction_locks_in" target="_blank" rel="noopener">page</a> details how lock implemented for mysql innodb table rows. After reading these materials, as well as some others. I found a locking utility could be simple, and also could be quite complicated. So I decided to make a note here to summarize my understandings. </p>
-<p>A lock is essentially a flag claiming the right of a deterministic resource. In mysql, the locking of a range is mapped to a set of data pages, which is thus deterministic as well. The simplest form of lock is a single write lock of one resource, e.g., a file. One could implement this based on zookeeper by creating a node with a certain name. For example, if I want to lock the file “/home/liqul/file1”, I’d put a node with the same name of the file into zookeeper. If the creation returns with success, I got the lock for the file. In contrast, if I failed in creating the node, it means the lock of the file is already held by someone else. If I cannot obtain the lock, I may backoff for a while and retry afterwards. The one holding the lock should release it explicitly. Otherwise, the file can never be used by others any more. </p>
-<p>I note that this is much simpler compared with the lock recipe in this <a href="https://zookeeper.apache.org/doc/r3.1.2/recipes.html" target="_blank" rel="noopener">page</a>. The zookeeper lock recipe brings two useful features: blocking and session-aware. Blocking means that if I failed to obtain the lock now, I will wait until the lock being released by all peers queuing before me. Session-aware means that if I crash, my application for the lock also disappears. The latter is useful to avoid forgetting to release the lock as discussed in the previous paragraph. To implement these two features, one should setup a client-server architecture. Also, to achieve blocking lock, one need a queue for each resource. Sometimes, we however prefer non-blocking locks, which is not discussed in the zookeeper recipe. </p>
-<p>Read-write lock is an extension of the write-only lock. Zookeeper also has a dedicated recipe for it <a href="https://zookeeper.apache.org/doc/r3.1.2/recipes.html" target="_blank" rel="noopener">here</a>. Implementing a read-write lock is non-trivial. Let’s explain this problem with a concrete example. Suppose <em>A</em> wants to acquire a read lock of a file <em>F</em>, while <em>B</em> wants a write lock to <em>F</em> too. A naive implementation may be as follows:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1 *A* checks if there&apos;s any write locks to *F*</span><br><span class="line">2 *B* checks if there&apos;s any read locks to *F*</span><br><span class="line">3 *A* finds no write locks to *F*</span><br><span class="line">4 *B* finds no read locks to *F*</span><br><span class="line">5 *A* put a read lock of *F*</span><br><span class="line">6 *B* put a write lock of *F*</span><br></pre></td></tr></table></figure>
-<p>The “check and then lock” pattern simply doesn’t work correctly. In zookeeper, they rely on sequential nodes and watcher to work around this problem, where each peer always first inserts a node and then check if itself obtains the lock. If not, the peer put a watcher onto the current holder of the lock. Another workaround is to first obtain a global write pre-lock before any operation. With a pre-lock the above procedure becomes:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1 *A* acquires the pre-lock</span><br><span class="line">2 *A* obtains the pre-lock</span><br><span class="line">3 *A* checks if there&apos;s any write locks to *F*</span><br><span class="line">4 *B* acquires the pre-lock</span><br><span class="line">5 *B* failed to obtain the pre-lock</span><br><span class="line">6 *A* finds no write locks to *F*</span><br><span class="line">7 *A* put a read lock of *F*</span><br><span class="line">8 *A* release the pre-lock</span><br></pre></td></tr></table></figure>
-<p>One obvious drawback of the second workaround is that even two locks have no conflict, they still need to perform one after another. To avoid this problem, the lock utility need to maintain a conflict matrix for each pair of locks being processed or pending (should be marked separately). If a pending lock is not conflicting with any lock processed, it obtains the pre-lock right away. Otherwise, it is put into a queue waiting for all conflicting locks being clear. A short version is to only consider read and write locks separately. </p>
-<p>Another extension is to achieve atomicity for a set of locks. For this purpose, one need to treat the whole set as “one” lock. And the handling of it is quite similar with what we have discussed above. For instance, if you want to implement with zookeeper, you may need to insert all the locks and then set watchers for a set of conflicting locks. Only after all conflicting locks being clear, you obtain the locks. Without zookeeper, one can also use the pre-lock solution as described above. A conflict matrix is necessary to avoid deadlock if you want to process the sets of locks in parallel.</p>
-<p>In general, zookeeper is quite ready for customizing into your own locking service. However, it does has its own drawbacks. For example, it is not clear how to implement non-blocking read-write locks. If you have metadata for your locks, and you want to search in the metadata, zookeeper may be painful. At this time, using a mysql database may be a good choice, though you need to avoid some pitfalls discussed in this article.</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lock/">lock</a></li></ul>
 
       
     </footer>

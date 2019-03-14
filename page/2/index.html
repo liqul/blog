@@ -104,70 +104,6 @@
         
           <section id="main">
   
-    <article id="post-etcd_raft_2"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/blog/etcd_raft_2/">Raft协议实现学习之—etcd/raft库的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/blog/etcd_raft_2/" class="article-date">
-	  <time datetime="2018-09-13T07:50:03.000Z" itemprop="datePublished">September 13, 2018</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          Etcd中的Raft协议实现Etcd里Raft协议的实现的在这里。etcd并不是Raft的唯一实现，事实上Raft协议有许多实现，还有我简单尝试过的atomix。选择etcd/raft是因为个人对etcd和go语言比较感兴趣，而且Raft论文里提到的实现方法恰好比较适合用go语言的goroutine来实现。
-另外的一个原因正如etcd/raft在github上的readme所说：
-
-To keep the codebase small as well as provide flexibility, the library only implements the Raft algorithm; both network and disk IO are left to the user. Library users must implement their own transportation layer for message passing between Raft peers over the wire. Similarly, users must implement their own storage layer to persist the Raft log and state.
-
-
-        
-          <p class="article-more-link">
-            <a href="/blog/etcd_raft_2/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
     <article id="post-etcd_raft_1"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -205,6 +141,66 @@ To keep the codebase small as well as provide flexibility, the library only impl
         
           <p class="article-more-link">
             <a href="/blog/etcd_raft_1/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Raft/">Raft</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-etcd_raft_3"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/blog/etcd_raft_3/">Raft协议实现学习之—初始化和Leader Election过程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/blog/etcd_raft_3/" class="article-date">
+	  <time datetime="2018-09-13T07:50:03.000Z" itemprop="datePublished">September 13, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/blog/categories/Tech/">Tech</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+
+          
+          <div class="entry-summary">
+          实验代码和输出实验代码是基于作者原来的代码稍微修改而来，main函数如下所示:12345678910111213141516171819var (	nodes = make(map[int]*node))func main() &#123;	// start a small cluster	nodes[1] = newNode(1, []raft.Peer&#123;&#123;ID: 1&#125;, &#123;ID: 2&#125;, &#123;ID: 3&#125;&#125;)	go nodes[1].run()	nodes[2] = newNode(2, []raft.Peer&#123;&#123;ID: 1&#125;, &#123;ID: 2&#125;, &#123;ID: 3&#125;&#125;)	go nodes[2].run()	nodes[3] = newNode(3, []raft.Peer&#123;&#123;ID: 1&#125;, &#123;ID: 2&#125;, &#123;ID: 3&#125;&#125;)	go nodes[3].run()	// Wait for leader election	for &#123;		time.Sleep(100 * time.Millisecond)	&#125;&#125;
+
+        
+          <p class="article-more-link">
+            <a href="/blog/etcd_raft_3/#more">Continue Reading →</a>
           </p>
         </div>
       
